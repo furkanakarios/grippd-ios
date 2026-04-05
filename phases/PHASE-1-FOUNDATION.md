@@ -1,17 +1,17 @@
 # Faz 1 — Foundation & Infrastructure
 
-**Durum:** 🔴 Başlamadı  
+**Durum:** 🟡 Devam Ediyor  
 **Branch base:** `develop`
 
 ---
 
 ## Adımlar
 
-- [ ] **Step 1** — Xcode projesi, klasör yapısı, .gitignore  
-  Branch: `feature/phase-1-step-1-project-setup`
+- [x] **Step 1** — Xcode projesi, klasör yapısı, .gitignore  
+  Branch: `feature/phase-1-step-1-project-setup` ✅
 
-- [ ] **Step 2** — Supabase schema tasarımı, tüm tablolar, RLS politikaları  
-  Branch: `feature/phase-1-step-2-supabase-schema`
+- [x] **Step 2** — Supabase schema tasarımı, tüm tablolar, RLS politikaları  
+  Branch: `feature/phase-1-step-2-supabase-schema` ✅
 
 - [ ] **Step 3** — Supabase Swift SDK entegrasyonu, network katmanı, .xcconfig  
   Branch: `feature/phase-1-step-3-supabase-sdk`

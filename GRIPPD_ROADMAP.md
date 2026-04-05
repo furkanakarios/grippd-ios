@@ -53,6 +53,11 @@
 3. Araç kurulumları (brew, SPM, vb.) için asla izin isteme — direkt kur
 4. Kullanıcı "başlayabilirsin" dediğinde adım tamamlanana kadar dur olmadan ilerle
 5. Hata oluşursa önce kendi çöz, çözülmezse kısa özet sun
+6. **Her step'in kodu bittikten sonra, git commit/push'tan ÖNCE kullanıcıya test özeti sun:**
+   - Bu step'te ne eklendi (kısa madde madde)
+   - Xcode Simulator'da nasıl test edilir (hangi ekran, hangi akış)
+   - "Test et, onaylarsan git adımlarına geçiyorum" de
+   - Kullanıcı onayı geldikten sonra commit + push yap
 
 ---
 
