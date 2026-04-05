@@ -20,6 +20,24 @@ packages:
     url: https://github.com/supabase/supabase-swift
     from: "2.0.0"
 
+schemes:
+  Grippd:
+    build:
+      targets:
+        Grippd: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - GrippedTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
 targets:
   Grippd:
     type: application
