@@ -39,6 +39,16 @@
 
 ---
 
+## Test Kuralı
+
+Her step'in kodu tamamlandıktan sonra, **git commit/push'tan ÖNCE**:
+1. O step'te yapılanlar kısaca özetlenir
+2. Xcode Simulator'da nasıl görüleceği / test edileceği açıklanır
+3. Kullanıcı test edip onay verir
+4. Onay sonrası commit + push yapılır
+
+---
+
 ## Alınan Kararlar
 
 _Bu faz boyunca alınan teknik kararlar buraya eklenir._
