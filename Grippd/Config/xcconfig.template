@@ -1,0 +1,7 @@
+// Copy this file to Debug.xcconfig and Release.xcconfig
+// Fill in your Supabase project credentials
+// These files are gitignored — never commit real keys
+// NOTE: Use https:/$()/your-project.supabase.co — the $() trick prevents // being treated as a comment
+
+SUPABASE_URL = https:/$()/YOUR_PROJECT_ID.supabase.co
+SUPABASE_ANON_KEY = your_anon_key_here

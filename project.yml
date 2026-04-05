@@ -15,6 +15,11 @@ settings:
     DEVELOPMENT_TEAM: ""
     ENABLE_PREVIEWS: YES
 
+packages:
+  Supabase:
+    url: https://github.com/supabase/supabase-swift
+    from: "2.0.0"
+
 targets:
   Grippd:
     type: application
@@ -28,7 +33,15 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.grippd.app
         INFOPLIST_FILE: Grippd/Resources/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-    dependencies: []
+      configs:
+        Debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+    configFiles:
+      Debug: Grippd/Config/Debug.xcconfig
+      Release: Grippd/Config/Release.xcconfig
+    dependencies:
+      - package: Supabase
+        product: Supabase
 
   GrippedTests:
     type: bundle.unit-test

@@ -1,12 +1,10 @@
 import Foundation
 
-// Bu değerler Faz 1 Step 3'te .xcconfig'den okunacak
-// Şimdilik placeholder
 enum SupabaseConstants {
     static var projectURL: String {
-        Bundle.main.infoDictionary?["SUPABASE_URL"] as? String ?? ""
+        Bundle.main.object(forInfoDictionaryKey: "SupabaseURL") as? String ?? ""
     }
     static var anonKey: String {
-        Bundle.main.infoDictionary?["SUPABASE_ANON_KEY"] as? String ?? ""
+        Bundle.main.object(forInfoDictionaryKey: "SupabaseAnonKey") as? String ?? ""
     }
 }
