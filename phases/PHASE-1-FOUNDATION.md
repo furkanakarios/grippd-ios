@@ -13,8 +13,8 @@
 - [x] **Step 2** — Supabase schema tasarımı, tüm tablolar, RLS politikaları  
   Branch: `feature/phase-1-step-2-supabase-schema` ✅
 
-- [ ] **Step 3** — Supabase Swift SDK entegrasyonu, network katmanı, .xcconfig  
-  Branch: `feature/phase-1-step-3-supabase-sdk`
+- [x] **Step 3** — Supabase Swift SDK entegrasyonu, network katmanı, .xcconfig  
+  Branch: `feature/phase-1-step-3-supabase-sdk` ✅
 
 - [ ] **Step 4** — Authentication: Sign in with Apple  
   Branch: `feature/phase-1-step-4-auth-apple`
