@@ -4,6 +4,7 @@ import AuthenticationServices
 struct SignInView: View {
     @Environment(AppState.self) private var appState
     @State private var viewModel = AuthViewModel()
+    @State private var showEmailAuth = false
 
     var body: some View {
         ZStack {
@@ -34,6 +35,7 @@ struct SignInView: View {
                         ProgressView()
                             .frame(height: 50)
                     } else {
+                        // Apple
                         SignInWithAppleButton(.signIn) { request in
                             request.requestedScopes = [.fullName, .email]
                             request.nonce = viewModel.generateNonce()
@@ -42,6 +44,24 @@ struct SignInView: View {
                         }
                         .signInWithAppleButtonStyle(.black)
                         .frame(height: 50)
+                        .cornerRadius(12)
+
+                        // Divider
+                        HStack {
+                            Rectangle().frame(height: 1).foregroundStyle(.separator)
+                            Text("veya").font(.caption).foregroundStyle(.secondary)
+                            Rectangle().frame(height: 1).foregroundStyle(.separator)
+                        }
+
+                        // Email
+                        Button {
+                            showEmailAuth = true
+                        } label: {
+                            Label("E-posta ile devam et", systemImage: "envelope")
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 50)
+                        }
+                        .buttonStyle(.bordered)
                         .cornerRadius(12)
                     }
 
@@ -58,6 +78,10 @@ struct SignInView: View {
         }
         .task {
             await viewModel.restoreSession(appState: appState)
+        }
+        .sheet(isPresented: $showEmailAuth) {
+            EmailAuthView(isPresented: $showEmailAuth)
+                .environment(appState)
         }
     }
 }
