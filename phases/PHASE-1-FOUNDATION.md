@@ -16,8 +16,8 @@
 - [x] **Step 3** — Supabase Swift SDK entegrasyonu, network katmanı, .xcconfig  
   Branch: `feature/phase-1-step-3-supabase-sdk` ✅
 
-- [ ] **Step 4** — Authentication: Sign in with Apple  
-  Branch: `feature/phase-1-step-4-auth-apple`
+- [x] **Step 4** — Authentication: Sign in with Apple  
+  Branch: `feature/phase-1-step-4-auth-apple` ✅
 
 - [ ] **Step 5** — Authentication: Email/şifre kayıt ve giriş  
   Branch: `feature/phase-1-step-5-auth-email`
