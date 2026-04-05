@@ -1,0 +1,655 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9344A381848C54CF5FE99A0D /* DIContainer.swift */; };
+		1AABA80722445F66E018A6AA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D1CBC1ABF9BD97FF109E01 /* Content.swift */; };
+		1E497CC5BB09798EA83402F2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1686809CF6AAB5731AA8481 /* User.swift */; };
+		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
+		69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5C708F8C6739EFC5B9592C /* LogRepository.swift */; };
+		6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B216F04C46ADC79E57A7119 /* ContentView.swift */; };
+		70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC76940C4F0862F2C919C69 /* AppState.swift */; };
+		7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209950C1A8FB3E39AD1DD55F /* LogEntry.swift */; };
+		9C205D397566ACA00F458697 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF95542CD4B341C9D05419B7 /* Review.swift */; };
+		B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905FA566B07407F50510D020 /* UserRepository.swift */; };
+		B493C5FA697B4E379C049D11 /* GrippedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */; };
+		BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4DD0039F13A4706C8805F /* View+Extensions.swift */; };
+		C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */; };
+		C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF9D2C89BA6439699CACDD /* ContentRepository.swift */; };
+		EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2B33E8B65D7A0B0FCF27B999 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CB30D1721FE57E3119A478C7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0175D501C0CCC8E960FE18CA;
+			remoteInfo = Grippd;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		09F4DD0039F13A4706C8805F /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		209950C1A8FB3E39AD1DD55F /* LogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntry.swift; sourceTree = "<group>"; };
+		21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippedTests.swift; sourceTree = "<group>"; };
+		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B216F04C46ADC79E57A7119 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GrippedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdApp.swift; sourceTree = "<group>"; };
+		53D1CBC1ABF9BD97FF109E01 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		70DF9D2C89BA6439699CACDD /* ContentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentRepository.swift; sourceTree = "<group>"; };
+		716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConstants.swift; sourceTree = "<group>"; };
+		787BEEC8FC34DAB5B9253370 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		905FA566B07407F50510D020 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
+		9344A381848C54CF5FE99A0D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
+		BF95542CD4B341C9D05419B7 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		BFC76940C4F0862F2C919C69 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		D1686809CF6AAB5731AA8481 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		EE5C708F8C6739EFC5B9592C /* LogRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRepository.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1AD8B087ABAFB1ACFB9C98AB /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				965FE217D4674C4AAF03FE0C /* Components */,
+				A0FC1A77BCD1ACA89228E52D /* Constants */,
+				64FEFEA97195D42E17140726 /* Extensions */,
+				8615BBCD9817B1356F0AF2B2 /* Utils */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		309B307DE089F37E0245A26A /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		3691A1949DFAE3FCB542C173 /* Grippd */ = {
+			isa = PBXGroup;
+			children = (
+				F2262D7F0BCC789F72E329D3 /* App */,
+				77F66DC06E13C3BB47D69229 /* Data */,
+				D4FAF8E871C090FDE834F887 /* Domain */,
+				371306CBA9835385B3447541 /* Features */,
+				73AC765CBBA7F4D1AB928003 /* Resources */,
+				1AD8B087ABAFB1ACFB9C98AB /* Shared */,
+			);
+			path = Grippd;
+			sourceTree = "<group>";
+		};
+		371306CBA9835385B3447541 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				89BABCA741EB275B44CE2CB0 /* Auth */,
+				37BF925D7CE85A68F712FB6C /* ContentDetail */,
+				F7F9BF6BFCCB117DB1FD9E16 /* Discover */,
+				8435615DCA22E09D98CF16D3 /* Feed */,
+				309B307DE089F37E0245A26A /* Notifications */,
+				E854957021460A291F7125D5 /* Profile */,
+				B23FB579AB2E063D908E8486 /* Search */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		37BF925D7CE85A68F712FB6C /* ContentDetail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ContentDetail;
+			sourceTree = "<group>";
+		};
+		47F07DEF8E354B5D16A03A36 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		4DAA1FFC5B34F47AE60596A1 /* Supabase */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Supabase;
+			sourceTree = "<group>";
+		};
+		5ACBABDC609AC076FE7CCA0C /* Local */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Local;
+			sourceTree = "<group>";
+		};
+		64FEFEA97195D42E17140726 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				09F4DD0039F13A4706C8805F /* View+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		73AC765CBBA7F4D1AB928003 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				787BEEC8FC34DAB5B9253370 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		73F078758BC5D9DE33F02FB9 /* Books */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Books;
+			sourceTree = "<group>";
+		};
+		77F66DC06E13C3BB47D69229 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				5ACBABDC609AC076FE7CCA0C /* Local */,
+				D4E2EB454AF9B57AD5391BB1 /* Network */,
+				4DAA1FFC5B34F47AE60596A1 /* Supabase */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		8435615DCA22E09D98CF16D3 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
+		8615BBCD9817B1356F0AF2B2 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9344A381848C54CF5FE99A0D /* DIContainer.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		89BABCA741EB275B44CE2CB0 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		965FE217D4674C4AAF03FE0C /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		96D4DBBD203CDF5C99A49FE1 /* GrippedTests */ = {
+			isa = PBXGroup;
+			children = (
+				21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */,
+			);
+			path = GrippedTests;
+			sourceTree = "<group>";
+		};
+		9DCB6B6F36AE164A163651AE /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				70DF9D2C89BA6439699CACDD /* ContentRepository.swift */,
+				EE5C708F8C6739EFC5B9592C /* LogRepository.swift */,
+				905FA566B07407F50510D020 /* UserRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		A0FC1A77BCD1ACA89228E52D /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */,
+				716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		ABF8B4BDAA565D7D0746A459 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */,
+				404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B23FB579AB2E063D908E8486 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		D19A8B8CFC1ADB65BD0FD1D7 /* TMDB */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TMDB;
+			sourceTree = "<group>";
+		};
+		D4E2EB454AF9B57AD5391BB1 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				73F078758BC5D9DE33F02FB9 /* Books */,
+				D19A8B8CFC1ADB65BD0FD1D7 /* TMDB */,
+				E5B6E5657B45D19E7D4BB7AD /* Watchmode */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		D4FAF8E871C090FDE834F887 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				DD77C628E44BD6A4A40763AB /* Entities */,
+				9DCB6B6F36AE164A163651AE /* Repositories */,
+				47F07DEF8E354B5D16A03A36 /* UseCases */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		DD77C628E44BD6A4A40763AB /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				53D1CBC1ABF9BD97FF109E01 /* Content.swift */,
+				209950C1A8FB3E39AD1DD55F /* LogEntry.swift */,
+				BF95542CD4B341C9D05419B7 /* Review.swift */,
+				D1686809CF6AAB5731AA8481 /* User.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		E5B6E5657B45D19E7D4BB7AD /* Watchmode */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Watchmode;
+			sourceTree = "<group>";
+		};
+		E854957021460A291F7125D5 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		F2262D7F0BCC789F72E329D3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BFC76940C4F0862F2C919C69 /* AppState.swift */,
+				3B216F04C46ADC79E57A7119 /* ContentView.swift */,
+				45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F7F9BF6BFCCB117DB1FD9E16 /* Discover */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Discover;
+			sourceTree = "<group>";
+		};
+		F857DE3C8C86580A3DF98480 = {
+			isa = PBXGroup;
+			children = (
+				3691A1949DFAE3FCB542C173 /* Grippd */,
+				96D4DBBD203CDF5C99A49FE1 /* GrippedTests */,
+				ABF8B4BDAA565D7D0746A459 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0175D501C0CCC8E960FE18CA /* Grippd */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45C3DCBB02B7033B34B85C0A /* Build configuration list for PBXNativeTarget "Grippd" */;
+			buildPhases = (
+				CEDE891F0785B3BE7CD28E6D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Grippd;
+			packageProductDependencies = (
+			);
+			productName = Grippd;
+			productReference = 2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2A1F6221E9EA1B0B2AC4FD4E /* GrippedTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3084C33BF329DFF694D17A50 /* Build configuration list for PBXNativeTarget "GrippedTests" */;
+			buildPhases = (
+				33B6B7CC8538CC1B22157AC1 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E797A4DE9749FC484D1FB97 /* PBXTargetDependency */,
+			);
+			name = GrippedTests;
+			packageProductDependencies = (
+			);
+			productName = GrippedTests;
+			productReference = 404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CB30D1721FE57E3119A478C7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					0175D501C0CCC8E960FE18CA = {
+						DevelopmentTeam = "";
+					};
+					2A1F6221E9EA1B0B2AC4FD4E = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = 4DC96796BA051C27A2641598 /* Build configuration list for PBXProject "Grippd" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = F857DE3C8C86580A3DF98480;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = ABF8B4BDAA565D7D0746A459 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0175D501C0CCC8E960FE18CA /* Grippd */,
+				2A1F6221E9EA1B0B2AC4FD4E /* GrippedTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		33B6B7CC8538CC1B22157AC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B493C5FA697B4E379C049D11 /* GrippedTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEDE891F0785B3BE7CD28E6D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */,
+				70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */,
+				1AABA80722445F66E018A6AA /* Content.swift in Sources */,
+				C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */,
+				6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */,
+				175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */,
+				3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */,
+				7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */,
+				69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */,
+				9C205D397566ACA00F458697 /* Review.swift in Sources */,
+				EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */,
+				1E497CC5BB09798EA83402F2 /* User.swift in Sources */,
+				B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */,
+				BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6E797A4DE9749FC484D1FB97 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0175D501C0CCC8E960FE18CA /* Grippd */;
+			targetProxy = 2B33E8B65D7A0B0FCF27B999 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		36ACCA7FF550CE5046674428 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		3F63D6697F85167B3968A9EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.GrippedTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Grippd.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Grippd";
+			};
+			name = Debug;
+		};
+		74049DAF996B5F83558C9FF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.GrippedTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Grippd.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Grippd";
+			};
+			name = Release;
+		};
+		B1DD7BFB5800BFBDA1253E75 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		C3664ADA9886238040B65E46 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Grippd/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FE14FFC8EAFA84E56CC45F08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Grippd/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3084C33BF329DFF694D17A50 /* Build configuration list for PBXNativeTarget "GrippedTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F63D6697F85167B3968A9EA /* Debug */,
+				74049DAF996B5F83558C9FF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		45C3DCBB02B7033B34B85C0A /* Build configuration list for PBXNativeTarget "Grippd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3664ADA9886238040B65E46 /* Debug */,
+				FE14FFC8EAFA84E56CC45F08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4DC96796BA051C27A2641598 /* Build configuration list for PBXProject "Grippd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36ACCA7FF550CE5046674428 /* Debug */,
+				B1DD7BFB5800BFBDA1253E75 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CB30D1721FE57E3119A478C7 /* Project object */;
+}
