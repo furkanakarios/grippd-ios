@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */; };
 		175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9344A381848C54CF5FE99A0D /* DIContainer.swift */; };
 		1AABA80722445F66E018A6AA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D1CBC1ABF9BD97FF109E01 /* Content.swift */; };
 		1E497CC5BB09798EA83402F2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1686809CF6AAB5731AA8481 /* User.swift */; };
+		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
 		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
 		69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5C708F8C6739EFC5B9592C /* LogRepository.swift */; };
 		6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B216F04C46ADC79E57A7119 /* ContentView.swift */; };
@@ -21,6 +23,7 @@
 		BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4DD0039F13A4706C8805F /* View+Extensions.swift */; };
 		C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */; };
 		C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF9D2C89BA6439699CACDD /* ContentRepository.swift */; };
+		E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 57B8F951E1296882A2860113 /* Supabase */; };
 		EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		09F4DD0039F13A4706C8805F /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClientService.swift; sourceTree = "<group>"; };
 		209950C1A8FB3E39AD1DD55F /* LogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntry.swift; sourceTree = "<group>"; };
 		21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippedTests.swift; sourceTree = "<group>"; };
 		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,9 +47,12 @@
 		404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GrippedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdApp.swift; sourceTree = "<group>"; };
 		53D1CBC1ABF9BD97FF109E01 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		70DF9D2C89BA6439699CACDD /* ContentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentRepository.swift; sourceTree = "<group>"; };
 		716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConstants.swift; sourceTree = "<group>"; };
 		787BEEC8FC34DAB5B9253370 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; path = xcconfig.template; sourceTree = "<group>"; };
 		905FA566B07407F50510D020 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		9344A381848C54CF5FE99A0D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		BF95542CD4B341C9D05419B7 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
@@ -55,7 +62,28 @@
 		EE5C708F8C6739EFC5B9592C /* LogRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFrameworksBuildPhase section */
+		19E5854C8ED1C6EC5E602FA2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
+		09A1C0F8A28980D58AAD5A12 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */,
+				82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */,
+				8B5609258A962BEB0EF594A6 /* xcconfig.template */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		1AD8B087ABAFB1ACFB9C98AB /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				F2262D7F0BCC789F72E329D3 /* App */,
+				09A1C0F8A28980D58AAD5A12 /* Config */,
 				77F66DC06E13C3BB47D69229 /* Data */,
 				D4FAF8E871C090FDE834F887 /* Domain */,
 				371306CBA9835385B3447541 /* Features */,
@@ -118,6 +147,7 @@
 		4DAA1FFC5B34F47AE60596A1 /* Supabase */ = {
 			isa = PBXGroup;
 			children = (
+				0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */,
 			);
 			path = Supabase;
 			sourceTree = "<group>";
@@ -320,6 +350,8 @@
 			buildConfigurationList = 45C3DCBB02B7033B34B85C0A /* Build configuration list for PBXNativeTarget "Grippd" */;
 			buildPhases = (
 				CEDE891F0785B3BE7CD28E6D /* Sources */,
+				5B3D1C85ADE9EB7FB53E1064 /* Resources */,
+				19E5854C8ED1C6EC5E602FA2 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -327,6 +359,7 @@
 			);
 			name = Grippd;
 			packageProductDependencies = (
+				57B8F951E1296882A2860113 /* Supabase */,
 			);
 			productName = Grippd;
 			productReference = 2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */;
@@ -376,6 +409,9 @@
 			);
 			mainGroup = F857DE3C8C86580A3DF98480;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = ABF8B4BDAA565D7D0746A459 /* Products */;
 			projectDirPath = "";
@@ -386,6 +422,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5B3D1C85ADE9EB7FB53E1064 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DE3076A9C740F885368A39D /* xcconfig.template in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		33B6B7CC8538CC1B22157AC1 /* Sources */ = {
@@ -410,6 +457,7 @@
 				7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */,
 				69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */,
 				9C205D397566ACA00F458697 /* Review.swift in Sources */,
+				134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */,
 				EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */,
 				1E497CC5BB09798EA83402F2 /* User.swift in Sources */,
 				B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */,
@@ -589,6 +637,7 @@
 		};
 		C3664ADA9886238040B65E46 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -599,12 +648,14 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.app;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		FE14FFC8EAFA84E56CC45F08 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -650,6 +701,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		57B8F951E1296882A2860113 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CB30D1721FE57E3119A478C7 /* Project object */;
 }
