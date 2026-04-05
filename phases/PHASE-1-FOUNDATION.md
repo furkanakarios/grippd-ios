@@ -19,8 +19,8 @@
 - [x] **Step 4** — Authentication: Sign in with Apple  
   Branch: `feature/phase-1-step-4-auth-apple` ✅
 
-- [ ] **Step 5** — Authentication: Email/şifre kayıt ve giriş  
-  Branch: `feature/phase-1-step-5-auth-email`
+- [x] **Step 5** — Authentication: Email/şifre kayıt ve giriş  
+  Branch: `feature/phase-1-step-5-auth-email` ✅
 
 - [ ] **Step 6** — Onboarding: kullanıcı adı, ilgi alanları, profil fotoğrafı  
   Branch: `feature/phase-1-step-6-onboarding`
