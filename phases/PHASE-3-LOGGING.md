@@ -7,8 +7,8 @@
 
 ## Adımlar
 
-- [ ] **Step 1** — Log entry schema + domain model: tarih, platform, rewatch flag  
-  Branch: `feature/phase-3-step-1-log-schema`
+- [x] **Step 1** — Log entry schema + domain model: tarih, platform, rewatch flag  
+  Branch: `feature/phase-3-step-1-log-schema` ✅
 
 - [ ] **Step 2** — "İzledim/Okudum" log ekleme akışı: bottom sheet UI  
   Branch: `feature/phase-3-step-2-log-entry-flow`
