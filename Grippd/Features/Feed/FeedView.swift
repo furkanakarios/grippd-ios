@@ -34,8 +34,9 @@ struct FeedView: View {
     @ViewBuilder
     private func feedDestination(_ route: FeedRoute) -> some View {
         switch route {
-        case .contentDetail: Text("İçerik Detay — Phase 2")
-        case .userProfile: Text("Kullanıcı Profil — Phase 4")
+        case .movieDetail(let tmdbID): MovieDetailView(tmdbID: tmdbID)
+        case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
+        case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         }
     }
 }

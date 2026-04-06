@@ -94,6 +94,7 @@ struct GrippdTextField: View {
                     .font(.system(size: 16))
                     .foregroundStyle(.white)
                     .tint(GrippdTheme.Colors.accent)
+                    .textContentType(textContentType)
             } else {
                 TextField(placeholder, text: $text)
                     .font(.system(size: 16))
@@ -102,6 +103,7 @@ struct GrippdTextField: View {
                     .keyboardType(keyboardType)
                     .textInputAutocapitalization(keyboardType == .emailAddress ? .never : .sentences)
                     .autocorrectionDisabled(keyboardType == .emailAddress)
+                    .textContentType(textContentType)
             }
 
             if isSecure {

@@ -16,9 +16,10 @@ struct TMDBMovie: Decodable, Identifiable {
     let genres: [TMDBGenre]?
     let runtime: Int?
     let popularity: Double
+    let credits: TMDBCredits?
 
     enum CodingKeys: String, CodingKey {
-        case id, title, overview, runtime, popularity, genres
+        case id, title, overview, runtime, popularity, genres, credits
         case originalTitle = "original_title"
         case posterPath = "poster_path"
         case backdropPath = "backdrop_path"
@@ -178,6 +179,53 @@ enum TMDBSearchResult: Decodable, Identifiable {
         case "tv":    self = .tv(try TMDBTVShow(from: decoder))
         default:      self = .unknown
         }
+    }
+}
+
+// MARK: - TMDB Credits
+
+struct TMDBCredits: Decodable {
+    let cast: [TMDBCastMember]
+    let crew: [TMDBCrewMember]
+}
+
+struct TMDBCastMember: Decodable {
+    let id: Int
+    let creditID: String
+    let name: String
+    let character: String
+    let profilePath: String?
+    let order: Int
+
+    var profileURL: URL? {
+        guard let path = profilePath else { return nil }
+        return URL(string: "https://image.tmdb.org/t/p/w185\(path)")
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, character, order
+        case creditID = "credit_id"
+        case profilePath = "profile_path"
+    }
+}
+
+struct TMDBCrewMember: Decodable {
+    let id: Int
+    let creditID: String
+    let name: String
+    let job: String
+    let department: String
+    let profilePath: String?
+
+    var profileURL: URL? {
+        guard let path = profilePath else { return nil }
+        return URL(string: "https://image.tmdb.org/t/p/w185\(path)")
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, job, department
+        case creditID = "credit_id"
+        case profilePath = "profile_path"
     }
 }
 

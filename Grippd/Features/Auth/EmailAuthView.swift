@@ -82,7 +82,8 @@ struct EmailAuthView: View {
                                 placeholder: "E-posta adresi",
                                 text: $viewModel.email,
                                 icon: "envelope",
-                                keyboardType: .emailAddress
+                                keyboardType: .emailAddress,
+                                textContentType: .emailAddress
                             )
 
                             if mode != .forgotPassword {
@@ -90,7 +91,8 @@ struct EmailAuthView: View {
                                     placeholder: "Şifre",
                                     text: $viewModel.password,
                                     icon: "lock",
-                                    isSecure: true
+                                    isSecure: true,
+                                    textContentType: mode == .signUp ? .newPassword : .password
                                 )
                             }
 
@@ -99,7 +101,8 @@ struct EmailAuthView: View {
                                     placeholder: "Şifre tekrar",
                                     text: $viewModel.confirmPassword,
                                     icon: "lock.fill",
-                                    isSecure: true
+                                    isSecure: true,
+                                    textContentType: .newPassword
                                 )
                             }
                         }

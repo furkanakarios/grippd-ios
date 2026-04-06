@@ -130,12 +130,13 @@ struct ProfileView: View {
     @ViewBuilder
     private func profileDestination(_ route: ProfileRoute) -> some View {
         switch route {
+        case .movieDetail(let tmdbID): MovieDetailView(tmdbID: tmdbID)
         case .settings: SettingsPlaceholderView()
-        case .editProfile: Text("Profil Düzenle — Phase 4")
-        case .followers: Text("Takipçiler — Phase 4")
-        case .following: Text("Takip Edilenler — Phase 4")
-        case .contentDetail: Text("İçerik Detay — Phase 2")
-        case .userProfile: Text("Kullanıcı Profil — Phase 4")
+        case .editProfile: Text("Profil Düzenle — Phase 4").foregroundStyle(.white)
+        case .followers: Text("Takipçiler — Phase 4").foregroundStyle(.white)
+        case .following: Text("Takip Edilenler — Phase 4").foregroundStyle(.white)
+        case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
+        case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         }
     }
 }

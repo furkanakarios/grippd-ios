@@ -6,13 +6,13 @@ options:
   xcodeVersion: "16.0"
   generateEmptyDirectories: true
   createIntermediateGroups: true
+  postGenCommand: python3 scripts/fix-capabilities.py
 
 settings:
   base:
     SWIFT_VERSION: 5.9
     MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "1"
-    DEVELOPMENT_TEAM: ""
     ENABLE_PREVIEWS: YES
 
 packages:
@@ -62,6 +62,13 @@ targets:
         product: Supabase
     entitlements:
       path: Grippd/Resources/Grippd.entitlements
+      properties:
+        com.apple.developer.applesignin:
+          - Default
+    attributes:
+      SystemCapabilities:
+        com.apple.SignInWithApple:
+          enabled: 1
 
   GrippedTests:
     type: bundle.unit-test
