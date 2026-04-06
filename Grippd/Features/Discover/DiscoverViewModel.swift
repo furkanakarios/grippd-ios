@@ -9,6 +9,8 @@ final class DiscoverViewModel {
     var trendingShows: [TMDBTVShow] = []
     var nowPlayingMovies: [TMDBMovie] = []
     var onTheAirShows: [TMDBTVShow] = []
+    var movieGenres: [TMDBGenre] = []
+    var tvGenres: [TMDBGenre] = []
 
     var isLoadingTrending = false
     var isLoadingNowPlaying = false
@@ -32,6 +34,8 @@ final class DiscoverViewModel {
         trendingShows = []
         nowPlayingMovies = []
         onTheAirShows = []
+        movieGenres = []
+        tvGenres = []
         await load()
     }
 
@@ -39,7 +43,20 @@ final class DiscoverViewModel {
         async let trending: Void = loadTrending()
         async let nowPlaying: Void = loadNowPlaying()
         async let onTheAir: Void = loadOnTheAir()
-        _ = await (trending, nowPlaying, onTheAir)
+        async let genres: Void = loadGenres()
+        _ = await (trending, nowPlaying, onTheAir, genres)
+    }
+
+    private func loadGenres() async {
+        do {
+            async let movieTask = TMDBClient.shared.movieGenres()
+            async let tvTask = TMDBClient.shared.tvGenres()
+            let (movies, tv) = try await (movieTask, tvTask)
+            movieGenres = movies
+            tvGenres = tv
+        } catch {
+            // sessizce geç
+        }
     }
 
     private func loadTrending() async {

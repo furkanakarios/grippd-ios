@@ -200,7 +200,7 @@ struct TMDBEpisode: Decodable, Identifiable {
 
 // MARK: - TMDB Genre
 
-struct TMDBGenre: Decodable, Identifiable {
+struct TMDBGenre: Decodable, Identifiable, Hashable {
     let id: Int
     let name: String
 }

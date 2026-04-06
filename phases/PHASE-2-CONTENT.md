@@ -32,7 +32,7 @@
   Branch: `feature/phase-2-step-8-trending`
 
 - [ ] **Step 9** — Genre & kategori browsing: türe göre filtreleme  
-  Branch: `feature/phase-2-step-9-genre-browse`
+  Branch: `feature/phase-2-step-9-genre-browse` ✅
 
 - [ ] **Step 10** — Community verisi detay ekranlarına: ortalama puan, yorum sayısı  
   Branch: `feature/phase-2-step-10-community-data`

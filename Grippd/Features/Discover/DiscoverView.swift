@@ -68,6 +68,20 @@ struct DiscoverView: View {
                     posterCarousel(items: viewModel.onTheAirShows.map { .tv($0) })
                 }
 
+                // Film Türleri
+                if !viewModel.movieGenres.isEmpty {
+                    sectionHeader(title: "Film Türleri", icon: "film")
+                        .padding(.top, GrippdTheme.Spacing.lg)
+                    genreChips(genres: viewModel.movieGenres, kind: .movie)
+                }
+
+                // Dizi Türleri
+                if !viewModel.tvGenres.isEmpty {
+                    sectionHeader(title: "Dizi Türleri", icon: "tv")
+                        .padding(.top, GrippdTheme.Spacing.lg)
+                    genreChips(genres: viewModel.tvGenres, kind: .tv)
+                }
+
                 Spacer(minLength: GrippdTheme.Spacing.xxl)
             }
         }
@@ -150,6 +164,31 @@ struct DiscoverView: View {
         }
     }
 
+    // MARK: - Genre Chips
+
+    private func genreChips(genres: [TMDBGenre], kind: GenreBrowseViewModel.ContentKind) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(genres) { genre in
+                    Button {
+                        router.discoverPath.append(DiscoverRoute.genreBrowse(genre: genre, kind: kind == .movie ? "movie" : "tv"))
+                    } label: {
+                        Text(genre.name)
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.85))
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(GrippdTheme.Colors.surface, in: Capsule())
+                            .overlay(Capsule().stroke(.white.opacity(0.1), lineWidth: 1))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, GrippdTheme.Spacing.sm)
+        }
+    }
+
     // MARK: - Skeleton
 
     private func skeletonRow() -> some View {
@@ -188,7 +227,14 @@ struct DiscoverView: View {
         case .personDetail: Text("Kişi Detay — Phase 3").foregroundStyle(.white)
         case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
-        case .genre(let name): Text("\(name) — Phase 5").foregroundStyle(.white)
+        case .genre(let name): Text("\(name)").foregroundStyle(.white)
+        case .genreBrowse(let genre, let kindStr):
+            let kind: GenreBrowseViewModel.ContentKind = kindStr == "movie" ? .movie : .tv
+            GenreBrowseView(viewModel: GenreBrowseViewModel(genre: genre, kind: kind)) { movieID in
+                router.discoverPath.append(DiscoverRoute.movieDetail(tmdbID: movieID))
+            } onTVTap: { tvID in
+                router.discoverPath.append(DiscoverRoute.tvShowDetail(tmdbID: tvID))
+            }
         }
     }
 }
