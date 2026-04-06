@@ -9,7 +9,9 @@ struct GoogleBook: Decodable, Identifiable {
 
     struct VolumeInfo: Decodable {
         let title: String
+        let subtitle: String?
         let authors: [String]?
+        let publisher: String?
         let description: String?
         let publishedDate: String?
         let pageCount: Int?
@@ -19,16 +21,23 @@ struct GoogleBook: Decodable, Identifiable {
         let imageLinks: ImageLinks?
         let language: String?
         let industryIdentifiers: [Identifier]?
+        let previewLink: String?
 
         struct ImageLinks: Decodable {
-            let thumbnail: String?
             let smallThumbnail: String?
+            let thumbnail: String?
+            let small: String?
+            let medium: String?
+            let large: String?
+            let extraLarge: String?
 
-            var thumbnailURL: URL? {
-                guard let raw = thumbnail ?? smallThumbnail else { return nil }
-                // Google Books HTTP → HTTPS
+            private func toHTTPS(_ raw: String?) -> URL? {
+                guard let raw else { return nil }
                 return URL(string: raw.replacingOccurrences(of: "http://", with: "https://"))
             }
+
+            var thumbnailURL: URL? { toHTTPS(thumbnail ?? smallThumbnail) }
+            var largeURL: URL? { toHTTPS(extraLarge ?? large ?? medium ?? small ?? thumbnail ?? smallThumbnail) }
         }
 
         struct Identifier: Decodable {

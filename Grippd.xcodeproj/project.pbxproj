@@ -26,6 +26,7 @@
 		5A24E7CAE74A1399FA266C18 /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EFFCE43DC001079408FF4D /* PasswordResetView.swift */; };
 		69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5C708F8C6739EFC5B9592C /* LogRepository.swift */; };
 		6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B216F04C46ADC79E57A7119 /* ContentView.swift */; };
+		6F576865DF159AF3AA3D1835 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B050D81F62141DC420327F /* BookDetailView.swift */; };
 		70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC76940C4F0862F2C919C69 /* AppState.swift */; };
 		7175571387E911F418554E20 /* BooksMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97FFEA9C96CC1AC1A471163 /* BooksMapper.swift */; };
 		74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F3842F44C6E0E3A2A569E5 /* SignInView.swift */; };
@@ -98,6 +99,7 @@
 		5B0E69087D381DFA259CE35C /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		5C60BB8993AE3B0492233474 /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
 		5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		61B050D81F62141DC420327F /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
 		663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
 		67EFFCE43DC001079408FF4D /* PasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetView.swift; sourceTree = "<group>"; };
 		684AA2C0DF8DE655B26C90A0 /* GrippdTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdTheme.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 		1526FE58A6F666C15D361BC9 /* Content */ = {
 			isa = PBXGroup;
 			children = (
+				F80729D546E04E670FAB9E91 /* Book */,
 				8532F01D13203EE3B751C817 /* Movie */,
 				5C252BA059849A2D7AD14E79 /* TVShow */,
 			);
@@ -482,6 +485,14 @@
 			path = Discover;
 			sourceTree = "<group>";
 		};
+		F80729D546E04E670FAB9E91 /* Book */ = {
+			isa = PBXGroup;
+			children = (
+				61B050D81F62141DC420327F /* BookDetailView.swift */,
+			);
+			path = Book;
+			sourceTree = "<group>";
+		};
 		F857DE3C8C86580A3DF98480 = {
 			isa = PBXGroup;
 			children = (
@@ -603,6 +614,7 @@
 				70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */,
 				BFF42B36D9E6B9E6D2D20215 /* AuthService.swift in Sources */,
 				A88BA4107619CA7035BC7D64 /* AuthViewModel.swift in Sources */,
+				6F576865DF159AF3AA3D1835 /* BookDetailView.swift in Sources */,
 				7175571387E911F418554E20 /* BooksMapper.swift in Sources */,
 				BD8723107387C9BB7CAC1D14 /* BooksModels.swift in Sources */,
 				0CE79A92654B6457CDA82879 /* BooksRepository.swift in Sources */,
