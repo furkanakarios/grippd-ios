@@ -8,8 +8,8 @@
 
 | Faz | İsim | Durum | Detay |
 |---|---|---|---|
-| 1 | Foundation & Infrastructure | 🔴 Başlamadı | [PHASE-1](phases/PHASE-1-FOUNDATION.md) |
-| 2 | Content Browsing & Detail Screens | 🔴 Başlamadı | [PHASE-2](phases/PHASE-2-CONTENT.md) |
+| 1 | Foundation & Infrastructure | ✅ Tamamlandı | [PHASE-1](phases/PHASE-1-FOUNDATION.md) |
+| 2 | Content Browsing & Detail Screens | 🟡 Devam Ediyor | [PHASE-2](phases/PHASE-2-CONTENT.md) |
 | 3 | Logging & Rating System | 🔴 Başlamadı | [PHASE-3](phases/PHASE-3-LOGGING.md) |
 | 4 | Social Infrastructure | 🔴 Başlamadı | [PHASE-4](phases/PHASE-4-SOCIAL.md) |
 | 5 | Discover & Algorithms | 🔴 Başlamadı | [PHASE-5](phases/PHASE-5-DISCOVER.md) |
@@ -53,6 +53,11 @@
 3. Araç kurulumları (brew, SPM, vb.) için asla izin isteme — direkt kur
 4. Kullanıcı "başlayabilirsin" dediğinde adım tamamlanana kadar dur olmadan ilerle
 5. Hata oluşursa önce kendi çöz, çözülmezse kısa özet sun
+6. **Her step'in kodu bittikten sonra, git commit/push'tan ÖNCE kullanıcıya test özeti sun:**
+   - Bu step'te ne eklendi (kısa madde madde)
+   - Xcode Simulator'da nasıl test edilir (hangi ekran, hangi akış)
+   - "Test et, onaylarsan git adımlarına geçiyorum" de
+   - Kullanıcı onayı geldikten sonra commit + push yap
 
 ---
 

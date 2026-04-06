@@ -1,0 +1,859 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01700C4ED6212604C3062EA7 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14935DCEB91862475AA15F37 /* MainTabView.swift */; };
+		0CE79A92654B6457CDA82879 /* BooksRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265835ED6A83105317F3EDC5 /* BooksRepository.swift */; };
+		116A3439D527C894C318EDA3 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B348645889240B57745ED216 /* OnboardingService.swift */; };
+		11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */; };
+		134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */; };
+		175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9344A381848C54CF5FE99A0D /* DIContainer.swift */; };
+		1AABA80722445F66E018A6AA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D1CBC1ABF9BD97FF109E01 /* Content.swift */; };
+		1E497CC5BB09798EA83402F2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1686809CF6AAB5731AA8481 /* User.swift */; };
+		1E50150BD4CADF7E83A4D32E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C3D51F02E1AE282175FA62 /* SearchView.swift */; };
+		24CB916439B123DB568F668D /* EmailAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */; };
+		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
+		33AF8FE290C0154E1E2BF576 /* SwiftDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */; };
+		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
+		3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */; };
+		56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28237F388713091CF5B58242 /* EmailAuthViewModel.swift */; };
+		5916D159749A98326791E104 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */; };
+		5A24E7CAE74A1399FA266C18 /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EFFCE43DC001079408FF4D /* PasswordResetView.swift */; };
+		69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5C708F8C6739EFC5B9592C /* LogRepository.swift */; };
+		6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B216F04C46ADC79E57A7119 /* ContentView.swift */; };
+		70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC76940C4F0862F2C919C69 /* AppState.swift */; };
+		7175571387E911F418554E20 /* BooksMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97FFEA9C96CC1AC1A471163 /* BooksMapper.swift */; };
+		74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F3842F44C6E0E3A2A569E5 /* SignInView.swift */; };
+		75130680374B96D6E996FF20 /* OpenLibraryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED09B7FBCDC06B99E2FE6BEA /* OpenLibraryClient.swift */; };
+		763B32A3D5C4361C8A74F5BD /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0434D08DA6A581F7F3B392 /* OnboardingView.swift */; };
+		7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209950C1A8FB3E39AD1DD55F /* LogEntry.swift */; };
+		8D1EA92CD2CBD7FA6A7F5B96 /* ContentInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B95A5DB33DF5A3679378204 /* ContentInterest.swift */; };
+		8EA99FD01206A4834FC06D44 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6CEA8D04D9ED636549509A /* ProfileView.swift */; };
+		9C205D397566ACA00F458697 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF95542CD4B341C9D05419B7 /* Review.swift */; };
+		9C42B2865B070B827521A67A /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08940053FF164140782E01FB /* AppRouter.swift */; };
+		A05A9038635ADDFAE702743A /* DiscoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AD3C13B83EB88FD33808D8 /* DiscoverView.swift */; };
+		A0F6E6591D2079F3C4C97BAA /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF053B89084A730815FE5768 /* FeedView.swift */; };
+		A88BA4107619CA7035BC7D64 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4CBF9E15999716707334E2 /* AuthViewModel.swift */; };
+		B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905FA566B07407F50510D020 /* UserRepository.swift */; };
+		B493C5FA697B4E379C049D11 /* GrippedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */; };
+		B71F2D6485252AE146CE69AD /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A077D0480CDDF60562399C9D /* TMDBClient.swift */; };
+		BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4DD0039F13A4706C8805F /* View+Extensions.swift */; };
+		BD8723107387C9BB7CAC1D14 /* BooksModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03449CA286DD3544FE53B7B2 /* BooksModels.swift */; };
+		BFF42B36D9E6B9E6D2D20215 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD11A484C7628DE0A6A84B0 /* AuthService.swift */; };
+		C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */; };
+		C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF9D2C89BA6439699CACDD /* ContentRepository.swift */; };
+		E0143E850210E440D62D37EB /* GoogleBooksClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */; };
+		E4A2AD4006928763D27846B2 /* GrippdComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2D418182291CD3ED6B16F /* GrippdComponents.swift */; };
+		E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 57B8F951E1296882A2860113 /* Supabase */; };
+		E9F116064D6A081F52F0BFE6 /* LocalCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */; };
+		EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */; };
+		F4DA93DFA910E861B146AC2D /* GrippdTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684AA2C0DF8DE655B26C90A0 /* GrippdTheme.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2B33E8B65D7A0B0FCF27B999 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CB30D1721FE57E3119A478C7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0175D501C0CCC8E960FE18CA;
+			remoteInfo = Grippd;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		03449CA286DD3544FE53B7B2 /* BooksModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksModels.swift; sourceTree = "<group>"; };
+		07C3D51F02E1AE282175FA62 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		08940053FF164140782E01FB /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		09F4DD0039F13A4706C8805F /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClientService.swift; sourceTree = "<group>"; };
+		14935DCEB91862475AA15F37 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		209950C1A8FB3E39AD1DD55F /* LogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntry.swift; sourceTree = "<group>"; };
+		21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippedTests.swift; sourceTree = "<group>"; };
+		265835ED6A83105317F3EDC5 /* BooksRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksRepository.swift; sourceTree = "<group>"; };
+		28237F388713091CF5B58242 /* EmailAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthViewModel.swift; sourceTree = "<group>"; };
+		284EEEB5FBB2470FF1914E70 /* Grippd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grippd.entitlements; sourceTree = "<group>"; };
+		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B216F04C46ADC79E57A7119 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GrippedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdApp.swift; sourceTree = "<group>"; };
+		4A0434D08DA6A581F7F3B392 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		4CC2D418182291CD3ED6B16F /* GrippdComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdComponents.swift; sourceTree = "<group>"; };
+		4CD11A484C7628DE0A6A84B0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		51AD3C13B83EB88FD33808D8 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
+		53D1CBC1ABF9BD97FF109E01 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
+		67EFFCE43DC001079408FF4D /* PasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetView.swift; sourceTree = "<group>"; };
+		684AA2C0DF8DE655B26C90A0 /* GrippdTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdTheme.swift; sourceTree = "<group>"; };
+		6B95A5DB33DF5A3679378204 /* ContentInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInterest.swift; sourceTree = "<group>"; };
+		70DF9D2C89BA6439699CACDD /* ContentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentRepository.swift; sourceTree = "<group>"; };
+		716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConstants.swift; sourceTree = "<group>"; };
+		787BEEC8FC34DAB5B9253370 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModels.swift; sourceTree = "<group>"; };
+		82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		85F3842F44C6E0E3A2A569E5 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksClient.swift; sourceTree = "<group>"; };
+		8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMapper.swift; sourceTree = "<group>"; };
+		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; path = xcconfig.template; sourceTree = "<group>"; };
+		8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthView.swift; sourceTree = "<group>"; };
+		905FA566B07407F50510D020 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
+		9344A381848C54CF5FE99A0D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
+		9A4CBF9E15999716707334E2 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		9B6CEA8D04D9ED636549509A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A077D0480CDDF60562399C9D /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
+		B348645889240B57745ED216 /* OnboardingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingService.swift; sourceTree = "<group>"; };
+		BF95542CD4B341C9D05419B7 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		BFC76940C4F0862F2C919C69 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		D1686809CF6AAB5731AA8481 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		D97FFEA9C96CC1AC1A471163 /* BooksMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksMapper.swift; sourceTree = "<group>"; };
+		ED09B7FBCDC06B99E2FE6BEA /* OpenLibraryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLibraryClient.swift; sourceTree = "<group>"; };
+		EE5C708F8C6739EFC5B9592C /* LogRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRepository.swift; sourceTree = "<group>"; };
+		F12A925BB62BED5A878937FD /* Grippd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grippd.entitlements; sourceTree = "<group>"; };
+		F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCacheService.swift; sourceTree = "<group>"; };
+		FF053B89084A730815FE5768 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		19E5854C8ED1C6EC5E602FA2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		09A1C0F8A28980D58AAD5A12 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */,
+				82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */,
+				8B5609258A962BEB0EF594A6 /* xcconfig.template */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		1AD8B087ABAFB1ACFB9C98AB /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				965FE217D4674C4AAF03FE0C /* Components */,
+				A0FC1A77BCD1ACA89228E52D /* Constants */,
+				8F508F21C787E1054B3B2491 /* DesignSystem */,
+				64FEFEA97195D42E17140726 /* Extensions */,
+				D836B20BCCA9367F3E374B5A /* Navigation */,
+				8615BBCD9817B1356F0AF2B2 /* Utils */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		309B307DE089F37E0245A26A /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		3691A1949DFAE3FCB542C173 /* Grippd */ = {
+			isa = PBXGroup;
+			children = (
+				284EEEB5FBB2470FF1914E70 /* Grippd.entitlements */,
+				F2262D7F0BCC789F72E329D3 /* App */,
+				09A1C0F8A28980D58AAD5A12 /* Config */,
+				77F66DC06E13C3BB47D69229 /* Data */,
+				D4FAF8E871C090FDE834F887 /* Domain */,
+				371306CBA9835385B3447541 /* Features */,
+				73AC765CBBA7F4D1AB928003 /* Resources */,
+				1AD8B087ABAFB1ACFB9C98AB /* Shared */,
+			);
+			path = Grippd;
+			sourceTree = "<group>";
+		};
+		371306CBA9835385B3447541 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				89BABCA741EB275B44CE2CB0 /* Auth */,
+				37BF925D7CE85A68F712FB6C /* ContentDetail */,
+				F7F9BF6BFCCB117DB1FD9E16 /* Discover */,
+				8435615DCA22E09D98CF16D3 /* Feed */,
+				309B307DE089F37E0245A26A /* Notifications */,
+				E854957021460A291F7125D5 /* Profile */,
+				B23FB579AB2E063D908E8486 /* Search */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		37BF925D7CE85A68F712FB6C /* ContentDetail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ContentDetail;
+			sourceTree = "<group>";
+		};
+		47F07DEF8E354B5D16A03A36 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		4DAA1FFC5B34F47AE60596A1 /* Supabase */ = {
+			isa = PBXGroup;
+			children = (
+				4CD11A484C7628DE0A6A84B0 /* AuthService.swift */,
+				B348645889240B57745ED216 /* OnboardingService.swift */,
+				0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */,
+			);
+			path = Supabase;
+			sourceTree = "<group>";
+		};
+		5ACBABDC609AC076FE7CCA0C /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */,
+				7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */,
+			);
+			path = Local;
+			sourceTree = "<group>";
+		};
+		64FEFEA97195D42E17140726 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				09F4DD0039F13A4706C8805F /* View+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		73AC765CBBA7F4D1AB928003 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F12A925BB62BED5A878937FD /* Grippd.entitlements */,
+				787BEEC8FC34DAB5B9253370 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		73F078758BC5D9DE33F02FB9 /* Books */ = {
+			isa = PBXGroup;
+			children = (
+				D97FFEA9C96CC1AC1A471163 /* BooksMapper.swift */,
+				03449CA286DD3544FE53B7B2 /* BooksModels.swift */,
+				88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */,
+				ED09B7FBCDC06B99E2FE6BEA /* OpenLibraryClient.swift */,
+			);
+			path = Books;
+			sourceTree = "<group>";
+		};
+		77F66DC06E13C3BB47D69229 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				5ACBABDC609AC076FE7CCA0C /* Local */,
+				D4E2EB454AF9B57AD5391BB1 /* Network */,
+				4DAA1FFC5B34F47AE60596A1 /* Supabase */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		8435615DCA22E09D98CF16D3 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				FF053B89084A730815FE5768 /* FeedView.swift */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
+		8615BBCD9817B1356F0AF2B2 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9344A381848C54CF5FE99A0D /* DIContainer.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		89BABCA741EB275B44CE2CB0 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				9A4CBF9E15999716707334E2 /* AuthViewModel.swift */,
+				8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */,
+				28237F388713091CF5B58242 /* EmailAuthViewModel.swift */,
+				4A0434D08DA6A581F7F3B392 /* OnboardingView.swift */,
+				437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */,
+				67EFFCE43DC001079408FF4D /* PasswordResetView.swift */,
+				85F3842F44C6E0E3A2A569E5 /* SignInView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		8F508F21C787E1054B3B2491 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				4CC2D418182291CD3ED6B16F /* GrippdComponents.swift */,
+				684AA2C0DF8DE655B26C90A0 /* GrippdTheme.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		965FE217D4674C4AAF03FE0C /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		96D4DBBD203CDF5C99A49FE1 /* GrippedTests */ = {
+			isa = PBXGroup;
+			children = (
+				21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */,
+			);
+			path = GrippedTests;
+			sourceTree = "<group>";
+		};
+		9DCB6B6F36AE164A163651AE /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				265835ED6A83105317F3EDC5 /* BooksRepository.swift */,
+				70DF9D2C89BA6439699CACDD /* ContentRepository.swift */,
+				EE5C708F8C6739EFC5B9592C /* LogRepository.swift */,
+				905FA566B07407F50510D020 /* UserRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		A0FC1A77BCD1ACA89228E52D /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */,
+				716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		ABF8B4BDAA565D7D0746A459 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */,
+				404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B23FB579AB2E063D908E8486 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				07C3D51F02E1AE282175FA62 /* SearchView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		D19A8B8CFC1ADB65BD0FD1D7 /* TMDB */ = {
+			isa = PBXGroup;
+			children = (
+				A077D0480CDDF60562399C9D /* TMDBClient.swift */,
+				8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */,
+				663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */,
+			);
+			path = TMDB;
+			sourceTree = "<group>";
+		};
+		D4E2EB454AF9B57AD5391BB1 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				73F078758BC5D9DE33F02FB9 /* Books */,
+				D19A8B8CFC1ADB65BD0FD1D7 /* TMDB */,
+				E5B6E5657B45D19E7D4BB7AD /* Watchmode */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		D4FAF8E871C090FDE834F887 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				DD77C628E44BD6A4A40763AB /* Entities */,
+				9DCB6B6F36AE164A163651AE /* Repositories */,
+				47F07DEF8E354B5D16A03A36 /* UseCases */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		D836B20BCCA9367F3E374B5A /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				08940053FF164140782E01FB /* AppRouter.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		DD77C628E44BD6A4A40763AB /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				53D1CBC1ABF9BD97FF109E01 /* Content.swift */,
+				6B95A5DB33DF5A3679378204 /* ContentInterest.swift */,
+				209950C1A8FB3E39AD1DD55F /* LogEntry.swift */,
+				BF95542CD4B341C9D05419B7 /* Review.swift */,
+				D1686809CF6AAB5731AA8481 /* User.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		E5B6E5657B45D19E7D4BB7AD /* Watchmode */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Watchmode;
+			sourceTree = "<group>";
+		};
+		E854957021460A291F7125D5 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				9B6CEA8D04D9ED636549509A /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		F2262D7F0BCC789F72E329D3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BFC76940C4F0862F2C919C69 /* AppState.swift */,
+				3B216F04C46ADC79E57A7119 /* ContentView.swift */,
+				45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */,
+				14935DCEB91862475AA15F37 /* MainTabView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F7F9BF6BFCCB117DB1FD9E16 /* Discover */ = {
+			isa = PBXGroup;
+			children = (
+				51AD3C13B83EB88FD33808D8 /* DiscoverView.swift */,
+			);
+			path = Discover;
+			sourceTree = "<group>";
+		};
+		F857DE3C8C86580A3DF98480 = {
+			isa = PBXGroup;
+			children = (
+				3691A1949DFAE3FCB542C173 /* Grippd */,
+				96D4DBBD203CDF5C99A49FE1 /* GrippedTests */,
+				ABF8B4BDAA565D7D0746A459 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0175D501C0CCC8E960FE18CA /* Grippd */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45C3DCBB02B7033B34B85C0A /* Build configuration list for PBXNativeTarget "Grippd" */;
+			buildPhases = (
+				CEDE891F0785B3BE7CD28E6D /* Sources */,
+				5B3D1C85ADE9EB7FB53E1064 /* Resources */,
+				19E5854C8ED1C6EC5E602FA2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Grippd;
+			packageProductDependencies = (
+				57B8F951E1296882A2860113 /* Supabase */,
+			);
+			productName = Grippd;
+			productReference = 2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2A1F6221E9EA1B0B2AC4FD4E /* GrippedTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3084C33BF329DFF694D17A50 /* Build configuration list for PBXNativeTarget "GrippedTests" */;
+			buildPhases = (
+				33B6B7CC8538CC1B22157AC1 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E797A4DE9749FC484D1FB97 /* PBXTargetDependency */,
+			);
+			name = GrippedTests;
+			packageProductDependencies = (
+			);
+			productName = GrippedTests;
+			productReference = 404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CB30D1721FE57E3119A478C7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					0175D501C0CCC8E960FE18CA = {
+						DevelopmentTeam = "";
+					};
+					2A1F6221E9EA1B0B2AC4FD4E = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = 4DC96796BA051C27A2641598 /* Build configuration list for PBXProject "Grippd" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = F857DE3C8C86580A3DF98480;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = ABF8B4BDAA565D7D0746A459 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0175D501C0CCC8E960FE18CA /* Grippd */,
+				2A1F6221E9EA1B0B2AC4FD4E /* GrippedTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5B3D1C85ADE9EB7FB53E1064 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DE3076A9C740F885368A39D /* xcconfig.template in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		33B6B7CC8538CC1B22157AC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B493C5FA697B4E379C049D11 /* GrippedTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEDE891F0785B3BE7CD28E6D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */,
+				9C42B2865B070B827521A67A /* AppRouter.swift in Sources */,
+				70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */,
+				BFF42B36D9E6B9E6D2D20215 /* AuthService.swift in Sources */,
+				A88BA4107619CA7035BC7D64 /* AuthViewModel.swift in Sources */,
+				7175571387E911F418554E20 /* BooksMapper.swift in Sources */,
+				BD8723107387C9BB7CAC1D14 /* BooksModels.swift in Sources */,
+				0CE79A92654B6457CDA82879 /* BooksRepository.swift in Sources */,
+				1AABA80722445F66E018A6AA /* Content.swift in Sources */,
+				8D1EA92CD2CBD7FA6A7F5B96 /* ContentInterest.swift in Sources */,
+				C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */,
+				6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */,
+				175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */,
+				A05A9038635ADDFAE702743A /* DiscoverView.swift in Sources */,
+				24CB916439B123DB568F668D /* EmailAuthView.swift in Sources */,
+				56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */,
+				A0F6E6591D2079F3C4C97BAA /* FeedView.swift in Sources */,
+				E0143E850210E440D62D37EB /* GoogleBooksClient.swift in Sources */,
+				3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */,
+				E4A2AD4006928763D27846B2 /* GrippdComponents.swift in Sources */,
+				F4DA93DFA910E861B146AC2D /* GrippdTheme.swift in Sources */,
+				E9F116064D6A081F52F0BFE6 /* LocalCacheService.swift in Sources */,
+				7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */,
+				69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */,
+				01700C4ED6212604C3062EA7 /* MainTabView.swift in Sources */,
+				116A3439D527C894C318EDA3 /* OnboardingService.swift in Sources */,
+				763B32A3D5C4361C8A74F5BD /* OnboardingView.swift in Sources */,
+				5916D159749A98326791E104 /* OnboardingViewModel.swift in Sources */,
+				75130680374B96D6E996FF20 /* OpenLibraryClient.swift in Sources */,
+				5A24E7CAE74A1399FA266C18 /* PasswordResetView.swift in Sources */,
+				8EA99FD01206A4834FC06D44 /* ProfileView.swift in Sources */,
+				9C205D397566ACA00F458697 /* Review.swift in Sources */,
+				1E50150BD4CADF7E83A4D32E /* SearchView.swift in Sources */,
+				74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */,
+				134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */,
+				EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */,
+				33AF8FE290C0154E1E2BF576 /* SwiftDataModels.swift in Sources */,
+				B71F2D6485252AE146CE69AD /* TMDBClient.swift in Sources */,
+				3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */,
+				11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */,
+				1E497CC5BB09798EA83402F2 /* User.swift in Sources */,
+				B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */,
+				BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6E797A4DE9749FC484D1FB97 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0175D501C0CCC8E960FE18CA /* Grippd */;
+			targetProxy = 2B33E8B65D7A0B0FCF27B999 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		36ACCA7FF550CE5046674428 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		3F63D6697F85167B3968A9EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.GrippedTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Grippd.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Grippd";
+			};
+			name = Debug;
+		};
+		74049DAF996B5F83558C9FF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.GrippedTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Grippd.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Grippd";
+			};
+			name = Release;
+		};
+		B1DD7BFB5800BFBDA1253E75 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		C3664ADA9886238040B65E46 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Grippd/Resources/Grippd.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Grippd/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.app;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FE14FFC8EAFA84E56CC45F08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Grippd/Resources/Grippd.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Grippd/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3084C33BF329DFF694D17A50 /* Build configuration list for PBXNativeTarget "GrippedTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F63D6697F85167B3968A9EA /* Debug */,
+				74049DAF996B5F83558C9FF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		45C3DCBB02B7033B34B85C0A /* Build configuration list for PBXNativeTarget "Grippd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3664ADA9886238040B65E46 /* Debug */,
+				FE14FFC8EAFA84E56CC45F08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4DC96796BA051C27A2641598 /* Build configuration list for PBXProject "Grippd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36ACCA7FF550CE5046674428 /* Debug */,
+				B1DD7BFB5800BFBDA1253E75 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		57B8F951E1296882A2860113 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = CB30D1721FE57E3119A478C7 /* Project object */;
+}
