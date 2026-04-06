@@ -47,6 +47,7 @@ struct BookDetailView: View {
     @State private var showFullDescription = false
     @State private var showLogSheet = false
     @State private var isLogged = false
+    @State private var loggedRating: Double? = nil
 
     private var contentKey: String { "book-\(googleBooksID)" }
 
@@ -76,7 +77,7 @@ struct BookDetailView: View {
         .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task { await viewModel.load(googleBooksID: googleBooksID) }
-        .onAppear { isLogged = LogService.shared.isLogged(contentKey: contentKey) }
+        .onAppear { refreshLogState() }
         .sheet(isPresented: $showLogSheet) {
             LogEntrySheet(
                 contentKey: contentKey,
@@ -85,11 +86,16 @@ struct BookDetailView: View {
                 posterPath: viewModel.book?.volumeInfo.imageLinks?.thumbnail,
                 isPresented: $showLogSheet
             ) {
-                isLogged = LogService.shared.isLogged(contentKey: contentKey)
+                refreshLogState()
             }
             .presentationDetents([.large])
             .presentationDragIndicator(.visible)
         }
+    }
+
+    private func refreshLogState() {
+        isLogged = LogService.shared.isLogged(contentKey: contentKey)
+        loggedRating = LogService.shared.latestLog(for: contentKey)?.rating
     }
 
     // MARK: - Main Content
@@ -229,25 +235,34 @@ struct BookDetailView: View {
 
     private var actionButtons: some View {
         HStack(spacing: 12) {
-            Button {
-                showLogSheet = true
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: isLogged ? "checkmark.circle.fill" : "checkmark.circle")
-                        .font(.system(size: 16))
-                    Text(isLogged ? "Okundu" : "Okudum")
-                        .font(.system(size: 14, weight: .semibold))
+            ZStack(alignment: .topTrailing) {
+                Button {
+                    showLogSheet = true
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: isLogged ? "checkmark.circle.fill" : "checkmark.circle")
+                            .font(.system(size: 16))
+                        Text(isLogged ? "Okundu" : "Okudum")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                    .foregroundStyle(isLogged ? GrippdTheme.Colors.background : .white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(
+                        isLogged
+                            ? GrippdTheme.Colors.accent
+                            : Color.white.opacity(0.1),
+                        in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
+                    )
                 }
-                .foregroundStyle(isLogged ? GrippdTheme.Colors.background : .white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 44)
-                .background(
-                    isLogged
-                        ? GrippdTheme.Colors.accent
-                        : Color.white.opacity(0.1),
-                    in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
-                )
+
+                if let r = loggedRating {
+                    StarRatingBadge(rating: r, fontSize: 12)
+                        .offset(x: 6, y: -6)
+                        .transition(.scale.combined(with: .opacity))
+                }
             }
+            .animation(.spring(response: 0.3), value: loggedRating != nil)
 
             Button {
                 withAnimation(.spring(response: 0.3)) {

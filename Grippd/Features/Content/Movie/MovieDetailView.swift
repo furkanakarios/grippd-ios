@@ -7,6 +7,7 @@ struct MovieDetailView: View {
     @State private var showFullOverview = false
     @State private var showLogSheet = false
     @State private var isLogged = false
+    @State private var loggedRating: Double? = nil
 
     private var contentKey: String { "movie-\(tmdbID)" }
 
@@ -26,7 +27,7 @@ struct MovieDetailView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task { await viewModel.load(tmdbID: tmdbID) }
-        .onAppear { isLogged = LogService.shared.isLogged(contentKey: contentKey) }
+        .onAppear { refreshLogState() }
         .sheet(isPresented: $showLogSheet) {
             LogEntrySheet(
                 contentKey: contentKey,
@@ -34,12 +35,15 @@ struct MovieDetailView: View {
                 contentTitle: viewModel.movie?.title ?? "",
                 posterPath: viewModel.movie?.posterPath,
                 isPresented: $showLogSheet
-            ) {
-                isLogged = LogService.shared.isLogged(contentKey: contentKey)
-            }
+            ) { refreshLogState() }
             .presentationDetents([.large])
             .presentationDragIndicator(.visible)
         }
+    }
+
+    private func refreshLogState() {
+        isLogged = LogService.shared.isLogged(contentKey: contentKey)
+        loggedRating = LogService.shared.latestLog(for: contentKey)?.rating
     }
 
     // MARK: - Content
@@ -241,7 +245,8 @@ struct MovieDetailView: View {
                 icon: isLogged ? "checkmark.circle.fill" : "checkmark.circle",
                 label: isLogged ? "İzlendi" : "İzledim",
                 isActive: isLogged,
-                activeColor: Color(red: 0.2, green: 0.8, blue: 0.4)
+                activeColor: Color(red: 0.2, green: 0.8, blue: 0.4),
+                badge: loggedRating.map { AnyView(StarRatingBadge(rating: $0, fontSize: 12)) }
             ) {
                 showLogSheet = true
             }
@@ -404,12 +409,13 @@ private struct MovieActionButton: View {
     let label: String
     let isActive: Bool
     let activeColor: Color
+    var badge: AnyView? = nil
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             VStack(spacing: 6) {
-                ZStack {
+                ZStack(alignment: .topTrailing) {
                     RoundedRectangle(cornerRadius: GrippdTheme.Radius.sm)
                         .fill(isActive ? activeColor.opacity(0.15) : .white.opacity(0.06))
                         .overlay(
@@ -420,6 +426,12 @@ private struct MovieActionButton: View {
                         .font(.system(size: 20))
                         .foregroundStyle(isActive ? activeColor : .white.opacity(0.7))
                         .animation(.spring(duration: 0.2), value: isActive)
+
+                    if let badge {
+                        badge
+                            .offset(x: 6, y: -6)
+                            .transition(.scale.combined(with: .opacity))
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
@@ -429,6 +441,7 @@ private struct MovieActionButton: View {
                     .foregroundStyle(isActive ? activeColor.opacity(0.9) : .white.opacity(0.45))
             }
         }
+        .animation(.spring(response: 0.3), value: badge != nil)
     }
 }
 
