@@ -1,6 +1,6 @@
 # Faz 2 — Content Browsing & Detail Screens
 
-**Durum:** 🟡 Devam Ediyor  
+**Durum:** ✅ Tamamlandı  
 **Branch base:** `develop`
 
 ---
@@ -28,8 +28,8 @@
 - [x] **Step 7** — Custom içerik ekleme (Premium): user_created flow  
   Branch: `feature/phase-2-step-7-custom-content` ✅
 
-- [ ] **Step 8** — Trending & New Releases: TMDB trending, yeni çıkanlar  
-  Branch: `feature/phase-2-step-8-trending`
+- [x] **Step 8** — Trending & New Releases: TMDB trending, yeni çıkanlar  
+  Branch: `feature/phase-2-step-8-trending` ✅
 
 - [ ] **Step 9** — Genre & kategori browsing: türe göre filtreleme  
   Branch: `feature/phase-2-step-9-genre-browse` ✅

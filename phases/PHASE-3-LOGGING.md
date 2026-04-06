@@ -1,6 +1,6 @@
 # Faz 3 — Logging & Rating System
 
-**Durum:** 🔴 Başlamadı  
+**Durum:** 🟡 Devam Ediyor  
 **Branch base:** `develop`
 
 ---
