@@ -5,17 +5,20 @@ import SwiftUI
 enum FeedRoute: Hashable {
     case userProfile(userID: UUID)
     case contentDetail(contentID: UUID)
+    case movieDetail(tmdbID: Int)
 }
 
 enum SearchRoute: Hashable {
     case contentDetail(contentID: UUID)
     case userProfile(userID: UUID)
+    case movieDetail(tmdbID: Int)
 }
 
 enum DiscoverRoute: Hashable {
     case contentDetail(contentID: UUID)
     case userProfile(userID: UUID)
     case genre(String)
+    case movieDetail(tmdbID: Int)
 }
 
 enum ProfileRoute: Hashable {
@@ -25,6 +28,7 @@ enum ProfileRoute: Hashable {
     case following(userID: UUID)
     case contentDetail(contentID: UUID)
     case userProfile(userID: UUID)
+    case movieDetail(tmdbID: Int)
 }
 
 // MARK: - Router

@@ -30,7 +30,7 @@ final class TMDBClient {
     }
 
     func movieDetail(id: Int) async throws -> TMDBMovie {
-        try await get("movie/\(id)", params: ["append_to_response": "genres"])
+        try await get("movie/\(id)", params: ["append_to_response": "credits"])
     }
 
     func searchMovies(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBMovie> {

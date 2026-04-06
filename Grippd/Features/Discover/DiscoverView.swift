@@ -33,9 +33,10 @@ struct DiscoverView: View {
     @ViewBuilder
     private func discoverDestination(_ route: DiscoverRoute) -> some View {
         switch route {
-        case .contentDetail: Text("İçerik Detay — Phase 2")
-        case .userProfile: Text("Kullanıcı Profil — Phase 4")
-        case .genre(let name): Text("\(name) — Phase 5")
+        case .movieDetail(let tmdbID): MovieDetailView(tmdbID: tmdbID)
+        case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
+        case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
+        case .genre(let name): Text("\(name) — Phase 5").foregroundStyle(.white)
         }
     }
 }
