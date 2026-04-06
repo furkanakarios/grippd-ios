@@ -135,7 +135,12 @@ struct ProfileView: View {
             TVShowDetailView(tmdbID: tmdbID) { showID, seasonNumber in
                 router.profilePath.append(ProfileRoute.seasonDetail(showID: showID, seasonNumber: seasonNumber))
             }
-        case .seasonDetail(let showID, let seasonNumber): SeasonDetailView(showID: showID, seasonNumber: seasonNumber)
+        case .seasonDetail(let showID, let seasonNumber):
+            SeasonDetailView(showID: showID, seasonNumber: seasonNumber) { sID, sNum, epNum in
+                router.profilePath.append(ProfileRoute.episodeDetail(showID: sID, seasonNumber: sNum, episodeNumber: epNum))
+            }
+        case .episodeDetail(let showID, let seasonNumber, let episodeNumber):
+            EpisodeDetailView(showID: showID, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
         case .settings: SettingsPlaceholderView()
         case .editProfile: Text("Profil Düzenle — Phase 4").foregroundStyle(.white)
         case .followers: Text("Takipçiler — Phase 4").foregroundStyle(.white)

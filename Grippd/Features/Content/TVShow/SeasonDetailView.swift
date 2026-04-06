@@ -22,6 +22,7 @@ private final class SeasonDetailViewModel {
 struct SeasonDetailView: View {
     let showID: Int
     let seasonNumber: Int
+    var onEpisodeTap: ((Int, Int, Int) -> Void)? // (showID, seasonNumber, episodeNumber)
 
     @State private var viewModel = SeasonDetailViewModel()
 
@@ -63,7 +64,9 @@ struct SeasonDetailView: View {
                 // Episodes
                 if let episodes = season.episodes, !episodes.isEmpty {
                     ForEach(episodes) { episode in
-                        EpisodeRow(episode: episode)
+                        EpisodeRow(episode: episode) {
+                            onEpisodeTap?(showID, seasonNumber, episode.episodeNumber)
+                        }
                         Divider()
                             .background(.white.opacity(0.06))
                             .padding(.leading, GrippdTheme.Spacing.md)
@@ -130,17 +133,17 @@ struct SeasonDetailView: View {
 
 private struct EpisodeRow: View {
     let episode: TMDBEpisode
+    let onTap: () -> Void
     @State private var showOverview = false
 
-    var formattedRuntime: String? {
-        guard let runtime = episode.runtime, runtime > 0 else { return nil }
-        let h = runtime / 60, m = runtime % 60
-        if h == 0 { return "\(m)dk" }
-        if m == 0 { return "\(h)s" }
-        return "\(h)s \(m)dk"
+    var body: some View {
+        Button(action: onTap) {
+            rowContent
+        }
+        .buttonStyle(.plain)
     }
 
-    var body: some View {
+    private var rowContent: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .top, spacing: GrippdTheme.Spacing.md) {
                 // Still image
@@ -173,7 +176,7 @@ private struct EpisodeRow: View {
                     }
 
                     HStack(spacing: 8) {
-                        if let runtime = formattedRuntime {
+                        if let runtime = episode.formattedRuntime {
                             Text(runtime)
                                 .font(.system(size: 12))
                                 .foregroundStyle(.white.opacity(0.4))
@@ -218,5 +221,6 @@ private struct EpisodeRow: View {
         }
         .padding(.horizontal, GrippdTheme.Spacing.md)
         .padding(.vertical, 12)
+        .contentShape(Rectangle())
     }
 }

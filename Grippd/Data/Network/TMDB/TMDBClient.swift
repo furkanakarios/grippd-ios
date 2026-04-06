@@ -55,6 +55,13 @@ final class TMDBClient {
         try await get("tv/\(showID)/season/\(seasonNumber)", params: ["append_to_response": "episodes"])
     }
 
+    func episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int) async throws -> TMDBEpisode {
+        try await get(
+            "tv/\(showID)/season/\(seasonNumber)/episode/\(episodeNumber)",
+            params: ["append_to_response": "credits"]
+        )
+    }
+
     func searchTVShows(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBTVShow> {
         try await get("search/tv", params: ["query": query, "page": "\(page)"])
     }

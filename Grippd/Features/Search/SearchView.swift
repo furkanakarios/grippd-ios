@@ -204,7 +204,11 @@ struct SearchView: View {
                 router.searchPath.append(SearchRoute.seasonDetail(showID: showID, seasonNumber: seasonNumber))
             }
         case .seasonDetail(let showID, let seasonNumber):
-            SeasonDetailView(showID: showID, seasonNumber: seasonNumber)
+            SeasonDetailView(showID: showID, seasonNumber: seasonNumber) { sID, sNum, epNum in
+                router.searchPath.append(SearchRoute.episodeDetail(showID: sID, seasonNumber: sNum, episodeNumber: epNum))
+            }
+        case .episodeDetail(let showID, let seasonNumber, let episodeNumber):
+            EpisodeDetailView(showID: showID, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
         case .contentDetail:
             Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile:

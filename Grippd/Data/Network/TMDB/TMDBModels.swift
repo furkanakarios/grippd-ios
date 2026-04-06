@@ -151,19 +151,50 @@ struct TMDBEpisode: Decodable, Identifiable {
     let airDate: String?
     let runtime: Int?
     let voteAverage: Double
+    let voteCount: Int?
+    let guestStars: [TMDBCastMember]?
+    let crew: [TMDBCrewMember]?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, overview, runtime
+        case id, name, overview, runtime, crew
         case episodeNumber = "episode_number"
         case seasonNumber = "season_number"
         case stillPath = "still_path"
         case airDate = "air_date"
         case voteAverage = "vote_average"
+        case voteCount = "vote_count"
+        case guestStars = "guest_stars"
     }
 
     var stillURL: URL? {
         guard let path = stillPath else { return nil }
-        return URL(string: "https://image.tmdb.org/t/p/w300\(path)")
+        return URL(string: "https://image.tmdb.org/t/p/w780\(path)")
+    }
+
+    var formattedAirDate: String? {
+        guard let airDate else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        guard let date = formatter.date(from: airDate) else { return airDate }
+        formatter.dateFormat = "d MMM yyyy"
+        formatter.locale = Locale(identifier: "tr_TR")
+        return formatter.string(from: date)
+    }
+
+    var formattedRuntime: String? {
+        guard let runtime, runtime > 0 else { return nil }
+        let h = runtime / 60, m = runtime % 60
+        if h == 0 { return "\(m)dk" }
+        if m == 0 { return "\(h)s" }
+        return "\(h)s \(m)dk"
+    }
+
+    var directors: [TMDBCrewMember] {
+        crew?.filter { $0.job == "Director" } ?? []
+    }
+
+    var writers: [TMDBCrewMember] {
+        crew?.filter { $0.department == "Writing" } ?? []
     }
 }
 
