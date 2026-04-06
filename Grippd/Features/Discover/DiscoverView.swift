@@ -1,0 +1,41 @@
+import SwiftUI
+
+struct DiscoverView: View {
+    @Environment(AppRouter.self) private var router
+
+    var body: some View {
+        @Bindable var router = router
+        NavigationStack(path: $router.discoverPath) {
+            ZStack {
+                GrippdBackground()
+                VStack(spacing: GrippdTheme.Spacing.md) {
+                    Image(systemName: "compass.drawing")
+                        .font(.system(size: 48))
+                        .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.3))
+                    Text("Keşfet")
+                        .font(GrippdTheme.Typography.headline)
+                        .foregroundStyle(.white)
+                    Text("Phase 5'te geliyor")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.white.opacity(0.35))
+                }
+            }
+            .navigationTitle("Keşfet")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .navigationDestination(for: DiscoverRoute.self) { route in
+                discoverDestination(route)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func discoverDestination(_ route: DiscoverRoute) -> some View {
+        switch route {
+        case .contentDetail: Text("İçerik Detay — Phase 2")
+        case .userProfile: Text("Kullanıcı Profil — Phase 4")
+        case .genre(let name): Text("\(name) — Phase 5")
+        }
+    }
+}
