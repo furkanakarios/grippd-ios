@@ -156,15 +156,19 @@ struct StarRatingBadge: View {
     var body: some View {
         HStack(spacing: 3) {
             Image(systemName: "star.fill")
-                .font(.system(size: fontSize - 1))
+                .font(.system(size: fontSize - 2, weight: .semibold))
                 .foregroundStyle(badgeColor)
             Text(String(format: rating == Double(Int(rating)) ? "%.0f" : "%.1f", rating))
-                .font(.system(size: fontSize, weight: .semibold, design: .rounded))
+                .font(.system(size: fontSize, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
         }
-        .padding(.horizontal, 8)
+        .padding(.horizontal, 7)
         .padding(.vertical, 4)
-        .background(badgeColor.opacity(0.15), in: Capsule())
+        .background(
+            Capsule()
+                .fill(Color(red: 0.10, green: 0.10, blue: 0.13))
+                .overlay(Capsule().stroke(badgeColor.opacity(0.6), lineWidth: 1))
+        )
     }
 
     private var badgeColor: Color {
