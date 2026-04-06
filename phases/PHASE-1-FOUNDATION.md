@@ -28,6 +28,7 @@
 - [ ] **Step 7** — Ana navigasyon: TabBar, router/coordinator pattern  
   Branch: `feature/phase-1-step-7-navigation`
 
+
 - [ ] **Step 8** — TMDB API client: arama, detay, model mapping  
   Branch: `feature/phase-1-step-8-tmdb-client`
 
