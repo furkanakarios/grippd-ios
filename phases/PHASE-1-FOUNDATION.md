@@ -32,8 +32,8 @@
 - [x] **Step 8** — TMDB API client: arama, detay, model mapping  
   Branch: `feature/phase-1-step-8-tmdb-client` ✅
 
-- [ ] **Step 9** — Google Books + Open Library API client  
-  Branch: `feature/phase-1-step-9-books-client`
+- [x] **Step 9** — Google Books + Open Library API client  
+  Branch: `feature/phase-1-step-9-books-client` ✅
 
 - [ ] **Step 10** — SwiftData local cache, offline altyapı, TestFlight ilk build  
   Branch: `feature/phase-1-step-10-local-cache`
