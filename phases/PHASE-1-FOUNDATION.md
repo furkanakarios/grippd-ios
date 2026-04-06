@@ -25,8 +25,8 @@
 - [x] **Step 6** — Onboarding: kullanıcı adı, ilgi alanları, profil fotoğrafı  
   Branch: `feature/phase-1-step-6-onboarding` ✅
 
-- [ ] **Step 7** — Ana navigasyon: TabBar, router/coordinator pattern  
-  Branch: `feature/phase-1-step-7-navigation`
+- [x] **Step 7** — Ana navigasyon: TabBar, router/coordinator pattern  
+  Branch: `feature/phase-1-step-7-navigation` ✅
 
 
 - [ ] **Step 8** — TMDB API client: arama, detay, model mapping  
