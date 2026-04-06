@@ -7,8 +7,6 @@ final class MovieDetailViewModel {
     var isLoading = false
     var error: String?
 
-    // Local toggle state — actual persistence is Phase 3
-    var isWatched = false
     var isBookmarked = false
 
     func load(tmdbID: Int) async {

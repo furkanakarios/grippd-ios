@@ -7,7 +7,6 @@ private final class BookDetailViewModel {
     var book: GoogleBook?
     var isLoading = false
     var error: String?
-    var isRead = false
     var isBookmarked = false
 
     func load(googleBooksID: String) async {
@@ -46,6 +45,10 @@ struct BookDetailView: View {
 
     @State private var viewModel = BookDetailViewModel()
     @State private var showFullDescription = false
+    @State private var showLogSheet = false
+    @State private var isLogged = false
+
+    private var contentKey: String { "book-\(googleBooksID)" }
 
     var body: some View {
         ZStack {
@@ -73,6 +76,20 @@ struct BookDetailView: View {
         .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task { await viewModel.load(googleBooksID: googleBooksID) }
+        .onAppear { isLogged = LogService.shared.isLogged(contentKey: contentKey) }
+        .sheet(isPresented: $showLogSheet) {
+            LogEntrySheet(
+                contentKey: contentKey,
+                contentType: .book,
+                contentTitle: viewModel.book?.volumeInfo.title ?? "",
+                posterPath: viewModel.book?.volumeInfo.imageLinks?.thumbnail,
+                isPresented: $showLogSheet
+            ) {
+                isLogged = LogService.shared.isLogged(contentKey: contentKey)
+            }
+            .presentationDetents([.large])
+            .presentationDragIndicator(.visible)
+        }
     }
 
     // MARK: - Main Content
@@ -213,21 +230,19 @@ struct BookDetailView: View {
     private var actionButtons: some View {
         HStack(spacing: 12) {
             Button {
-                withAnimation(.spring(response: 0.3)) {
-                    viewModel.isRead.toggle()
-                }
+                showLogSheet = true
             } label: {
                 HStack(spacing: 8) {
-                    Image(systemName: viewModel.isRead ? "checkmark.circle.fill" : "checkmark.circle")
+                    Image(systemName: isLogged ? "checkmark.circle.fill" : "checkmark.circle")
                         .font(.system(size: 16))
-                    Text(viewModel.isRead ? "Okundu" : "Okudum")
+                    Text(isLogged ? "Okundu" : "Okudum")
                         .font(.system(size: 14, weight: .semibold))
                 }
-                .foregroundStyle(viewModel.isRead ? GrippdTheme.Colors.background : .white)
+                .foregroundStyle(isLogged ? GrippdTheme.Colors.background : .white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 44)
                 .background(
-                    viewModel.isRead
+                    isLogged
                         ? GrippdTheme.Colors.accent
                         : Color.white.opacity(0.1),
                     in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
