@@ -96,6 +96,10 @@ struct MovieDetailView: View {
                     overviewSection(text: movie.overview)
                 }
 
+                // Community stats
+                CommunityStatsView(contentKey: "movie-\(tmdbID)")
+                    .padding(.horizontal, GrippdTheme.Spacing.md)
+
                 // Streaming platforms
                 PlatformAvailabilityView(kind: .movie(tmdbID: tmdbID))
 

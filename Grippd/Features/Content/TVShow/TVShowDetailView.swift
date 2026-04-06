@@ -98,6 +98,10 @@ struct TVShowDetailView: View {
                     creatorSection(creators: creators)
                 }
 
+                // Community stats
+                CommunityStatsView(contentKey: "tv-\(tmdbID)")
+                    .padding(.horizontal, GrippdTheme.Spacing.md)
+
                 // Streaming platforms
                 PlatformAvailabilityView(kind: .tv(tmdbID: tmdbID))
 

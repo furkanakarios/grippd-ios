@@ -85,6 +85,10 @@ struct BookDetailView: View {
                 actionButtons
                     .padding(.horizontal, GrippdTheme.Spacing.md)
                     .padding(.top, GrippdTheme.Spacing.lg)
+                CommunityStatsView(contentKey: "book-\(googleBooksID)")
+                    .padding(.horizontal, GrippdTheme.Spacing.md)
+                    .padding(.top, GrippdTheme.Spacing.sm)
+
                 if let description = book.volumeInfo.description {
                     descriptionSection(description)
                 }
