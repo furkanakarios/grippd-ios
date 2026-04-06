@@ -13,6 +13,7 @@
 		11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */; };
 		132FDEF360F2544D6B795EEC /* UserContentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F163E79088ACED45114CDFF8 /* UserContentService.swift */; };
 		BDFFBFF80C584D6688A0C62F /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF71D7A438D432F868EFB2A /* LogService.swift */; };
+		B996696A6AD9488393DE6E06 /* LogEntrySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A548B3411475F955E84F3 /* LogEntrySheet.swift */; };
 		134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */; };
 		175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9344A381848C54CF5FE99A0D /* DIContainer.swift */; };
 		1AABA80722445F66E018A6AA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D1CBC1ABF9BD97FF109E01 /* Content.swift */; };
@@ -156,6 +157,7 @@
 		F12A925BB62BED5A878937FD /* Grippd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grippd.entitlements; sourceTree = "<group>"; };
 		F163E79088ACED45114CDFF8 /* UserContentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContentService.swift; sourceTree = "<group>"; };
 		5CF71D7A438D432F868EFB2A /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
+		038A548B3411475F955E84F3 /* LogEntrySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntrySheet.swift; sourceTree = "<group>"; };
 		F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCacheService.swift; sourceTree = "<group>"; };
 		FF053B89084A730815FE5768 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -236,11 +238,20 @@
 				37BF925D7CE85A68F712FB6C /* ContentDetail */,
 				F7F9BF6BFCCB117DB1FD9E16 /* Discover */,
 				8435615DCA22E09D98CF16D3 /* Feed */,
+				B43AFE4810394D2D81633872 /* Logging */,
 				309B307DE089F37E0245A26A /* Notifications */,
 				E854957021460A291F7125D5 /* Profile */,
 				B23FB579AB2E063D908E8486 /* Search */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		B43AFE4810394D2D81633872 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				038A548B3411475F955E84F3 /* LogEntrySheet.swift */,
+			);
+			path = Logging;
 			sourceTree = "<group>";
 		};
 		37BF925D7CE85A68F712FB6C /* ContentDetail */ = {
@@ -712,6 +723,7 @@
 				1E497CC5BB09798EA83402F2 /* User.swift in Sources */,
 				132FDEF360F2544D6B795EEC /* UserContentService.swift in Sources */,
 				BDFFBFF80C584D6688A0C62F /* LogService.swift in Sources */,
+				B996696A6AD9488393DE6E06 /* LogEntrySheet.swift in Sources */,
 				B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */,
 				BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */,
 				F5350A4C329474F42D1CB4F7 /* WatchmodeClient.swift in Sources */,

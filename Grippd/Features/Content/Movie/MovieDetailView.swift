@@ -5,6 +5,10 @@ struct MovieDetailView: View {
 
     @State private var viewModel = MovieDetailViewModel()
     @State private var showFullOverview = false
+    @State private var showLogSheet = false
+    @State private var isLogged = false
+
+    private var contentKey: String { "movie-\(tmdbID)" }
 
     var body: some View {
         ZStack {
@@ -22,6 +26,20 @@ struct MovieDetailView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task { await viewModel.load(tmdbID: tmdbID) }
+        .onAppear { isLogged = LogService.shared.isLogged(contentKey: contentKey) }
+        .sheet(isPresented: $showLogSheet) {
+            LogEntrySheet(
+                contentKey: contentKey,
+                contentType: .movie,
+                contentTitle: viewModel.movie?.title ?? "",
+                posterPath: viewModel.movie?.posterPath,
+                isPresented: $showLogSheet
+            ) {
+                isLogged = LogService.shared.isLogged(contentKey: contentKey)
+            }
+            .presentationDetents([.large])
+            .presentationDragIndicator(.visible)
+        }
     }
 
     // MARK: - Content
@@ -220,12 +238,12 @@ struct MovieDetailView: View {
     private func actionButtons(movie: TMDBMovie) -> some View {
         HStack(spacing: 10) {
             MovieActionButton(
-                icon: viewModel.isWatched ? "checkmark.circle.fill" : "checkmark.circle",
-                label: "İzledim",
-                isActive: viewModel.isWatched,
+                icon: isLogged ? "checkmark.circle.fill" : "checkmark.circle",
+                label: isLogged ? "İzlendi" : "İzledim",
+                isActive: isLogged,
                 activeColor: Color(red: 0.2, green: 0.8, blue: 0.4)
             ) {
-                viewModel.isWatched.toggle()
+                showLogSheet = true
             }
 
             MovieActionButton(

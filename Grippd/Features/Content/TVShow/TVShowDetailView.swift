@@ -7,6 +7,10 @@ struct TVShowDetailView: View {
 
     @State private var viewModel = TVShowDetailViewModel()
     @State private var showFullOverview = false
+    @State private var showLogSheet = false
+    @State private var isLogged = false
+
+    private var contentKey: String { "tv-\(tmdbID)" }
 
     var body: some View {
         ZStack {
@@ -24,6 +28,20 @@ struct TVShowDetailView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task { await viewModel.load(tmdbID: tmdbID) }
+        .onAppear { isLogged = LogService.shared.isLogged(contentKey: contentKey) }
+        .sheet(isPresented: $showLogSheet) {
+            LogEntrySheet(
+                contentKey: contentKey,
+                contentType: .tv_show,
+                contentTitle: viewModel.show?.name ?? "",
+                posterPath: viewModel.show?.posterPath,
+                isPresented: $showLogSheet
+            ) {
+                isLogged = LogService.shared.isLogged(contentKey: contentKey)
+            }
+            .presentationDetents([.large])
+            .presentationDragIndicator(.visible)
+        }
     }
 
     // MARK: - Content
@@ -210,11 +228,11 @@ struct TVShowDetailView: View {
     private func actionButtons(show: TMDBTVShow) -> some View {
         HStack(spacing: 10) {
             TVActionButton(
-                icon: viewModel.isWatching ? "play.circle.fill" : "play.circle",
-                label: "İzliyorum",
-                isActive: viewModel.isWatching,
+                icon: isLogged ? "checkmark.circle.fill" : "checkmark.circle",
+                label: isLogged ? "İzlendi" : "İzledim",
+                isActive: isLogged,
                 activeColor: Color(red: 0.2, green: 0.8, blue: 0.4)
-            ) { viewModel.isWatching.toggle() }
+            ) { showLogSheet = true }
 
             TVActionButton(
                 icon: viewModel.isBookmarked ? "bookmark.fill" : "bookmark",
