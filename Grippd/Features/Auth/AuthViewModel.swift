@@ -14,8 +14,10 @@ final class AuthViewModel {
     // Called by AppState on launch to restore session
     func restoreSession(appState: AppState) async {
         guard let user = try? await authService.restoreSession() else { return }
+        let needsOnboarding = (try? await OnboardingService.shared.needsOnboarding(userID: user.id)) ?? false
         await MainActor.run {
             appState.currentUser = user
+            appState.needsOnboarding = needsOnboarding
             appState.isAuthenticated = true
         }
     }
@@ -43,8 +45,10 @@ final class AuthViewModel {
 
             do {
                 let user = try await authService.signInWithApple(idToken: idToken, nonce: nonce)
+                let needsOnboarding = (try? await OnboardingService.shared.needsOnboarding(userID: user.id)) ?? false
                 await MainActor.run {
                     appState.currentUser = user
+                    appState.needsOnboarding = needsOnboarding
                     appState.isAuthenticated = true
                     isLoading = false
                 }

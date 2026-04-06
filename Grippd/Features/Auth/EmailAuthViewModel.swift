@@ -30,6 +30,7 @@ final class EmailAuthViewModel {
                 let user = try await fetchProfile(id: response.user.id)
                 await MainActor.run {
                     appState.currentUser = user
+                    appState.needsOnboarding = true  // new signup always needs onboarding
                     appState.isAuthenticated = true
                     isLoading = false
                 }
@@ -59,8 +60,10 @@ final class EmailAuthViewModel {
         do {
             let session = try await client.auth.signIn(email: email, password: password)
             let user = try await fetchProfile(id: session.user.id)
+            let needsOnboarding = (try? await OnboardingService.shared.needsOnboarding(userID: user.id)) ?? false
             await MainActor.run {
                 appState.currentUser = user
+                appState.needsOnboarding = needsOnboarding
                 appState.isAuthenticated = true
                 isLoading = false
             }

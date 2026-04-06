@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		116A3439D527C894C318EDA3 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B348645889240B57745ED216 /* OnboardingService.swift */; };
 		134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */; };
 		175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9344A381848C54CF5FE99A0D /* DIContainer.swift */; };
 		1AABA80722445F66E018A6AA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D1CBC1ABF9BD97FF109E01 /* Content.swift */; };
@@ -15,11 +16,14 @@
 		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
 		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
 		56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28237F388713091CF5B58242 /* EmailAuthViewModel.swift */; };
+		5916D159749A98326791E104 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */; };
 		69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5C708F8C6739EFC5B9592C /* LogRepository.swift */; };
 		6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B216F04C46ADC79E57A7119 /* ContentView.swift */; };
 		70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC76940C4F0862F2C919C69 /* AppState.swift */; };
 		74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F3842F44C6E0E3A2A569E5 /* SignInView.swift */; };
+		763B32A3D5C4361C8A74F5BD /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0434D08DA6A581F7F3B392 /* OnboardingView.swift */; };
 		7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209950C1A8FB3E39AD1DD55F /* LogEntry.swift */; };
+		8D1EA92CD2CBD7FA6A7F5B96 /* ContentInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B95A5DB33DF5A3679378204 /* ContentInterest.swift */; };
 		9C205D397566ACA00F458697 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF95542CD4B341C9D05419B7 /* Review.swift */; };
 		A88BA4107619CA7035BC7D64 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4CBF9E15999716707334E2 /* AuthViewModel.swift */; };
 		B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905FA566B07407F50510D020 /* UserRepository.swift */; };
@@ -48,23 +52,27 @@
 		209950C1A8FB3E39AD1DD55F /* LogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntry.swift; sourceTree = "<group>"; };
 		21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippedTests.swift; sourceTree = "<group>"; };
 		28237F388713091CF5B58242 /* EmailAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthViewModel.swift; sourceTree = "<group>"; };
-		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B216F04C46ADC79E57A7119 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GrippedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdApp.swift; sourceTree = "<group>"; };
+		4A0434D08DA6A581F7F3B392 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		4CD11A484C7628DE0A6A84B0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		53D1CBC1ABF9BD97FF109E01 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		6B95A5DB33DF5A3679378204 /* ContentInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInterest.swift; sourceTree = "<group>"; };
 		70DF9D2C89BA6439699CACDD /* ContentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentRepository.swift; sourceTree = "<group>"; };
 		716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConstants.swift; sourceTree = "<group>"; };
 		787BEEC8FC34DAB5B9253370 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		85F3842F44C6E0E3A2A569E5 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
-		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; path = xcconfig.template; sourceTree = "<group>"; };
+		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; lastKnownFileType = text; path = xcconfig.template; sourceTree = "<group>"; };
 		8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthView.swift; sourceTree = "<group>"; };
 		905FA566B07407F50510D020 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		9344A381848C54CF5FE99A0D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		9A4CBF9E15999716707334E2 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		B348645889240B57745ED216 /* OnboardingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingService.swift; sourceTree = "<group>"; };
 		BF95542CD4B341C9D05419B7 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		BFC76940C4F0862F2C919C69 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		D1686809CF6AAB5731AA8481 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -158,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				4CD11A484C7628DE0A6A84B0 /* AuthService.swift */,
+				B348645889240B57745ED216 /* OnboardingService.swift */,
 				0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */,
 			);
 			path = Supabase;
@@ -224,6 +233,8 @@
 				9A4CBF9E15999716707334E2 /* AuthViewModel.swift */,
 				8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */,
 				28237F388713091CF5B58242 /* EmailAuthViewModel.swift */,
+				4A0434D08DA6A581F7F3B392 /* OnboardingView.swift */,
+				437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */,
 				85F3842F44C6E0E3A2A569E5 /* SignInView.swift */,
 			);
 			path = Auth;
@@ -310,6 +321,7 @@
 			isa = PBXGroup;
 			children = (
 				53D1CBC1ABF9BD97FF109E01 /* Content.swift */,
+				6B95A5DB33DF5A3679378204 /* ContentInterest.swift */,
 				209950C1A8FB3E39AD1DD55F /* LogEntry.swift */,
 				BF95542CD4B341C9D05419B7 /* Review.swift */,
 				D1686809CF6AAB5731AA8481 /* User.swift */,
@@ -407,9 +419,6 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
-					0175D501C0CCC8E960FE18CA = {
-						DevelopmentTeam = "";
-					};
 					2A1F6221E9EA1B0B2AC4FD4E = {
 						DevelopmentTeam = "";
 					};
@@ -467,6 +476,7 @@
 				BFF42B36D9E6B9E6D2D20215 /* AuthService.swift in Sources */,
 				A88BA4107619CA7035BC7D64 /* AuthViewModel.swift in Sources */,
 				1AABA80722445F66E018A6AA /* Content.swift in Sources */,
+				8D1EA92CD2CBD7FA6A7F5B96 /* ContentInterest.swift in Sources */,
 				C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */,
 				6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */,
 				175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */,
@@ -475,6 +485,9 @@
 				3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */,
 				7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */,
 				69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */,
+				116A3439D527C894C318EDA3 /* OnboardingService.swift in Sources */,
+				763B32A3D5C4361C8A74F5BD /* OnboardingView.swift in Sources */,
+				5916D159749A98326791E104 /* OnboardingViewModel.swift in Sources */,
 				9C205D397566ACA00F458697 /* Review.swift in Sources */,
 				74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */,
 				134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */,
@@ -661,6 +674,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Grippd/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -679,6 +693,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Grippd/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
