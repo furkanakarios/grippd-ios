@@ -1,14 +1,14 @@
 # Faz 2 — Content Browsing & Detail Screens
 
-**Durum:** 🔴 Başlamadı  
+**Durum:** 🟡 Devam Ediyor  
 **Branch base:** `develop`
 
 ---
 
 ## Adımlar
 
-- [ ] **Step 1** — Film detay ekranı: poster, metadata, cast, overview  
-  Branch: `feature/phase-2-step-1-film-detail`
+- [x] **Step 1** — Film detay ekranı: poster, metadata, cast, overview  
+  Branch: `feature/phase-2-step-1-film-detail` ✅
 
 - [ ] **Step 2** — Dizi detay ekranı: sezon listesi, bölüm listesi  
   Branch: `feature/phase-2-step-2-series-detail`
