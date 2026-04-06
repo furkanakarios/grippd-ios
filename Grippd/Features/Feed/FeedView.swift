@@ -39,7 +39,12 @@ struct FeedView: View {
             TVShowDetailView(tmdbID: tmdbID) { showID, seasonNumber in
                 router.feedPath.append(FeedRoute.seasonDetail(showID: showID, seasonNumber: seasonNumber))
             }
-        case .seasonDetail(let showID, let seasonNumber): SeasonDetailView(showID: showID, seasonNumber: seasonNumber)
+        case .seasonDetail(let showID, let seasonNumber):
+            SeasonDetailView(showID: showID, seasonNumber: seasonNumber) { sID, sNum, epNum in
+                router.feedPath.append(FeedRoute.episodeDetail(showID: sID, seasonNumber: sNum, episodeNumber: epNum))
+            }
+        case .episodeDetail(let showID, let seasonNumber, let episodeNumber):
+            EpisodeDetailView(showID: showID, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
         case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         }

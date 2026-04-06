@@ -52,6 +52,7 @@
 		C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */; };
 		C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF9D2C89BA6439699CACDD /* ContentRepository.swift */; };
 		C87C4DF764520526F7883CD0 /* SeasonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9386362D9CDAFB90B965DB67 /* SeasonDetailView.swift */; };
+		D5069B2BAF67E1D72A438ACC /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C60BB8993AE3B0492233474 /* EpisodeDetailView.swift */; };
 		E0143E850210E440D62D37EB /* GoogleBooksClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */; };
 		E4A2AD4006928763D27846B2 /* GrippdComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2D418182291CD3ED6B16F /* GrippdComponents.swift */; };
 		E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 57B8F951E1296882A2860113 /* Supabase */; };
@@ -95,6 +96,7 @@
 		51AD3C13B83EB88FD33808D8 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
 		53D1CBC1ABF9BD97FF109E01 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		5B0E69087D381DFA259CE35C /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		5C60BB8993AE3B0492233474 /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
 		5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
 		67EFFCE43DC001079408FF4D /* PasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetView.swift; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 		5C252BA059849A2D7AD14E79 /* TVShow */ = {
 			isa = PBXGroup;
 			children = (
+				5C60BB8993AE3B0492233474 /* EpisodeDetailView.swift */,
 				9386362D9CDAFB90B965DB67 /* SeasonDetailView.swift */,
 				71CB1664F19BA9AEB53A4B6C /* TVShowDetailView.swift */,
 				71FF594E720DEE961452B2EE /* TVShowDetailViewModel.swift */,
@@ -611,6 +614,7 @@
 				A05A9038635ADDFAE702743A /* DiscoverView.swift in Sources */,
 				24CB916439B123DB568F668D /* EmailAuthView.swift in Sources */,
 				56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */,
+				D5069B2BAF67E1D72A438ACC /* EpisodeDetailView.swift in Sources */,
 				A0F6E6591D2079F3C4C97BAA /* FeedView.swift in Sources */,
 				E0143E850210E440D62D37EB /* GoogleBooksClient.swift in Sources */,
 				3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */,
