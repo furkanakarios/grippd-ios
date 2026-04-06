@@ -257,8 +257,7 @@ struct BookDetailView: View {
             .overlay(alignment: .topTrailing) {
                 if let r = loggedRating {
                     StarRatingBadge(rating: r, fontSize: 12)
-                        .padding(.top, 5)
-                        .padding(.trailing, 7)
+                        .offset(x: 4, y: -5)
                         .transition(.scale.combined(with: .opacity))
                 }
             }

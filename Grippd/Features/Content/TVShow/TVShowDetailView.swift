@@ -423,8 +423,7 @@ private struct TVActionButton: View {
                 .overlay(alignment: .topTrailing) {
                     if let badge {
                         badge
-                            .padding(.top, 5)
-                            .padding(.trailing, 7)
+                            .offset(x: 4, y: -5)
                             .transition(.scale.combined(with: .opacity))
                     }
                 }
