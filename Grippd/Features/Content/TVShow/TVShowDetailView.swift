@@ -406,7 +406,7 @@ private struct TVActionButton: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 6) {
-                ZStack(alignment: .topTrailing) {
+                ZStack {
                     RoundedRectangle(cornerRadius: GrippdTheme.Radius.sm)
                         .fill(isActive ? activeColor.opacity(0.15) : .white.opacity(0.06))
                         .overlay(
@@ -417,15 +417,16 @@ private struct TVActionButton: View {
                         .font(.system(size: 20))
                         .foregroundStyle(isActive ? activeColor : .white.opacity(0.7))
                         .animation(.spring(duration: 0.2), value: isActive)
-
-                    if let badge {
-                        badge
-                            .offset(x: 6, y: -6)
-                            .transition(.scale.combined(with: .opacity))
-                    }
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
+                .overlay(alignment: .topTrailing) {
+                    if let badge {
+                        badge
+                            .offset(x: 8, y: -8)
+                            .transition(.scale.combined(with: .opacity))
+                    }
+                }
 
                 Text(label)
                     .font(.system(size: 11, weight: .medium))

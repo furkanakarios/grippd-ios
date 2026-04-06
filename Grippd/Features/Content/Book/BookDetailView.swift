@@ -235,30 +235,29 @@ struct BookDetailView: View {
 
     private var actionButtons: some View {
         HStack(spacing: 12) {
-            ZStack(alignment: .topTrailing) {
-                Button {
-                    showLogSheet = true
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: isLogged ? "checkmark.circle.fill" : "checkmark.circle")
-                            .font(.system(size: 16))
-                        Text(isLogged ? "Okundu" : "Okudum")
-                            .font(.system(size: 14, weight: .semibold))
-                    }
-                    .foregroundStyle(isLogged ? GrippdTheme.Colors.background : .white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
-                    .background(
-                        isLogged
-                            ? GrippdTheme.Colors.accent
-                            : Color.white.opacity(0.1),
-                        in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
-                    )
+            Button {
+                showLogSheet = true
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: isLogged ? "checkmark.circle.fill" : "checkmark.circle")
+                        .font(.system(size: 16))
+                    Text(isLogged ? "Okundu" : "Okudum")
+                        .font(.system(size: 14, weight: .semibold))
                 }
-
+                .foregroundStyle(isLogged ? GrippdTheme.Colors.background : .white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background(
+                    isLogged
+                        ? GrippdTheme.Colors.accent
+                        : Color.white.opacity(0.1),
+                    in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
+                )
+            }
+            .overlay(alignment: .topTrailing) {
                 if let r = loggedRating {
                     StarRatingBadge(rating: r, fontSize: 12)
-                        .offset(x: 6, y: -6)
+                        .offset(x: 8, y: -8)
                         .transition(.scale.combined(with: .opacity))
                 }
             }
