@@ -25,6 +25,7 @@
 		1D8DD65D76A047DCB969DAA2 /* CommunityStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA650D47349D4E40A296B666 /* CommunityStatsView.swift */; };
 		A0AECF0F65CA46DDAAA31BD5 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15FAC924D7D4A1FBB57C846 /* StarRatingView.swift */; };
 		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
+		0048F6EB1E1341D7803ECE66 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BE0029CA8A04A79B832D912 /* Assets.xcassets */; };
 		33AF8FE290C0154E1E2BF576 /* SwiftDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */; };
 		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
 		3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */; };
@@ -318,8 +319,15 @@
 			children = (
 				F12A925BB62BED5A878937FD /* Grippd.entitlements */,
 				787BEEC8FC34DAB5B9253370 /* Info.plist */,
+				8BE0029CA8A04A79B832D912 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		8BE0029CA8A04A79B832D912 /* Assets.xcassets */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder.assetcatalog;
+			path = Assets.xcassets;
 			sourceTree = "<group>";
 		};
 		73F078758BC5D9DE33F02FB9 /* Books */ = {
@@ -652,6 +660,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DE3076A9C740F885368A39D /* xcconfig.template in Resources */,
+				0048F6EB1E1341D7803ECE66 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
