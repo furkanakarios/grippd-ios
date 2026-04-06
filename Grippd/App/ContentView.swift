@@ -5,7 +5,9 @@ struct ContentView: View {
 
     var body: some View {
         Group {
-            if appState.isAuthenticated {
+            if appState.pendingDeepLink == .passwordReset {
+                PasswordResetView()
+            } else if appState.isAuthenticated {
                 if appState.needsOnboarding {
                     OnboardingView()
                 } else {
@@ -17,6 +19,7 @@ struct ContentView: View {
         }
         .animation(.easeInOut(duration: 0.3), value: appState.isAuthenticated)
         .animation(.easeInOut(duration: 0.3), value: appState.needsOnboarding)
+        .animation(.easeInOut(duration: 0.3), value: appState.pendingDeepLink == nil)
     }
 }
 
@@ -37,7 +40,7 @@ private struct MainTabView: View {
     }
 }
 
-// MARK: - Dev profile — sadece Step 7'ye kadar, sign-out testi için
+// MARK: - Dev profile — sadece Step 7'ye kadar
 
 private struct DevProfileView: View {
     @Environment(AppState.self) private var appState
