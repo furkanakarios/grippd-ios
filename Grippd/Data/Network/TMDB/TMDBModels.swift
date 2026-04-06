@@ -300,6 +300,39 @@ struct TMDBCrewMember: Decodable {
     }
 }
 
+// MARK: - TMDB Person
+
+struct TMDBPerson: Decodable, Identifiable {
+    let id: Int
+    let name: String
+    let profilePath: String?
+    let knownForDepartment: String?
+    let popularity: Double
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, popularity
+        case profilePath = "profile_path"
+        case knownForDepartment = "known_for_department"
+    }
+
+    var profileURL: URL? {
+        guard let path = profilePath else { return nil }
+        return URL(string: "https://image.tmdb.org/t/p/w185\(path)")
+    }
+
+    var departmentDisplay: String {
+        switch knownForDepartment {
+        case "Acting": return "Oyuncu"
+        case "Directing": return "Yönetmen"
+        case "Writing": return "Senarist"
+        case "Production": return "Yapımcı"
+        case "Sound": return "Ses"
+        case "Camera": return "Görüntü Yönetmeni"
+        default: return knownForDepartment ?? "Sanatçı"
+        }
+    }
+}
+
 // MARK: - Paginated Response
 
 struct TMDBPagedResponse<T: Decodable>: Decodable {

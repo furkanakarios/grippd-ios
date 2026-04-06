@@ -66,6 +66,12 @@ final class TMDBClient {
         try await get("search/tv", params: ["query": query, "page": "\(page)"])
     }
 
+    // MARK: - Person Search
+
+    func searchPersons(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBPerson> {
+        try await get("search/person", params: ["query": query, "page": "\(page)"])
+    }
+
     // MARK: - Multi Search (film + dizi birlikte)
 
     func searchMulti(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBSearchResult> {

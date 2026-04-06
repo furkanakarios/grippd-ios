@@ -23,6 +23,7 @@ struct SearchView: View {
             .navigationDestination(for: SearchRoute.self) { route in
                 searchDestination(route)
             }
+            .task { await viewModel.loadTrending() }
         }
     }
 
@@ -34,7 +35,7 @@ struct SearchView: View {
                 .font(.system(size: 16))
                 .foregroundStyle(.white.opacity(0.4))
 
-            TextField("Film, dizi veya kitap ara...", text: $viewModel.query)
+            TextField("Film, dizi, kitap veya kişi ara...", text: $viewModel.query)
                 .font(.system(size: 16))
                 .foregroundStyle(.white)
                 .tint(GrippdTheme.Colors.accent)
@@ -99,11 +100,10 @@ struct SearchView: View {
     private var resultsList: some View {
         if viewModel.isLoading {
             Spacer()
-            ProgressView()
-                .tint(GrippdTheme.Colors.accent)
+            ProgressView().tint(GrippdTheme.Colors.accent)
             Spacer()
         } else if viewModel.query.count < 2 {
-            emptyPrompt
+            emptyState
         } else if viewModel.results.isEmpty {
             noResults
         } else {
@@ -118,19 +118,115 @@ struct SearchView: View {
         }
     }
 
-    private var emptyPrompt: some View {
-        VStack(spacing: GrippdTheme.Spacing.md) {
-            Spacer()
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 48))
-                .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.25))
-            Text("Film, dizi veya kitap ara")
-                .font(GrippdTheme.Typography.title)
-                .foregroundStyle(.white.opacity(0.6))
-            Text("En az 2 karakter gir")
-                .font(.system(size: 14))
-                .foregroundStyle(.white.opacity(0.3))
-            Spacer()
+    // MARK: - Empty State (geçmiş + trend)
+
+    private var emptyState: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: GrippdTheme.Spacing.xl) {
+
+                // Son Aramalar
+                if !viewModel.searchHistory.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Son Aramalar")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.45))
+                                .textCase(.uppercase)
+                                .tracking(1.2)
+                            Spacer()
+                            Button("Temizle") {
+                                withAnimation { viewModel.clearHistory() }
+                            }
+                            .font(.system(size: 13))
+                            .foregroundStyle(GrippdTheme.Colors.accent)
+                        }
+
+                        ForEach(viewModel.searchHistory, id: \.self) { item in
+                            Button {
+                                viewModel.selectSuggestion(item)
+                            } label: {
+                                HStack {
+                                    Image(systemName: "clock")
+                                        .font(.system(size: 14))
+                                        .foregroundStyle(.white.opacity(0.3))
+                                    Text(item)
+                                        .font(.system(size: 15))
+                                        .foregroundStyle(.white.opacity(0.8))
+                                    Spacer()
+                                    Button {
+                                        withAnimation { viewModel.removeHistory(item) }
+                                    } label: {
+                                        Image(systemName: "xmark")
+                                            .font(.system(size: 12, weight: .medium))
+                                            .foregroundStyle(.white.opacity(0.25))
+                                    }
+                                }
+                                .padding(.vertical, 10)
+                                .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+
+                            Divider().background(.white.opacity(0.06))
+                        }
+                    }
+                    .padding(.horizontal, GrippdTheme.Spacing.md)
+                }
+
+                // Trend İçerikler
+                if !viewModel.trendingSuggestions.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Trend İçerikler")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.45))
+                            .textCase(.uppercase)
+                            .tracking(1.2)
+                            .padding(.horizontal, GrippdTheme.Spacing.md)
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(viewModel.trendingSuggestions, id: \.self) { suggestion in
+                                    Button {
+                                        viewModel.selectSuggestion(suggestion)
+                                    } label: {
+                                        HStack(spacing: 6) {
+                                            Image(systemName: "flame")
+                                                .font(.system(size: 11))
+                                                .foregroundStyle(GrippdTheme.Colors.accent)
+                                            Text(suggestion)
+                                                .font(.system(size: 13, weight: .medium))
+                                                .foregroundStyle(.white.opacity(0.8))
+                                        }
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 8)
+                                        .background(.white.opacity(0.07), in: Capsule())
+                                        .overlay(Capsule().stroke(.white.opacity(0.1), lineWidth: 1))
+                                    }
+                                }
+                            }
+                            .padding(.horizontal, GrippdTheme.Spacing.md)
+                        }
+                    }
+                }
+
+                // İpucu (geçmiş ve trend yoksa)
+                if viewModel.searchHistory.isEmpty && viewModel.trendingSuggestions.isEmpty {
+                    VStack(spacing: GrippdTheme.Spacing.md) {
+                        Spacer(minLength: 60)
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 48))
+                            .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.25))
+                        Text("Film, dizi, kitap veya kişi ara")
+                            .font(GrippdTheme.Typography.title)
+                            .foregroundStyle(.white.opacity(0.6))
+                        Text("En az 2 karakter gir")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+            .padding(.top, GrippdTheme.Spacing.lg)
+            .padding(.bottom, GrippdTheme.Spacing.xxl)
         }
     }
 
@@ -150,6 +246,8 @@ struct SearchView: View {
         }
     }
 
+    // MARK: - Result Rows
+
     @ViewBuilder
     private func resultRow(result: UnifiedSearchResult) -> some View {
         switch result {
@@ -166,9 +264,7 @@ struct SearchView: View {
                 )
             }
             .buttonStyle(.plain)
-            Divider()
-                .background(.white.opacity(0.06))
-                .padding(.leading, 86)
+            Divider().background(.white.opacity(0.06)).padding(.leading, 86)
 
         case .tv(let show):
             Button {
@@ -183,9 +279,7 @@ struct SearchView: View {
                 )
             }
             .buttonStyle(.plain)
-            Divider()
-                .background(.white.opacity(0.06))
-                .padding(.leading, 86)
+            Divider().background(.white.opacity(0.06)).padding(.leading, 86)
 
         case .book(let book):
             Button {
@@ -204,9 +298,16 @@ struct SearchView: View {
                 )
             }
             .buttonStyle(.plain)
-            Divider()
-                .background(.white.opacity(0.06))
-                .padding(.leading, 86)
+            Divider().background(.white.opacity(0.06)).padding(.leading, 86)
+
+        case .person(let person):
+            Button {
+                router.searchPath.append(SearchRoute.personDetail(tmdbID: person.id))
+            } label: {
+                PersonResultCell(person: person)
+            }
+            .buttonStyle(.plain)
+            Divider().background(.white.opacity(0.06)).padding(.leading, 86)
         }
     }
 
@@ -229,11 +330,61 @@ struct SearchView: View {
             EpisodeDetailView(showID: showID, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
         case .bookDetail(let googleBooksID):
             BookDetailView(googleBooksID: googleBooksID)
+        case .personDetail(let tmdbID):
+            PersonDetailPlaceholderView(tmdbID: tmdbID)
         case .contentDetail:
             Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile:
             Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         }
+    }
+}
+
+// MARK: - Person Result Cell
+
+struct PersonResultCell: View {
+    let person: TMDBPerson
+
+    var body: some View {
+        HStack(spacing: GrippdTheme.Spacing.md) {
+            AsyncImage(url: person.profileURL) { phase in
+                switch phase {
+                case .success(let image):
+                    image.resizable().aspectRatio(contentMode: .fill)
+                default:
+                    Circle()
+                        .fill(GrippdTheme.Colors.surface)
+                        .overlay(
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 20))
+                                .foregroundStyle(.white.opacity(0.2))
+                        )
+                }
+            }
+            .frame(width: 54, height: 54)
+            .clipShape(Circle())
+            .overlay(Circle().stroke(.white.opacity(0.08), lineWidth: 1))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(person.name)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+
+                Text(person.departmentDisplay)
+                    .font(.system(size: 13))
+                    .foregroundStyle(.white.opacity(0.45))
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(.white.opacity(0.2))
+        }
+        .padding(.horizontal, GrippdTheme.Spacing.md)
+        .padding(.vertical, 12)
+        .contentShape(Rectangle())
     }
 }
 
@@ -297,5 +448,32 @@ struct SearchResultCell: View {
         .padding(.horizontal, GrippdTheme.Spacing.md)
         .padding(.vertical, 10)
         .contentShape(Rectangle())
+    }
+}
+
+// MARK: - Person Detail Placeholder
+
+private struct PersonDetailPlaceholderView: View {
+    let tmdbID: Int
+
+    var body: some View {
+        ZStack {
+            GrippdBackground()
+            VStack(spacing: GrippdTheme.Spacing.md) {
+                Image(systemName: "person.circle")
+                    .font(.system(size: 48))
+                    .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.3))
+                Text("Kişi Detay")
+                    .font(GrippdTheme.Typography.headline)
+                    .foregroundStyle(.white)
+                Text("Phase 3'te geliyor")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white.opacity(0.35))
+            }
+        }
+        .navigationTitle("Kişi")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
     }
 }

@@ -46,6 +46,7 @@ struct DiscoverView: View {
             EpisodeDetailView(showID: showID, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
         case .bookDetail(let googleBooksID):
             BookDetailView(googleBooksID: googleBooksID)
+        case .personDetail: Text("Kişi Detay — Phase 3").foregroundStyle(.white)
         case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         case .genre(let name): Text("\(name) — Phase 5").foregroundStyle(.white)
