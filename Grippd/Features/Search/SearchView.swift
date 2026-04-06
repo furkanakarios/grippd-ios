@@ -3,6 +3,7 @@ import SwiftUI
 struct SearchView: View {
     @Environment(AppRouter.self) private var router
     @State private var viewModel = SearchViewModel()
+    @State private var showAddContent = false
 
     var body: some View {
         @Bindable var router = router
@@ -20,6 +21,22 @@ struct SearchView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showAddContent = true
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.8))
+                    }
+                }
+            }
+            .sheet(isPresented: $showAddContent) {
+                AddCustomContentView {
+                    viewModel.onQueryChange()
+                }
+            }
             .navigationDestination(for: SearchRoute.self) { route in
                 searchDestination(route)
             }
@@ -308,6 +325,15 @@ struct SearchView: View {
             }
             .buttonStyle(.plain)
             Divider().background(.white.opacity(0.06)).padding(.leading, 86)
+
+        case .userContent(let content):
+            Button {
+                router.searchPath.append(SearchRoute.contentDetail(contentID: content.id))
+            } label: {
+                UserContentResultCell(content: content)
+            }
+            .buttonStyle(.plain)
+            Divider().background(.white.opacity(0.06)).padding(.leading, 86)
         }
     }
 
@@ -332,8 +358,8 @@ struct SearchView: View {
             BookDetailView(googleBooksID: googleBooksID)
         case .personDetail(let tmdbID):
             PersonDetailPlaceholderView(tmdbID: tmdbID)
-        case .contentDetail:
-            Text("İçerik Detay — Phase 3").foregroundStyle(.white)
+        case .contentDetail(let contentID):
+            CustomContentDetailView(contentID: contentID)
         case .userProfile:
             Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         }
@@ -437,6 +463,84 @@ struct SearchResultCell: View {
                             .foregroundStyle(.white.opacity(0.7))
                     }
                 }
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(.white.opacity(0.2))
+        }
+        .padding(.horizontal, GrippdTheme.Spacing.md)
+        .padding(.vertical, 10)
+        .contentShape(Rectangle())
+    }
+}
+
+// MARK: - User Content Result Cell
+
+struct UserContentResultCell: View {
+    let content: Content
+
+    private var typeIcon: String {
+        switch content.contentType {
+        case .movie: return "film"
+        case .tv_show: return "tv"
+        case .book: return "book.closed"
+        }
+    }
+
+    private var typeLabel: String {
+        switch content.contentType {
+        case .movie: return "Film"
+        case .tv_show: return "Dizi"
+        case .book: return "Kitap"
+        }
+    }
+
+    var body: some View {
+        HStack(spacing: GrippdTheme.Spacing.md) {
+            AsyncImage(url: content.posterURL) { phase in
+                switch phase {
+                case .success(let image):
+                    image.resizable().aspectRatio(contentMode: .fill)
+                default:
+                    Rectangle()
+                        .fill(GrippdTheme.Colors.accent.opacity(0.12))
+                        .overlay(
+                            Image(systemName: typeIcon)
+                                .font(.system(size: 18))
+                                .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.6))
+                        )
+                }
+            }
+            .frame(width: 54, height: 80)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(GrippdTheme.Colors.accent.opacity(0.3), lineWidth: 1)
+            )
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text(content.title)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .lineLimit(2)
+
+                HStack(spacing: 4) {
+                    Text([content.releaseYear.map { "\($0)" }, typeLabel].compactMap { $0 }.joined(separator: " · "))
+                        .font(.system(size: 13))
+                        .foregroundStyle(.white.opacity(0.45))
+                }
+
+                // "Senin eklediğin" badge
+                HStack(spacing: 4) {
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 10))
+                    Text("Senin eklediğin")
+                        .font(.system(size: 11, weight: .medium))
+                }
+                .foregroundStyle(GrippdTheme.Colors.accent)
             }
 
             Spacer()

@@ -94,6 +94,73 @@ final class CachedContent {
     }
 }
 
+// MARK: - User Created Content (kalıcı, TTL yok)
+
+@Model
+final class UserCreatedContent {
+    @Attribute(.unique) var id: String          // UUID string
+    var title: String
+    var contentTypeRaw: String                  // "movie", "tv_show", "book"
+    var year: Int?
+    var overview: String?
+    var posterURLString: String?
+    var genresRaw: String                       // virgülle ayrılmış
+    var runtime: Int?                           // film/dizi → dakika, kitap → sayfa
+    var createdAt: Date
+
+    init(
+        title: String,
+        contentType: Content.ContentType,
+        year: Int? = nil,
+        overview: String? = nil,
+        posterURLString: String? = nil,
+        genres: [String] = [],
+        runtime: Int? = nil
+    ) {
+        self.id = UUID().uuidString
+        self.title = title
+        self.contentTypeRaw = contentType.rawValue
+        self.year = year
+        self.overview = overview
+        self.posterURLString = posterURLString
+        self.genresRaw = genres.joined(separator: ", ")
+        self.runtime = runtime
+        self.createdAt = Date()
+    }
+
+    var contentType: Content.ContentType {
+        Content.ContentType(rawValue: contentTypeRaw) ?? .movie
+    }
+
+    var genres: [String] {
+        genresRaw.split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+    }
+
+    func toContent() -> Content {
+        Content(
+            id: UUID(uuidString: id) ?? UUID(),
+            tmdbID: nil,
+            googleBooksID: nil,
+            title: title,
+            originalTitle: nil,
+            overview: overview,
+            posterURL: posterURLString.flatMap { URL(string: $0) },
+            backdropURL: nil,
+            releaseYear: year,
+            contentType: contentType,
+            genres: genres,
+            averageRating: nil,
+            tmdbPopularity: nil,
+            runtime: runtime,
+            isUserCreated: true,
+            createdByUserID: nil,
+            createdAt: createdAt
+        )
+    }
+}
+
 // MARK: - Cached Search Query
 
 @Model

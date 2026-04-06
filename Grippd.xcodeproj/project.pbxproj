@@ -11,6 +11,7 @@
 		0CE79A92654B6457CDA82879 /* BooksRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265835ED6A83105317F3EDC5 /* BooksRepository.swift */; };
 		116A3439D527C894C318EDA3 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B348645889240B57745ED216 /* OnboardingService.swift */; };
 		11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */; };
+		132FDEF360F2544D6B795EEC /* UserContentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F163E79088ACED45114CDFF8 /* UserContentService.swift */; };
 		134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */; };
 		175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9344A381848C54CF5FE99A0D /* DIContainer.swift */; };
 		1AABA80722445F66E018A6AA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D1CBC1ABF9BD97FF109E01 /* Content.swift */; };
@@ -39,6 +40,7 @@
 		8D1EA92CD2CBD7FA6A7F5B96 /* ContentInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B95A5DB33DF5A3679378204 /* ContentInterest.swift */; };
 		8EA99FD01206A4834FC06D44 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6CEA8D04D9ED636549509A /* ProfileView.swift */; };
 		928B78DF03DA910125615ADD /* SearchHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB083A0116AE18C3A22F7710 /* SearchHistoryService.swift */; };
+		9B0CCD829CB8E54E2FE889EE /* AddCustomContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB51BD89D752BBE1288E9CC /* AddCustomContentView.swift */; };
 		9C205D397566ACA00F458697 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF95542CD4B341C9D05419B7 /* Review.swift */; };
 		9C42B2865B070B827521A67A /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08940053FF164140782E01FB /* AppRouter.swift */; };
 		A05A9038635ADDFAE702743A /* DiscoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AD3C13B83EB88FD33808D8 /* DiscoverView.swift */; };
@@ -65,6 +67,7 @@
 		F410313188D2095981C7A154 /* TVShowDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FF594E720DEE961452B2EE /* TVShowDetailViewModel.swift */; };
 		F4DA93DFA910E861B146AC2D /* GrippdTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684AA2C0DF8DE655B26C90A0 /* GrippdTheme.swift */; };
 		F5350A4C329474F42D1CB4F7 /* WatchmodeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239A6D139A5EACE55C933112 /* WatchmodeClient.swift */; };
+		FE0A2661B17EB8688CAFB098 /* CustomContentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1E5F7B238D5633EB7EF659 /* CustomContentDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +98,7 @@
 		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B216F04C46ADC79E57A7119 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformAvailabilityView.swift; sourceTree = "<group>"; };
+		3FB51BD89D752BBE1288E9CC /* AddCustomContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomContentView.swift; sourceTree = "<group>"; };
 		404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GrippedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdApp.swift; sourceTree = "<group>"; };
@@ -137,9 +141,11 @@
 		D1686809CF6AAB5731AA8481 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		D97FFEA9C96CC1AC1A471163 /* BooksMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksMapper.swift; sourceTree = "<group>"; };
+		DD1E5F7B238D5633EB7EF659 /* CustomContentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomContentDetailView.swift; sourceTree = "<group>"; };
 		ED09B7FBCDC06B99E2FE6BEA /* OpenLibraryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLibraryClient.swift; sourceTree = "<group>"; };
 		EE5C708F8C6739EFC5B9592C /* LogRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRepository.swift; sourceTree = "<group>"; };
 		F12A925BB62BED5A878937FD /* Grippd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grippd.entitlements; sourceTree = "<group>"; };
+		F163E79088ACED45114CDFF8 /* UserContentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContentService.swift; sourceTree = "<group>"; };
 		F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCacheService.swift; sourceTree = "<group>"; };
 		FF053B89084A730815FE5768 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -170,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				F80729D546E04E670FAB9E91 /* Book */,
+				8CF41664F36F50D367B91D63 /* Custom */,
 				8532F01D13203EE3B751C817 /* Movie */,
 				5C252BA059849A2D7AD14E79 /* TVShow */,
 			);
@@ -255,6 +262,7 @@
 			children = (
 				F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */,
 				7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */,
+				F163E79088ACED45114CDFF8 /* UserContentService.swift */,
 			);
 			path = Local;
 			sourceTree = "<group>";
@@ -345,6 +353,15 @@
 				85F3842F44C6E0E3A2A569E5 /* SignInView.swift */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		8CF41664F36F50D367B91D63 /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				3FB51BD89D752BBE1288E9CC /* AddCustomContentView.swift */,
+				DD1E5F7B238D5633EB7EF659 /* CustomContentDetailView.swift */,
+			);
+			path = Custom;
 			sourceTree = "<group>";
 		};
 		8F508F21C787E1054B3B2491 /* DesignSystem */ = {
@@ -621,6 +638,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B0CCD829CB8E54E2FE889EE /* AddCustomContentView.swift in Sources */,
 				C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */,
 				9C42B2865B070B827521A67A /* AppRouter.swift in Sources */,
 				70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */,
@@ -634,6 +652,7 @@
 				8D1EA92CD2CBD7FA6A7F5B96 /* ContentInterest.swift in Sources */,
 				C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */,
 				6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */,
+				FE0A2661B17EB8688CAFB098 /* CustomContentDetailView.swift in Sources */,
 				175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */,
 				A05A9038635ADDFAE702743A /* DiscoverView.swift in Sources */,
 				24CB916439B123DB568F668D /* EmailAuthView.swift in Sources */,
@@ -672,6 +691,7 @@
 				BAEE70C4E7A12644BE0BB456 /* TVShowDetailView.swift in Sources */,
 				F410313188D2095981C7A154 /* TVShowDetailViewModel.swift in Sources */,
 				1E497CC5BB09798EA83402F2 /* User.swift in Sources */,
+				132FDEF360F2544D6B795EEC /* UserContentService.swift in Sources */,
 				B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */,
 				BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */,
 				F5350A4C329474F42D1CB4F7 /* WatchmodeClient.swift in Sources */,
