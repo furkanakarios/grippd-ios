@@ -17,33 +17,21 @@ struct GrippdApp: App {
     }
 
     private func handleDeepLink(_ url: URL) async {
-        let raw = url.absoluteString
-
-        // Supabase PKCE ve legacy fragment formatlarının ikisini de kontrol et
-        // PKCE:    grippd://auth?code=xxx&type=recovery
-        // Legacy:  grippd://auth#access_token=xxx&type=recovery
-        let combined = raw + (url.fragment ?? "")
-        let isRecovery = combined.contains("type=recovery")
+        // grippd://auth/recovery → şifre sıfırlama
+        // grippd://auth          → diğer auth callback'leri (email confirm vs.)
+        let isRecovery = url.host == "auth" && url.path == "/recovery"
 
         do {
-            // session(from:) hem PKCE code exchange hem de fragment token'ı handle eder
-            let session = try await SupabaseClientService.shared.client.auth.session(from: url)
-            await MainActor.run {
-                if isRecovery {
-                    // Recovery session kuruldu — şifre güncelleme ekranını göster
-                    appState.pendingDeepLink = .passwordReset
-                } else {
-                    // Email confirm vs. — direkt giriş yap
-                    appState.isAuthenticated = true
-                }
-                _ = session
-            }
+            try await SupabaseClientService.shared.client.auth.session(from: url)
         } catch {
-            // session(from:) bazen recovery'de throw eder ama token set edilmiş olur
+            // PKCE exchange bazen throw eder ama session set edilmiş olur
+        }
+
+        await MainActor.run {
             if isRecovery {
-                await MainActor.run {
-                    appState.pendingDeepLink = .passwordReset
-                }
+                appState.pendingDeepLink = .passwordReset
+            } else {
+                appState.isAuthenticated = true
             }
         }
     }

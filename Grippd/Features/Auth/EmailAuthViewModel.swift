@@ -87,7 +87,10 @@ final class EmailAuthViewModel {
         errorMessage = nil
 
         do {
-            try await client.auth.resetPasswordForEmail(email)
+            try await client.auth.resetPasswordForEmail(
+                email,
+                redirectTo: URL(string: "grippd://auth/recovery")
+            )
             await MainActor.run {
                 successMessage = "Şifre sıfırlama bağlantısı \(email) adresine gönderildi."
                 isLoading = false
