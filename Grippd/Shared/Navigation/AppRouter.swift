@@ -9,6 +9,7 @@ enum FeedRoute: Hashable {
     case tvShowDetail(tmdbID: Int)
     case seasonDetail(showID: Int, seasonNumber: Int)
     case episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int)
+    case bookDetail(googleBooksID: String)
 }
 
 enum SearchRoute: Hashable {
@@ -18,6 +19,7 @@ enum SearchRoute: Hashable {
     case tvShowDetail(tmdbID: Int)
     case seasonDetail(showID: Int, seasonNumber: Int)
     case episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int)
+    case bookDetail(googleBooksID: String)
 }
 
 enum DiscoverRoute: Hashable {
@@ -28,6 +30,7 @@ enum DiscoverRoute: Hashable {
     case tvShowDetail(tmdbID: Int)
     case seasonDetail(showID: Int, seasonNumber: Int)
     case episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int)
+    case bookDetail(googleBooksID: String)
 }
 
 enum ProfileRoute: Hashable {
@@ -41,6 +44,7 @@ enum ProfileRoute: Hashable {
     case tvShowDetail(tmdbID: Int)
     case seasonDetail(showID: Int, seasonNumber: Int)
     case episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int)
+    case bookDetail(googleBooksID: String)
 }
 
 // MARK: - Router

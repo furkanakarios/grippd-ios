@@ -151,7 +151,7 @@ struct SearchView: View {
     }
 
     @ViewBuilder
-    private func resultRow(result: TMDBSearchResult) -> some View {
+    private func resultRow(result: UnifiedSearchResult) -> some View {
         switch result {
         case .movie(let movie):
             Button {
@@ -187,8 +187,26 @@ struct SearchView: View {
                 .background(.white.opacity(0.06))
                 .padding(.leading, 86)
 
-        case .unknown:
-            EmptyView()
+        case .book(let book):
+            Button {
+                router.searchPath.append(SearchRoute.bookDetail(googleBooksID: book.id))
+            } label: {
+                SearchResultCell(
+                    posterURL: book.volumeInfo.imageLinks?.thumbnailURL,
+                    title: book.volumeInfo.title,
+                    subtitle: [
+                        book.volumeInfo.authors?.first,
+                        book.volumeInfo.publishYear,
+                        "Kitap"
+                    ].compactMap { $0 }.joined(separator: " · "),
+                    rating: book.volumeInfo.averageRating ?? 0,
+                    typeIcon: "book.closed"
+                )
+            }
+            .buttonStyle(.plain)
+            Divider()
+                .background(.white.opacity(0.06))
+                .padding(.leading, 86)
         }
     }
 
@@ -209,6 +227,8 @@ struct SearchView: View {
             }
         case .episodeDetail(let showID, let seasonNumber, let episodeNumber):
             EpisodeDetailView(showID: showID, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
+        case .bookDetail(let googleBooksID):
+            BookDetailView(googleBooksID: googleBooksID)
         case .contentDetail:
             Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile:
@@ -256,13 +276,15 @@ struct SearchResultCell: View {
                     .font(.system(size: 13))
                     .foregroundStyle(.white.opacity(0.45))
 
-                HStack(spacing: 4) {
-                    Image(systemName: "star.fill")
-                        .font(.system(size: 11))
-                        .foregroundStyle(GrippdTheme.Colors.accent)
-                    Text(String(format: "%.1f", rating))
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.7))
+                if rating > 0 {
+                    HStack(spacing: 4) {
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 11))
+                            .foregroundStyle(GrippdTheme.Colors.accent)
+                        Text(String(format: "%.1f", rating))
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
                 }
             }
 
