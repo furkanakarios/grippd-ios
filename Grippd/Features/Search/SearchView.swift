@@ -172,7 +172,7 @@ struct SearchView: View {
 
         case .tv(let show):
             Button {
-                // TV detail comes in Phase 2 Step 2
+                router.searchPath.append(SearchRoute.tvShowDetail(tmdbID: show.id))
             } label: {
                 SearchResultCell(
                     posterURL: show.posterURL,
@@ -183,7 +183,6 @@ struct SearchView: View {
                 )
             }
             .buttonStyle(.plain)
-            .opacity(0.7)
             Divider()
                 .background(.white.opacity(0.06))
                 .padding(.leading, 86)
@@ -200,12 +199,16 @@ struct SearchView: View {
         switch route {
         case .movieDetail(let tmdbID):
             MovieDetailView(tmdbID: tmdbID)
+        case .tvShowDetail(let tmdbID):
+            TVShowDetailView(tmdbID: tmdbID) { showID, seasonNumber in
+                router.searchPath.append(SearchRoute.seasonDetail(showID: showID, seasonNumber: seasonNumber))
+            }
+        case .seasonDetail(let showID, let seasonNumber):
+            SeasonDetailView(showID: showID, seasonNumber: seasonNumber)
         case .contentDetail:
-            Text("İçerik Detay — Phase 3")
-                .foregroundStyle(.white)
+            Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile:
-            Text("Kullanıcı Profil — Phase 4")
-                .foregroundStyle(.white)
+            Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         }
     }
 }

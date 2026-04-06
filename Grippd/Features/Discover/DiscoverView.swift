@@ -34,6 +34,11 @@ struct DiscoverView: View {
     private func discoverDestination(_ route: DiscoverRoute) -> some View {
         switch route {
         case .movieDetail(let tmdbID): MovieDetailView(tmdbID: tmdbID)
+        case .tvShowDetail(let tmdbID):
+            TVShowDetailView(tmdbID: tmdbID) { showID, seasonNumber in
+                router.discoverPath.append(DiscoverRoute.seasonDetail(showID: showID, seasonNumber: seasonNumber))
+            }
+        case .seasonDetail(let showID, let seasonNumber): SeasonDetailView(showID: showID, seasonNumber: seasonNumber)
         case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         case .genre(let name): Text("\(name) — Phase 5").foregroundStyle(.white)

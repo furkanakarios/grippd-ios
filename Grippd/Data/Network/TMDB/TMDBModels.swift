@@ -54,6 +54,7 @@ struct TMDBTVShow: Decodable, Identifiable {
     let posterPath: String?
     let backdropPath: String?
     let firstAirDate: String?
+    let lastAirDate: String?
     let voteAverage: Double
     let voteCount: Int
     let genreIds: [Int]?
@@ -62,18 +63,24 @@ struct TMDBTVShow: Decodable, Identifiable {
     let numberOfEpisodes: Int?
     let popularity: Double
     let seasons: [TMDBSeason]?
+    let createdBy: [TMDBShowCreator]?
+    let credits: TMDBCredits?
+    let inProduction: Bool?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, overview, popularity, genres, seasons
+        case id, name, overview, popularity, genres, seasons, credits
         case originalName = "original_name"
         case posterPath = "poster_path"
         case backdropPath = "backdrop_path"
         case firstAirDate = "first_air_date"
+        case lastAirDate = "last_air_date"
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
         case genreIds = "genre_ids"
         case numberOfSeasons = "number_of_seasons"
         case numberOfEpisodes = "number_of_episodes"
+        case createdBy = "created_by"
+        case inProduction = "in_production"
     }
 
     var posterURL: URL? {
@@ -88,6 +95,21 @@ struct TMDBTVShow: Decodable, Identifiable {
 
     var firstAirYear: String? {
         firstAirDate.flatMap { $0.split(separator: "-").first.map(String.init) }
+    }
+
+    var lastAirYear: String? {
+        lastAirDate.flatMap { $0.split(separator: "-").first.map(String.init) }
+    }
+
+    var airYearRange: String? {
+        guard let first = firstAirYear else { return nil }
+        if inProduction == true { return "\(first) – devam ediyor" }
+        if let last = lastAirYear, last != first { return "\(first) – \(last)" }
+        return first
+    }
+
+    var mainSeasons: [TMDBSeason] {
+        (seasons ?? []).filter { $0.seasonNumber > 0 }
     }
 }
 
@@ -179,6 +201,24 @@ enum TMDBSearchResult: Decodable, Identifiable {
         case "tv":    self = .tv(try TMDBTVShow(from: decoder))
         default:      self = .unknown
         }
+    }
+}
+
+// MARK: - TMDB Show Creator
+
+struct TMDBShowCreator: Decodable, Identifiable {
+    let id: Int
+    let name: String
+    let profilePath: String?
+
+    var profileURL: URL? {
+        guard let path = profilePath else { return nil }
+        return URL(string: "https://image.tmdb.org/t/p/w185\(path)")
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case profilePath = "profile_path"
     }
 }
 
