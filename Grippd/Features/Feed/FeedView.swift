@@ -35,6 +35,11 @@ struct FeedView: View {
     private func feedDestination(_ route: FeedRoute) -> some View {
         switch route {
         case .movieDetail(let tmdbID): MovieDetailView(tmdbID: tmdbID)
+        case .tvShowDetail(let tmdbID):
+            TVShowDetailView(tmdbID: tmdbID) { showID, seasonNumber in
+                router.feedPath.append(FeedRoute.seasonDetail(showID: showID, seasonNumber: seasonNumber))
+            }
+        case .seasonDetail(let showID, let seasonNumber): SeasonDetailView(showID: showID, seasonNumber: seasonNumber)
         case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         }

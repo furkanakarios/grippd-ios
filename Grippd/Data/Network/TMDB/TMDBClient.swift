@@ -48,7 +48,7 @@ final class TMDBClient {
     }
 
     func tvShowDetail(id: Int) async throws -> TMDBTVShow {
-        try await get("tv/\(id)", params: ["append_to_response": "genres,seasons"])
+        try await get("tv/\(id)", params: ["append_to_response": "credits"])
     }
 
     func seasonDetail(showID: Int, seasonNumber: Int) async throws -> TMDBSeason {
