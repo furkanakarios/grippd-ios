@@ -17,6 +17,7 @@ enum UnifiedSearchResult: Identifiable {
     case tv(TMDBTVShow)
     case book(GoogleBook)
     case person(TMDBPerson)
+    case userContent(Content)
 
     var id: String {
         switch self {
@@ -24,6 +25,7 @@ enum UnifiedSearchResult: Identifiable {
         case .tv(let t): return "tv-\(t.id)"
         case .book(let b): return "book-\(b.id)"
         case .person(let p): return "person-\(p.id)"
+        case .userContent(let c): return "user-\(c.id.uuidString)"
         }
     }
 }
@@ -98,6 +100,12 @@ final class SearchViewModel {
     private func search(query: String) async {
         isLoading = true
         error = nil
+
+        // Kullanıcı içeriklerini her zaman yerel olarak ara
+        let userResults: [UnifiedSearchResult] = await MainActor.run {
+            UserContentService.shared.search(query: query).map { .userContent($0.toContent()) }
+        }
+
         do {
             switch filter {
             case .all:
@@ -112,19 +120,32 @@ final class SearchViewModel {
                     }
                 }
                 let bookResults = (booksResponse.items ?? []).map { UnifiedSearchResult.book($0) }
-                results = tmdbResults + bookResults
+                // Kullanıcı içerikleri önce gelir
+                results = userResults + tmdbResults + bookResults
 
             case .movies:
                 let response = try await TMDBClient.shared.searchMovies(query: query)
-                results = response.results.map { .movie($0) }
+                let movieUserResults = userResults.filter {
+                    if case .userContent(let c) = $0 { return c.contentType == .movie }
+                    return false
+                }
+                results = movieUserResults + response.results.map { .movie($0) }
 
             case .tv:
                 let response = try await TMDBClient.shared.searchTVShows(query: query)
-                results = response.results.map { .tv($0) }
+                let tvUserResults = userResults.filter {
+                    if case .userContent(let c) = $0 { return c.contentType == .tv_show }
+                    return false
+                }
+                results = tvUserResults + response.results.map { .tv($0) }
 
             case .books:
                 let response = try await GoogleBooksClient.shared.search(query: query, maxResults: 20)
-                results = (response.items ?? []).map { .book($0) }
+                let bookUserResults = userResults.filter {
+                    if case .userContent(let c) = $0 { return c.contentType == .book }
+                    return false
+                }
+                results = bookUserResults + (response.items ?? []).map { .book($0) }
 
             case .person:
                 let response = try await TMDBClient.shared.searchPersons(query: query)
