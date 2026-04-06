@@ -8,6 +8,7 @@ struct MovieDetailView: View {
     @State private var showLogSheet = false
     @State private var isLogged = false
     @State private var loggedRating: Double? = nil
+    @State private var loggedEmoji: String? = nil
 
     private var contentKey: String { "movie-\(tmdbID)" }
 
@@ -42,8 +43,10 @@ struct MovieDetailView: View {
     }
 
     private func refreshLogState() {
-        isLogged = LogService.shared.isLogged(contentKey: contentKey)
-        loggedRating = LogService.shared.latestLog(for: contentKey)?.rating
+        let log = LogService.shared.latestLog(for: contentKey)
+        isLogged = log != nil
+        loggedRating = log?.rating
+        loggedEmoji = log?.emoji
     }
 
     // MARK: - Content
@@ -246,7 +249,9 @@ struct MovieDetailView: View {
                 label: isLogged ? "İzlendi" : "İzledim",
                 isActive: isLogged,
                 activeColor: Color(red: 0.2, green: 0.8, blue: 0.4),
-                badge: loggedRating.map { AnyView(StarRatingBadge(rating: $0, fontSize: 12)) }
+                badge: (loggedRating != nil || loggedEmoji != nil)
+                    ? AnyView(LogBadge(emoji: loggedEmoji, rating: loggedRating, fontSize: 12))
+                    : nil
             ) {
                 showLogSheet = true
             }

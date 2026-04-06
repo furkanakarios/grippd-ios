@@ -48,6 +48,7 @@ struct BookDetailView: View {
     @State private var showLogSheet = false
     @State private var isLogged = false
     @State private var loggedRating: Double? = nil
+    @State private var loggedEmoji: String? = nil
 
     private var contentKey: String { "book-\(googleBooksID)" }
 
@@ -94,8 +95,10 @@ struct BookDetailView: View {
     }
 
     private func refreshLogState() {
-        isLogged = LogService.shared.isLogged(contentKey: contentKey)
-        loggedRating = LogService.shared.latestLog(for: contentKey)?.rating
+        let log = LogService.shared.latestLog(for: contentKey)
+        isLogged = log != nil
+        loggedRating = log?.rating
+        loggedEmoji = log?.emoji
     }
 
     // MARK: - Main Content
@@ -255,13 +258,13 @@ struct BookDetailView: View {
                 )
             }
             .overlay(alignment: .topTrailing) {
-                if let r = loggedRating {
-                    StarRatingBadge(rating: r, fontSize: 12)
+                if loggedRating != nil || loggedEmoji != nil {
+                    LogBadge(emoji: loggedEmoji, rating: loggedRating, fontSize: 12)
                         .offset(x: 4, y: -5)
                         .transition(.scale.combined(with: .opacity))
                 }
             }
-            .animation(.spring(response: 0.3), value: loggedRating != nil)
+            .animation(.spring(response: 0.3), value: loggedRating != nil || loggedEmoji != nil)
 
             Button {
                 withAnimation(.spring(response: 0.3)) {

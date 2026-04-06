@@ -171,12 +171,58 @@ struct StarRatingBadge: View {
         )
     }
 
-    private var badgeColor: Color {
+    static func ratingColor(_ rating: Double) -> Color {
         switch rating {
         case ..<4:  return Color(red: 0.95, green: 0.35, blue: 0.35)
         case ..<6:  return Color(red: 1.00, green: 0.65, blue: 0.20)
         case ..<8:  return Color(red: 1.00, green: 0.85, blue: 0.20)
         default:    return Color(red: 0.30, green: 0.85, blue: 0.45)
         }
+    }
+
+    private var badgeColor: Color { Self.ratingColor(rating) }
+}
+
+// MARK: - LogBadge (emoji + rating birleşik)
+
+struct LogBadge: View {
+    var emoji: String?
+    var rating: Double?
+    var fontSize: CGFloat = 12
+
+    var body: some View {
+        HStack(spacing: 4) {
+            if let emoji {
+                Text(emoji)
+                    .font(.system(size: fontSize + 1))
+            }
+            if let rating {
+                if emoji != nil {
+                    Rectangle()
+                        .fill(.white.opacity(0.2))
+                        .frame(width: 1, height: 12)
+                }
+                Image(systemName: "star.fill")
+                    .font(.system(size: fontSize - 2, weight: .semibold))
+                    .foregroundStyle(StarRatingBadge.ratingColor(rating))
+                Text(String(format: rating == Double(Int(rating)) ? "%.0f" : "%.1f", rating))
+                    .font(.system(size: fontSize, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+            }
+        }
+        .padding(.horizontal, 7)
+        .padding(.vertical, 4)
+        .background(
+            Capsule()
+                .fill(Color(red: 0.10, green: 0.10, blue: 0.13))
+                .overlay(
+                    Capsule().stroke(
+                        rating != nil
+                            ? StarRatingBadge.ratingColor(rating!).opacity(0.6)
+                            : Color.white.opacity(0.2),
+                        lineWidth: 1
+                    )
+                )
+        )
     }
 }
