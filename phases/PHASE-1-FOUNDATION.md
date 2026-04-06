@@ -1,6 +1,6 @@
 # Faz 1 — Foundation & Infrastructure
 
-**Durum:** 🟡 Devam Ediyor  
+**Durum:** ✅ Tamamlandı  
 **Branch base:** `develop`
 
 ---
@@ -35,8 +35,8 @@
 - [x] **Step 9** — Google Books + Open Library API client  
   Branch: `feature/phase-1-step-9-books-client` ✅
 
-- [ ] **Step 10** — SwiftData local cache, offline altyapı, TestFlight ilk build  
-  Branch: `feature/phase-1-step-10-local-cache`
+- [x] **Step 10** — SwiftData local cache, offline altyapı  
+  Branch: `feature/phase-1-step-10-local-cache` ✅
 
 ---
 

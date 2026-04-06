@@ -8,8 +8,8 @@
 
 | Faz | İsim | Durum | Detay |
 |---|---|---|---|
-| 1 | Foundation & Infrastructure | 🔴 Başlamadı | [PHASE-1](phases/PHASE-1-FOUNDATION.md) |
-| 2 | Content Browsing & Detail Screens | 🔴 Başlamadı | [PHASE-2](phases/PHASE-2-CONTENT.md) |
+| 1 | Foundation & Infrastructure | ✅ Tamamlandı | [PHASE-1](phases/PHASE-1-FOUNDATION.md) |
+| 2 | Content Browsing & Detail Screens | 🟡 Devam Ediyor | [PHASE-2](phases/PHASE-2-CONTENT.md) |
 | 3 | Logging & Rating System | 🔴 Başlamadı | [PHASE-3](phases/PHASE-3-LOGGING.md) |
 | 4 | Social Infrastructure | 🔴 Başlamadı | [PHASE-4](phases/PHASE-4-SOCIAL.md) |
 | 5 | Discover & Algorithms | 🔴 Başlamadı | [PHASE-5](phases/PHASE-5-DISCOVER.md) |
