@@ -109,9 +109,8 @@ final class SearchViewModel {
         do {
             switch filter {
             case .all:
-                async let tmdbTask = TMDBClient.shared.searchMulti(query: query)
-                async let booksTask = GoogleBooksClient.shared.search(query: query, maxResults: 5)
-                let (tmdbResponse, booksResponse) = try await (tmdbTask, booksTask)
+                let tmdbResponse = try await TMDBClient.shared.searchMulti(query: query)
+                let booksResponse = try? await GoogleBooksClient.shared.search(query: query, maxResults: 5)
                 let tmdbResults = tmdbResponse.results.compactMap { result -> UnifiedSearchResult? in
                     switch result {
                     case .movie(let m): return .movie(m)
@@ -119,7 +118,7 @@ final class SearchViewModel {
                     case .unknown: return nil
                     }
                 }
-                let bookResults = (booksResponse.items ?? []).map { UnifiedSearchResult.book($0) }
+                let bookResults = (booksResponse?.items ?? []).map { UnifiedSearchResult.book($0) }
                 // Kullanıcı içerikleri önce gelir
                 results = userResults + tmdbResults + bookResults
 
@@ -140,12 +139,12 @@ final class SearchViewModel {
                 results = tvUserResults + response.results.map { .tv($0) }
 
             case .books:
-                let response = try await GoogleBooksClient.shared.search(query: query, maxResults: 20)
+                let response = try? await GoogleBooksClient.shared.search(query: query, maxResults: 20)
                 let bookUserResults = userResults.filter {
                     if case .userContent(let c) = $0 { return c.contentType == .book }
                     return false
                 }
-                results = bookUserResults + (response.items ?? []).map { .book($0) }
+                results = bookUserResults + (response?.items ?? []).map { .book($0) }
 
             case .person:
                 let response = try await TMDBClient.shared.searchPersons(query: query)
