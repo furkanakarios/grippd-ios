@@ -9,6 +9,12 @@ struct GrippdApp: App {
         WindowGroup {
             ContentView()
                 .environment(appState)
+                .onOpenURL { url in
+                    Task {
+                        // Supabase auth deep link handler (password reset, email confirm vs.)
+                        try? await SupabaseClientService.shared.client.auth.session(from: url)
+                    }
+                }
         }
     }
 }

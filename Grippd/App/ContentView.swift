@@ -26,12 +26,52 @@ private struct MainTabView: View {
         TabView {
             Text("Feed")
                 .tabItem { Label("Feed", systemImage: "house") }
-            Text("Search")
+            Text("Ara")
                 .tabItem { Label("Ara", systemImage: "magnifyingglass") }
-            Text("Discover")
+            Text("Keşfet")
                 .tabItem { Label("Keşfet", systemImage: "compass.drawing") }
-            Text("Profil")
+            DevProfileView()
                 .tabItem { Label("Profil", systemImage: "person.circle") }
         }
+        .preferredColorScheme(.dark)
+    }
+}
+
+// MARK: - Dev profile — sadece Step 7'ye kadar, sign-out testi için
+
+private struct DevProfileView: View {
+    @Environment(AppState.self) private var appState
+    @State private var authVM = AuthViewModel()
+
+    var body: some View {
+        ZStack {
+            GrippdBackground()
+            VStack(spacing: GrippdTheme.Spacing.lg) {
+                Spacer()
+
+                if let user = appState.currentUser {
+                    VStack(spacing: 8) {
+                        Image(systemName: "person.circle.fill")
+                            .font(.system(size: 64))
+                            .foregroundStyle(GrippdTheme.Colors.accent)
+                        Text(user.displayName)
+                            .font(GrippdTheme.Typography.title)
+                            .foregroundStyle(.white)
+                        Text("@\(user.username)")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.white.opacity(0.45))
+                    }
+                }
+
+                Spacer()
+
+                GrippdSecondaryButton("Oturumu Kapat", icon: "rectangle.portrait.and.arrow.right") {
+                    Task { await authVM.signOut(appState: appState) }
+                }
+                .padding(.horizontal, GrippdTheme.Spacing.xl)
+                .padding(.bottom, GrippdTheme.Spacing.xxl)
+            }
+        }
+        .preferredColorScheme(.dark)
     }
 }
