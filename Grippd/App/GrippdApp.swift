@@ -1,5 +1,5 @@
 import SwiftUI
-import Supabase
+import Auth
 
 @main
 struct GrippdApp: App {
@@ -17,26 +17,33 @@ struct GrippdApp: App {
     }
 
     private func handleDeepLink(_ url: URL) async {
-        // Supabase auth callback — parse token from URL fragment/query
-        // URL format: grippd://auth#access_token=...&type=recovery
-        // or:         grippd://auth?type=recovery&...
-        let urlString = url.absoluteString
+        let raw = url.absoluteString
 
-        let isRecovery = urlString.contains("type=recovery")
-        let isEmailConfirm = urlString.contains("type=signup") || urlString.contains("type=email_change")
+        // Supabase PKCE ve legacy fragment formatlarının ikisini de kontrol et
+        // PKCE:    grippd://auth?code=xxx&type=recovery
+        // Legacy:  grippd://auth#access_token=xxx&type=recovery
+        let combined = raw + (url.fragment ?? "")
+        let isRecovery = combined.contains("type=recovery")
 
         do {
-            try await SupabaseClientService.shared.client.auth.session(from: url)
+            // session(from:) hem PKCE code exchange hem de fragment token'ı handle eder
+            let session = try await SupabaseClientService.shared.client.auth.session(from: url)
+            await MainActor.run {
+                if isRecovery {
+                    // Recovery session kuruldu — şifre güncelleme ekranını göster
+                    appState.pendingDeepLink = .passwordReset
+                } else {
+                    // Email confirm vs. — direkt giriş yap
+                    appState.isAuthenticated = true
+                }
+                _ = session
+            }
         } catch {
-            // session(from:) throws for recovery links — tokens are still set
-        }
-
-        await MainActor.run {
+            // session(from:) bazen recovery'de throw eder ama token set edilmiş olur
             if isRecovery {
-                appState.isAuthenticated = false
-                appState.pendingDeepLink = .passwordReset
-            } else if isEmailConfirm {
-                appState.isAuthenticated = true
+                await MainActor.run {
+                    appState.pendingDeepLink = .passwordReset
+                }
             }
         }
     }

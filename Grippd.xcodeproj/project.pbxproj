@@ -56,7 +56,7 @@
 		21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippedTests.swift; sourceTree = "<group>"; };
 		28237F388713091CF5B58242 /* EmailAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthViewModel.swift; sourceTree = "<group>"; };
 		284EEEB5FBB2470FF1914E70 /* Grippd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grippd.entitlements; sourceTree = "<group>"; };
-		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B216F04C46ADC79E57A7119 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GrippedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
@@ -74,7 +74,7 @@
 		787BEEC8FC34DAB5B9253370 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		85F3842F44C6E0E3A2A569E5 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
-		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; path = xcconfig.template; sourceTree = "<group>"; };
+		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; lastKnownFileType = text; path = xcconfig.template; sourceTree = "<group>"; };
 		8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthView.swift; sourceTree = "<group>"; };
 		905FA566B07407F50510D020 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		9344A381848C54CF5FE99A0D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
@@ -440,9 +440,6 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
-					0175D501C0CCC8E960FE18CA = {
-						DevelopmentTeam = "";
-					};
 					2A1F6221E9EA1B0B2AC4FD4E = {
 						DevelopmentTeam = "";
 					};
@@ -702,6 +699,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Grippd/Resources/Grippd.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Grippd/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -721,6 +719,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Grippd/Resources/Grippd.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Grippd/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
