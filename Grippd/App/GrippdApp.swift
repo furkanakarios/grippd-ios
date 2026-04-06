@@ -13,6 +13,10 @@ struct GrippdApp: App {
                 .onOpenURL { url in
                     Task { await handleDeepLink(url) }
                 }
+                .task {
+                    // Süresi dolmuş cache kayıtlarını temizle
+                    LocalCacheService.shared.clearExpired()
+                }
         }
     }
 
