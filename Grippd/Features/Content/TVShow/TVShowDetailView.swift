@@ -98,6 +98,9 @@ struct TVShowDetailView: View {
                     creatorSection(creators: creators)
                 }
 
+                // Streaming platforms
+                PlatformAvailabilityView(kind: .tv(tmdbID: tmdbID))
+
                 if !viewModel.mainCast.isEmpty {
                     castSection
                 }

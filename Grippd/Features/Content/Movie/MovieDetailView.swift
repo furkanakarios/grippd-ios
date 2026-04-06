@@ -96,6 +96,9 @@ struct MovieDetailView: View {
                     overviewSection(text: movie.overview)
                 }
 
+                // Streaming platforms
+                PlatformAvailabilityView(kind: .movie(tmdbID: tmdbID))
+
                 // Director
                 if !viewModel.directors.isEmpty {
                     directorSection
