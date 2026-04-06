@@ -4,9 +4,11 @@ final class GoogleBooksClient {
     static let shared = GoogleBooksClient()
 
     private let baseURL = "https://www.googleapis.com/books/v1"
+    private let apiKey: String?
     private let session: URLSession
 
     private init() {
+        apiKey = Bundle.main.object(forInfoDictionaryKey: "GoogleBooksApiKey") as? String
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .returnCacheDataElseLoad
         config.urlCache = URLCache(memoryCapacity: 10_000_000, diskCapacity: 50_000_000)
@@ -39,7 +41,11 @@ final class GoogleBooksClient {
 
     private func get<T: Decodable>(_ path: String, params: [String: String] = [:]) async throws -> T {
         var components = URLComponents(string: "\(baseURL)/\(path)")!
-        components.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
+        var allParams = params
+        if let key = apiKey, !key.isEmpty {
+            allParams["key"] = key
+        }
+        components.queryItems = allParams.map { URLQueryItem(name: $0.key, value: $0.value) }
 
         guard let url = components.url else { throw BooksError.invalidURL }
 

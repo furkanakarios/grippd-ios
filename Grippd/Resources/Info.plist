@@ -35,6 +35,8 @@
 	<string>$(TMDB_API_KEY)</string>
 	<key>WatchmodeApiKey</key>
 	<string>$(WATCHMODE_API_KEY)</string>
+	<key>GoogleBooksApiKey</key>
+	<string>$(GOOGLE_BOOKS_API_KEY)</string>
 	<key>SupabaseURL</key>
 	<string>$(SUPABASE_URL)</string>
 	<key>SupabaseAnonKey</key>
