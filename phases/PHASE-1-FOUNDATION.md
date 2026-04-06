@@ -29,8 +29,8 @@
   Branch: `feature/phase-1-step-7-navigation` ✅
 
 
-- [ ] **Step 8** — TMDB API client: arama, detay, model mapping  
-  Branch: `feature/phase-1-step-8-tmdb-client`
+- [x] **Step 8** — TMDB API client: arama, detay, model mapping  
+  Branch: `feature/phase-1-step-8-tmdb-client` ✅
 
 - [ ] **Step 9** — Google Books + Open Library API client  
   Branch: `feature/phase-1-step-9-books-client`
