@@ -2,6 +2,7 @@ import SwiftUI
 
 @Observable
 final class AppState {
+    var isCheckingAuth: Bool = true   // splash gösterim için
     var isAuthenticated: Bool = false
     var currentUser: User?
     var needsOnboarding: Bool = false

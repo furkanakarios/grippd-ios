@@ -23,7 +23,9 @@
 		266036DE24F2C42BC3D01F61 /* PlatformAvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */; };
 		3139A09C704144F6B6D7416F /* CommunityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C092ED7E14E90B7C9AA11 /* CommunityService.swift */; };
 		1D8DD65D76A047DCB969DAA2 /* CommunityStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA650D47349D4E40A296B666 /* CommunityStatsView.swift */; };
+		A0AECF0F65CA46DDAAA31BD5 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15FAC924D7D4A1FBB57C846 /* StarRatingView.swift */; };
 		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
+		0048F6EB1E1341D7803ECE66 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BE0029CA8A04A79B832D912 /* Assets.xcassets */; };
 		33AF8FE290C0154E1E2BF576 /* SwiftDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */; };
 		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
 		3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */; };
@@ -36,6 +38,7 @@
 		70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC76940C4F0862F2C919C69 /* AppState.swift */; };
 		7175571387E911F418554E20 /* BooksMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97FFEA9C96CC1AC1A471163 /* BooksMapper.swift */; };
 		74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F3842F44C6E0E3A2A569E5 /* SignInView.swift */; };
+		CD33CE9DE7844F859FFFAA3B /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6618BD9F3A4D7882E9CD69 /* SplashView.swift */; };
 		75130680374B96D6E996FF20 /* OpenLibraryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED09B7FBCDC06B99E2FE6BEA /* OpenLibraryClient.swift */; };
 		763B32A3D5C4361C8A74F5BD /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0434D08DA6A581F7F3B392 /* OnboardingView.swift */; };
 		7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209950C1A8FB3E39AD1DD55F /* LogEntry.swift */; };
@@ -106,6 +109,7 @@
 		3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformAvailabilityView.swift; sourceTree = "<group>"; };
 		074C092ED7E14E90B7C9AA11 /* CommunityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityService.swift; sourceTree = "<group>"; };
 		EA650D47349D4E40A296B666 /* CommunityStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStatsView.swift; sourceTree = "<group>"; };
+		A15FAC924D7D4A1FBB57C846 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		3FB51BD89D752BBE1288E9CC /* AddCustomContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomContentView.swift; sourceTree = "<group>"; };
 		404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GrippedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
@@ -133,6 +137,7 @@
 		7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModels.swift; sourceTree = "<group>"; };
 		82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		85F3842F44C6E0E3A2A569E5 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		3D6618BD9F3A4D7882E9CD69 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksClient.swift; sourceTree = "<group>"; };
 		8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMapper.swift; sourceTree = "<group>"; };
 		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; path = xcconfig.template; sourceTree = "<group>"; };
@@ -314,8 +319,15 @@
 			children = (
 				F12A925BB62BED5A878937FD /* Grippd.entitlements */,
 				787BEEC8FC34DAB5B9253370 /* Info.plist */,
+				8BE0029CA8A04A79B832D912 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		8BE0029CA8A04A79B832D912 /* Assets.xcassets */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder.assetcatalog;
+			path = Assets.xcassets;
 			sourceTree = "<group>";
 		};
 		73F078758BC5D9DE33F02FB9 /* Books */ = {
@@ -374,6 +386,7 @@
 				437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */,
 				67EFFCE43DC001079408FF4D /* PasswordResetView.swift */,
 				85F3842F44C6E0E3A2A569E5 /* SignInView.swift */,
+				3D6618BD9F3A4D7882E9CD69 /* SplashView.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -401,6 +414,7 @@
 			children = (
 				3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */,
 				EA650D47349D4E40A296B666 /* CommunityStatsView.swift */,
+				A15FAC924D7D4A1FBB57C846 /* StarRatingView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -646,6 +660,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DE3076A9C740F885368A39D /* xcconfig.template in Resources */,
+				0048F6EB1E1341D7803ECE66 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,6 +720,7 @@
 				266036DE24F2C42BC3D01F61 /* PlatformAvailabilityView.swift in Sources */,
 				3139A09C704144F6B6D7416F /* CommunityService.swift in Sources */,
 				1D8DD65D76A047DCB969DAA2 /* CommunityStatsView.swift in Sources */,
+				A0AECF0F65CA46DDAAA31BD5 /* StarRatingView.swift in Sources */,
 				8EA99FD01206A4834FC06D44 /* ProfileView.swift in Sources */,
 				9C205D397566ACA00F458697 /* Review.swift in Sources */,
 				928B78DF03DA910125615ADD /* SearchHistoryService.swift in Sources */,
@@ -712,6 +728,7 @@
 				86CC006C1A1C7FE9B8F68196 /* SearchViewModel.swift in Sources */,
 				C87C4DF764520526F7883CD0 /* SeasonDetailView.swift in Sources */,
 				74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */,
+				CD33CE9DE7844F859FFFAA3B /* SplashView.swift in Sources */,
 				134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */,
 				EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */,
 				33AF8FE290C0154E1E2BF576 /* SwiftDataModels.swift in Sources */,

@@ -89,8 +89,7 @@ struct SignInView: View {
             }
         }
         .preferredColorScheme(.dark)
-        .task {
-            await viewModel.restoreSession(appState: appState)
+        .onAppear {
             withAnimation(.spring(response: 0.8, dampingFraction: 0.7).delay(0.1)) {
                 logoScale = 1.0
                 logoOpacity = 1.0

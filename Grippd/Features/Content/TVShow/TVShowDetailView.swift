@@ -9,6 +9,7 @@ struct TVShowDetailView: View {
     @State private var showFullOverview = false
     @State private var showLogSheet = false
     @State private var isLogged = false
+    @State private var loggedRating: Double? = nil
 
     private var contentKey: String { "tv-\(tmdbID)" }
 
@@ -28,7 +29,7 @@ struct TVShowDetailView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task { await viewModel.load(tmdbID: tmdbID) }
-        .onAppear { isLogged = LogService.shared.isLogged(contentKey: contentKey) }
+        .onAppear { refreshLogState() }
         .sheet(isPresented: $showLogSheet) {
             LogEntrySheet(
                 contentKey: contentKey,
@@ -36,12 +37,15 @@ struct TVShowDetailView: View {
                 contentTitle: viewModel.show?.name ?? "",
                 posterPath: viewModel.show?.posterPath,
                 isPresented: $showLogSheet
-            ) {
-                isLogged = LogService.shared.isLogged(contentKey: contentKey)
-            }
+            ) { refreshLogState() }
             .presentationDetents([.large])
             .presentationDragIndicator(.visible)
         }
+    }
+
+    private func refreshLogState() {
+        isLogged = LogService.shared.isLogged(contentKey: contentKey)
+        loggedRating = LogService.shared.latestLog(for: contentKey)?.rating
     }
 
     // MARK: - Content
@@ -231,7 +235,8 @@ struct TVShowDetailView: View {
                 icon: isLogged ? "checkmark.circle.fill" : "checkmark.circle",
                 label: isLogged ? "İzlendi" : "İzledim",
                 isActive: isLogged,
-                activeColor: Color(red: 0.2, green: 0.8, blue: 0.4)
+                activeColor: Color(red: 0.2, green: 0.8, blue: 0.4),
+                badge: loggedRating.map { AnyView(StarRatingBadge(rating: $0, fontSize: 12)) }
             ) { showLogSheet = true }
 
             TVActionButton(
@@ -395,6 +400,7 @@ private struct TVActionButton: View {
     let label: String
     let isActive: Bool
     let activeColor: Color
+    var badge: AnyView? = nil
     let action: () -> Void
 
     var body: some View {
@@ -414,12 +420,20 @@ private struct TVActionButton: View {
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
+                .overlay(alignment: .topTrailing) {
+                    if let badge {
+                        badge
+                            .offset(x: 4, y: -5)
+                            .transition(.scale.combined(with: .opacity))
+                    }
+                }
 
                 Text(label)
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(isActive ? activeColor.opacity(0.9) : .white.opacity(0.45))
             }
         }
+        .animation(.spring(response: 0.3), value: badge != nil)
     }
 }
 

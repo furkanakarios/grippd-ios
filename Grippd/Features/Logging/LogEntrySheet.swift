@@ -13,6 +13,7 @@ struct LogEntrySheet: View {
     @State private var watchedAt: Date = Date()
     @State private var selectedPlatform: LogPlatform?
     @State private var isRewatch: Bool = false
+    @State private var rating: Double? = nil
     @State private var note: String = ""
 
     private var availablePlatforms: [LogPlatform] {
@@ -40,6 +41,7 @@ struct LogEntrySheet: View {
                     VStack(alignment: .leading, spacing: 24) {
                         dateSection
                         platformSection
+                        ratingSection
                         rewatchSection
                         noteSection
                         saveButton
@@ -102,6 +104,19 @@ struct LogEntrySheet: View {
                 .padding(.horizontal, 2)
                 .padding(.vertical, 2)
             }
+        }
+    }
+
+    // MARK: - Rating Section
+
+    private var ratingSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            sectionLabel("Puanın (İsteğe Bağlı)")
+
+            StarRatingView(rating: $rating, starSize: 38, spacing: 8)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 18)
+                .background(.white.opacity(0.05), in: RoundedRectangle(cornerRadius: 14))
         }
     }
 
@@ -176,6 +191,7 @@ struct LogEntrySheet: View {
             watchedAt: watchedAt,
             platform: selectedPlatform,
             isRewatch: isRewatch,
+            rating: rating,
             note: trimmedNote.isEmpty ? nil : trimmedNote
         )
         LogService.shared.save(entry)
