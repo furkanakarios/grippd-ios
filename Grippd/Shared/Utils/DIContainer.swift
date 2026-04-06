@@ -5,6 +5,7 @@ final class DIContainer {
     private init() {}
 
     lazy var contentRepository: ContentRepositoryProtocol = TMDBContentRepository()
+    lazy var booksRepository: BooksRepositoryProtocol = GoogleBooksRepository()
     lazy var userRepository: UserRepositoryProtocol = UserRepositoryStub()
     lazy var logRepository: LogRepositoryProtocol = LogRepositoryStub()
 }
