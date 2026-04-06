@@ -4,19 +4,24 @@ struct Content: Identifiable, Codable, Equatable {
     let id: UUID
     var tmdbID: Int?
     var googleBooksID: String?
-    var type: ContentType
     var title: String
+    var originalTitle: String?
     var overview: String?
     var posterURL: URL?
     var backdropURL: URL?
-    var releaseDate: Date?
+    var releaseYear: Int?
+    var contentType: ContentType
     var genres: [String]
+    var averageRating: Double?
+    var tmdbPopularity: Double?
+    var runtime: Int?
     var isUserCreated: Bool
     var createdByUserID: UUID?
+    var createdAt: Date
 
     enum ContentType: String, Codable {
         case movie
-        case tvShow = "tv_show"
+        case tv_show
         case book
     }
 }

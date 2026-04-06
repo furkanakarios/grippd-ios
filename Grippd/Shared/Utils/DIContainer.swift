@@ -1,26 +1,64 @@
 import Foundation
 
-// MARK: - Dependency Injection Container
-// Repository'ler Faz 1 Step 3'te Supabase implementasyonlarıyla doldurulacak
-
 final class DIContainer {
-
     static let shared = DIContainer()
     private init() {}
 
-    // MARK: - Repositories (lazy — implementasyonlar sonraki adımlarda eklenir)
-    lazy var contentRepository: ContentRepositoryProtocol = ContentRepositoryStub()
+    lazy var contentRepository: ContentRepositoryProtocol = TMDBContentRepository()
     lazy var userRepository: UserRepositoryProtocol = UserRepositoryStub()
     lazy var logRepository: LogRepositoryProtocol = LogRepositoryStub()
 }
 
-// MARK: - Stubs (gerçek implementasyon gelene kadar)
-private struct ContentRepositoryStub: ContentRepositoryProtocol {
-    func search(query: String, type: Content.ContentType?) async throws -> [Content] { [] }
-    func fetchDetail(id: UUID) async throws -> Content { fatalError("Not implemented") }
-    func fetchTrending(type: Content.ContentType) async throws -> [Content] { [] }
+// MARK: - TMDB Content Repository (gerçek implementasyon)
+
+final class TMDBContentRepository: ContentRepositoryProtocol {
+    private let tmdb = TMDBClient.shared
+
+    func search(query: String, type: Content.ContentType?) async throws -> [Content] {
+        switch type {
+        case .movie:
+            let response = try await tmdb.searchMovies(query: query)
+            return response.results.map { TMDBMapper.toContent($0) }
+        case .tv_show:
+            let response = try await tmdb.searchTVShows(query: query)
+            return response.results.map { TMDBMapper.toContent($0) }
+        default:
+            let response = try await tmdb.searchMulti(query: query)
+            return response.results.compactMap { TMDBMapper.toContent($0) }
+        }
+    }
+
+    func fetchTrending(type: Content.ContentType, page: Int = 1) async throws -> [Content] {
+        switch type {
+        case .movie:
+            let response = try await tmdb.trendingMovies()
+            return response.results.map { TMDBMapper.toContent($0) }
+        case .tv_show:
+            let response = try await tmdb.trendingTVShows()
+            return response.results.map { TMDBMapper.toContent($0) }
+        case .book:
+            return []
+        }
+    }
+
+    func fetchMovieDetail(tmdbID: Int) async throws -> Content {
+        let movie = try await tmdb.movieDetail(id: tmdbID)
+        return TMDBMapper.toContent(movie)
+    }
+
+    func fetchTVDetail(tmdbID: Int) async throws -> Content {
+        let show = try await tmdb.tvShowDetail(id: tmdbID)
+        return TMDBMapper.toContent(show)
+    }
+
+    func fetchSeasonDetail(showTmdbID: Int, seasonNumber: Int) async throws -> TMDBSeason {
+        try await tmdb.seasonDetail(showID: showTmdbID, seasonNumber: seasonNumber)
+    }
+
     func addUserContent(_ content: Content) async throws -> Content { content }
 }
+
+// MARK: - Stubs
 
 private struct UserRepositoryStub: UserRepositoryProtocol {
     func fetchProfile(id: UUID) async throws -> User { fatalError("Not implemented") }

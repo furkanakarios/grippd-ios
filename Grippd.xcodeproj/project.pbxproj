@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		01700C4ED6212604C3062EA7 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14935DCEB91862475AA15F37 /* MainTabView.swift */; };
 		116A3439D527C894C318EDA3 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B348645889240B57745ED216 /* OnboardingService.swift */; };
+		11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */; };
 		134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */; };
 		175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9344A381848C54CF5FE99A0D /* DIContainer.swift */; };
 		1AABA80722445F66E018A6AA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D1CBC1ABF9BD97FF109E01 /* Content.swift */; };
@@ -17,6 +18,7 @@
 		24CB916439B123DB568F668D /* EmailAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */; };
 		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
 		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
+		3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */; };
 		56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28237F388713091CF5B58242 /* EmailAuthViewModel.swift */; };
 		5916D159749A98326791E104 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */; };
 		5A24E7CAE74A1399FA266C18 /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EFFCE43DC001079408FF4D /* PasswordResetView.swift */; };
@@ -35,6 +37,7 @@
 		A88BA4107619CA7035BC7D64 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4CBF9E15999716707334E2 /* AuthViewModel.swift */; };
 		B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905FA566B07407F50510D020 /* UserRepository.swift */; };
 		B493C5FA697B4E379C049D11 /* GrippedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */; };
+		B71F2D6485252AE146CE69AD /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A077D0480CDDF60562399C9D /* TMDBClient.swift */; };
 		BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4DD0039F13A4706C8805F /* View+Extensions.swift */; };
 		BFF42B36D9E6B9E6D2D20215 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD11A484C7628DE0A6A84B0 /* AuthService.swift */; };
 		C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */; };
@@ -76,6 +79,7 @@
 		51AD3C13B83EB88FD33808D8 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
 		53D1CBC1ABF9BD97FF109E01 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
 		67EFFCE43DC001079408FF4D /* PasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetView.swift; sourceTree = "<group>"; };
 		684AA2C0DF8DE655B26C90A0 /* GrippdTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdTheme.swift; sourceTree = "<group>"; };
 		6B95A5DB33DF5A3679378204 /* ContentInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInterest.swift; sourceTree = "<group>"; };
@@ -84,12 +88,14 @@
 		787BEEC8FC34DAB5B9253370 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		85F3842F44C6E0E3A2A569E5 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMapper.swift; sourceTree = "<group>"; };
 		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; lastKnownFileType = text; path = xcconfig.template; sourceTree = "<group>"; };
 		8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthView.swift; sourceTree = "<group>"; };
 		905FA566B07407F50510D020 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		9344A381848C54CF5FE99A0D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		9A4CBF9E15999716707334E2 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		9B6CEA8D04D9ED636549509A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A077D0480CDDF60562399C9D /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		B348645889240B57745ED216 /* OnboardingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingService.swift; sourceTree = "<group>"; };
 		BF95542CD4B341C9D05419B7 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		BFC76940C4F0862F2C919C69 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -329,6 +335,9 @@
 		D19A8B8CFC1ADB65BD0FD1D7 /* TMDB */ = {
 			isa = PBXGroup;
 			children = (
+				A077D0480CDDF60562399C9D /* TMDBClient.swift */,
+				8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */,
+				663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */,
 			);
 			path = TMDB;
 			sourceTree = "<group>";
@@ -548,6 +557,9 @@
 				74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */,
 				134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */,
 				EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */,
+				B71F2D6485252AE146CE69AD /* TMDBClient.swift in Sources */,
+				3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */,
+				11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */,
 				1E497CC5BB09798EA83402F2 /* User.swift in Sources */,
 				B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */,
 				BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */,
