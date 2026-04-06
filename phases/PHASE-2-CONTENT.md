@@ -13,8 +13,8 @@
 - [x] **Step 2** — Dizi detay ekranı: sezon listesi, bölüm listesi  
   Branch: `feature/phase-2-step-2-series-detail` ✅
 
-- [ ] **Step 3** — Bölüm detay ekranı: episode metadata, still images  
-  Branch: `feature/phase-2-step-3-episode-detail`
+- [x] **Step 3** — Bölüm detay ekranı: episode metadata, still images  
+  Branch: `feature/phase-2-step-3-episode-detail` ✅
 
 - [ ] **Step 4** — Kitap detay ekranı: kapak, yazar, özet, Google Books  
   Branch: `feature/phase-2-step-4-book-detail`
