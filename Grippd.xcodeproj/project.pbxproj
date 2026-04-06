@@ -18,6 +18,7 @@
 		1E50150BD4CADF7E83A4D32E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C3D51F02E1AE282175FA62 /* SearchView.swift */; };
 		24CB916439B123DB568F668D /* EmailAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */; };
 		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
+		33AF8FE290C0154E1E2BF576 /* SwiftDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */; };
 		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
 		3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */; };
 		56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28237F388713091CF5B58242 /* EmailAuthViewModel.swift */; };
@@ -49,6 +50,7 @@
 		E0143E850210E440D62D37EB /* GoogleBooksClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */; };
 		E4A2AD4006928763D27846B2 /* GrippdComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2D418182291CD3ED6B16F /* GrippdComponents.swift */; };
 		E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 57B8F951E1296882A2860113 /* Supabase */; };
+		E9F116064D6A081F52F0BFE6 /* LocalCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */; };
 		EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */; };
 		F4DA93DFA910E861B146AC2D /* GrippdTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684AA2C0DF8DE655B26C90A0 /* GrippdTheme.swift */; };
 /* End PBXBuildFile section */
@@ -93,6 +95,7 @@
 		70DF9D2C89BA6439699CACDD /* ContentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentRepository.swift; sourceTree = "<group>"; };
 		716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConstants.swift; sourceTree = "<group>"; };
 		787BEEC8FC34DAB5B9253370 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModels.swift; sourceTree = "<group>"; };
 		82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		85F3842F44C6E0E3A2A569E5 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksClient.swift; sourceTree = "<group>"; };
@@ -113,6 +116,7 @@
 		ED09B7FBCDC06B99E2FE6BEA /* OpenLibraryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLibraryClient.swift; sourceTree = "<group>"; };
 		EE5C708F8C6739EFC5B9592C /* LogRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRepository.swift; sourceTree = "<group>"; };
 		F12A925BB62BED5A878937FD /* Grippd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grippd.entitlements; sourceTree = "<group>"; };
+		F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCacheService.swift; sourceTree = "<group>"; };
 		FF053B89084A730815FE5768 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -214,6 +218,8 @@
 		5ACBABDC609AC076FE7CCA0C /* Local */ = {
 			isa = PBXGroup;
 			children = (
+				F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */,
+				7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */,
 			);
 			path = Local;
 			sourceTree = "<group>";
@@ -566,6 +572,7 @@
 				3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */,
 				E4A2AD4006928763D27846B2 /* GrippdComponents.swift in Sources */,
 				F4DA93DFA910E861B146AC2D /* GrippdTheme.swift in Sources */,
+				E9F116064D6A081F52F0BFE6 /* LocalCacheService.swift in Sources */,
 				7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */,
 				69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */,
 				01700C4ED6212604C3062EA7 /* MainTabView.swift in Sources */,
@@ -580,6 +587,7 @@
 				74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */,
 				134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */,
 				EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */,
+				33AF8FE290C0154E1E2BF576 /* SwiftDataModels.swift in Sources */,
 				B71F2D6485252AE146CE69AD /* TMDBClient.swift in Sources */,
 				3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */,
 				11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */,
