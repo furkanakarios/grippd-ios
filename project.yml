@@ -60,6 +60,8 @@ targets:
     dependencies:
       - package: Supabase
         product: Supabase
+    entitlements:
+      path: Grippd/Resources/Grippd.entitlements
 
   GrippedTests:
     type: bundle.unit-test

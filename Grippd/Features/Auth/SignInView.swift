@@ -5,79 +5,96 @@ struct SignInView: View {
     @Environment(AppState.self) private var appState
     @State private var viewModel = AuthViewModel()
     @State private var showEmailAuth = false
+    @State private var logoScale: CGFloat = 0.8
+    @State private var logoOpacity: CGFloat = 0
 
     var body: some View {
         ZStack {
-            Color(.systemBackground).ignoresSafeArea()
+            GrippdBackground()
 
             VStack(spacing: 0) {
                 Spacer()
 
-                // Logo
-                VStack(spacing: 16) {
-                    Image(systemName: "film.stack.fill")
-                        .font(.system(size: 72, weight: .light))
-                        .foregroundStyle(.primary)
+                // MARK: Logo
+                VStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .fill(GrippdTheme.Colors.accent.opacity(0.15))
+                            .frame(width: 90, height: 90)
+                            .blur(radius: 20)
+
+                        Image(systemName: "film.stack.fill")
+                            .font(.system(size: 48, weight: .light))
+                            .foregroundStyle(GrippdTheme.Colors.accent)
+                    }
 
                     Text("Grippd")
-                        .font(.system(size: 42, weight: .bold, design: .rounded))
+                        .font(GrippdTheme.Typography.appName)
+                        .foregroundStyle(.white)
 
                     Text("Film, dizi ve kitap günlüğün")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 15, weight: .regular))
+                        .foregroundStyle(.white.opacity(0.45))
+                        .tracking(0.3)
                 }
+                .scaleEffect(logoScale)
+                .opacity(logoOpacity)
 
                 Spacer()
 
-                // Actions
+                // MARK: Auth Buttons
                 VStack(spacing: 12) {
+                    // Apple
                     if viewModel.isLoading {
                         ProgressView()
-                            .frame(height: 50)
+                            .tint(GrippdTheme.Colors.accent)
+                            .frame(height: 54)
                     } else {
-                        // Apple
                         SignInWithAppleButton(.signIn) { request in
                             request.requestedScopes = [.fullName, .email]
                             request.nonce = viewModel.generateNonce()
                         } onCompletion: { result in
                             Task { await viewModel.handleAppleSignIn(result: result, appState: appState) }
                         }
-                        .signInWithAppleButtonStyle(.black)
-                        .frame(height: 50)
-                        .cornerRadius(12)
+                        .signInWithAppleButtonStyle(.white)
+                        .frame(height: 54)
+                        .clipShape(RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
+                    }
 
-                        // Divider
-                        HStack {
-                            Rectangle().frame(height: 1).foregroundStyle(.separator)
-                            Text("veya").font(.caption).foregroundStyle(.secondary)
-                            Rectangle().frame(height: 1).foregroundStyle(.separator)
-                        }
+                    GrippdDivider(label: "veya")
 
-                        // Email
-                        Button {
-                            showEmailAuth = true
-                        } label: {
-                            Label("E-posta ile devam et", systemImage: "envelope")
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 50)
-                        }
-                        .buttonStyle(.bordered)
-                        .cornerRadius(12)
+                    // Email
+                    GrippdSecondaryButton("E-posta ile devam et", icon: "envelope") {
+                        showEmailAuth = true
                     }
 
                     if let error = viewModel.errorMessage {
                         Text(error)
                             .font(.caption)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.red.opacity(0.85))
                             .multilineTextAlignment(.center)
+                            .padding(.top, 4)
                     }
+
+                    // Terms
+                    Text("Devam ederek [Kullanım Koşulları](https://grippd.app/terms) ve [Gizlilik Politikası](https://grippd.app/privacy)'nı kabul etmiş olursun.")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.white.opacity(0.25))
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 8)
+                        .tint(GrippdTheme.Colors.accent)
                 }
-                .padding(.horizontal, 32)
-                .padding(.bottom, 48)
+                .padding(.horizontal, GrippdTheme.Spacing.xl)
+                .padding(.bottom, GrippdTheme.Spacing.xxl)
             }
         }
+        .preferredColorScheme(.dark)
         .task {
             await viewModel.restoreSession(appState: appState)
+            withAnimation(.spring(response: 0.8, dampingFraction: 0.7).delay(0.1)) {
+                logoScale = 1.0
+                logoOpacity = 1.0
+            }
         }
         .sheet(isPresented: $showEmailAuth) {
             EmailAuthView(isPresented: $showEmailAuth)
@@ -87,6 +104,5 @@ struct SignInView: View {
 }
 
 #Preview {
-    SignInView()
-        .environment(AppState())
+    SignInView().environment(AppState())
 }
