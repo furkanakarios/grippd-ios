@@ -90,8 +90,7 @@ private struct UserRepositoryStub: UserRepositoryProtocol {
 }
 
 private struct LogRepositoryStub: LogRepositoryProtocol {
-    func fetchLogs(userID: UUID, contentID: UUID?) async throws -> [LogEntry] { [] }
-    func addLog(_ entry: LogEntry) async throws -> LogEntry { entry }
-    func updateLog(_ entry: LogEntry) async throws -> LogEntry { entry }
-    func deleteLog(id: UUID) async throws {}
+    func fetchLogs(contentKey: String) async throws -> [LogEntry] { [] }
+    func addLog(_ entry: LogEntry) async throws {}
+    func deleteLog(id: String) async throws {}
 }
