@@ -10,8 +10,8 @@
 - [x] **Step 1** — Film detay ekranı: poster, metadata, cast, overview  
   Branch: `feature/phase-2-step-1-film-detail` ✅
 
-- [ ] **Step 2** — Dizi detay ekranı: sezon listesi, bölüm listesi  
-  Branch: `feature/phase-2-step-2-series-detail`
+- [x] **Step 2** — Dizi detay ekranı: sezon listesi, bölüm listesi  
+  Branch: `feature/phase-2-step-2-series-detail` ✅
 
 - [ ] **Step 3** — Bölüm detay ekranı: episode metadata, still images  
   Branch: `feature/phase-2-step-3-episode-detail`
