@@ -143,6 +143,7 @@ struct ProfileView: View {
             EpisodeDetailView(showID: showID, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
         case .bookDetail(let googleBooksID):
             BookDetailView(googleBooksID: googleBooksID)
+        case .personDetail: Text("Kişi Detay — Phase 3").foregroundStyle(.white)
         case .settings: SettingsPlaceholderView()
         case .editProfile: Text("Profil Düzenle — Phase 4").foregroundStyle(.white)
         case .followers: Text("Takipçiler — Phase 4").foregroundStyle(.white)
