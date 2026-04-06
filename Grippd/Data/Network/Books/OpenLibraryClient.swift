@@ -34,9 +34,11 @@ final class OpenLibraryClient {
 
         let (data, response) = try await session.data(from: url)
 
-        guard let http = response as? HTTPURLResponse,
-              (200...299).contains(http.statusCode) else {
-            throw BooksError.httpError
+        guard let http = response as? HTTPURLResponse else {
+            throw BooksError.httpError(statusCode: 0)
+        }
+        guard (200...299).contains(http.statusCode) else {
+            throw BooksError.httpError(statusCode: http.statusCode)
         }
 
         return try JSONDecoder().decode(T.self, from: data)

@@ -139,12 +139,12 @@ final class SearchViewModel {
                 results = tvUserResults + response.results.map { .tv($0) }
 
             case .books:
-                let response = try? await GoogleBooksClient.shared.search(query: query, maxResults: 20)
+                let response = try await GoogleBooksClient.shared.search(query: query, maxResults: 20)
                 let bookUserResults = userResults.filter {
                     if case .userContent(let c) = $0 { return c.contentType == .book }
                     return false
                 }
-                results = bookUserResults + (response?.items ?? []).map { .book($0) }
+                results = bookUserResults + (response.items ?? []).map { .book($0) }
 
             case .person:
                 let response = try await TMDBClient.shared.searchPersons(query: query)

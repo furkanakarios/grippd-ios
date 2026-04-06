@@ -48,6 +48,16 @@ struct DiscoverView: View {
                     posterCarousel(items: viewModel.trendingShows.map { .tv($0) })
                 }
 
+                // Öne Çıkan Kitaplar
+                sectionHeader(title: "Öne Çıkan Kitaplar", icon: "books.vertical.fill")
+                    .padding(.top, GrippdTheme.Spacing.lg)
+
+                if viewModel.isLoadingBooks {
+                    skeletonRow()
+                } else if !viewModel.featuredBooks.isEmpty {
+                    bookCarousel(books: viewModel.featuredBooks)
+                }
+
                 // Vizyondakiler
                 sectionHeader(title: "Vizyondakiler", icon: "film.stack.fill")
                     .padding(.top, GrippdTheme.Spacing.lg)
@@ -82,6 +92,11 @@ struct DiscoverView: View {
                     genreChips(genres: viewModel.tvGenres, kind: .tv)
                 }
 
+                // Kitap Kategorileri
+                sectionHeader(title: "Kitap Kategorileri", icon: "book.closed")
+                    .padding(.top, GrippdTheme.Spacing.lg)
+                bookCategoryChips()
+
                 Spacer(minLength: GrippdTheme.Spacing.xxl)
             }
         }
@@ -107,29 +122,34 @@ struct DiscoverView: View {
     private enum CarouselItem {
         case movie(TMDBMovie)
         case tv(TMDBTVShow)
+        case book(GoogleBook)
 
         var id: String {
             switch self {
             case .movie(let m): return "m-\(m.id)"
             case .tv(let t): return "t-\(t.id)"
+            case .book(let b): return "b-\(b.id)"
             }
         }
         var posterURL: URL? {
             switch self {
             case .movie(let m): return m.posterURL
             case .tv(let t): return t.posterURL
+            case .book(let b): return b.volumeInfo.imageLinks?.thumbnailURL
             }
         }
         var title: String {
             switch self {
             case .movie(let m): return m.title
             case .tv(let t): return t.name
+            case .book(let b): return b.volumeInfo.title
             }
         }
         var rating: Double? {
             switch self {
             case .movie(let m): return m.voteAverage > 0 ? m.voteAverage : nil
             case .tv(let t): return t.voteAverage > 0 ? t.voteAverage : nil
+            case .book(let b): return b.volumeInfo.averageRating
             }
         }
     }
@@ -161,6 +181,56 @@ struct DiscoverView: View {
             router.discoverPath.append(DiscoverRoute.movieDetail(tmdbID: m.id))
         case .tv(let t):
             router.discoverPath.append(DiscoverRoute.tvShowDetail(tmdbID: t.id))
+        case .book(let b):
+            router.discoverPath.append(DiscoverRoute.bookDetail(googleBooksID: b.id))
+        }
+    }
+
+    // MARK: - Book Carousel
+
+    private func bookCarousel(books: [GoogleBook]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(alignment: .top, spacing: 12) {
+                ForEach(books) { book in
+                    Button {
+                        router.discoverPath.append(DiscoverRoute.bookDetail(googleBooksID: book.id))
+                    } label: {
+                        DiscoverPosterCard(
+                            posterURL: book.volumeInfo.imageLinks?.thumbnailURL,
+                            title: book.volumeInfo.title,
+                            rating: book.volumeInfo.averageRating
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, GrippdTheme.Spacing.sm)
+        }
+    }
+
+    // MARK: - Book Category Chips
+
+    private func bookCategoryChips() -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(viewModel.bookCategories, id: \.query) { category in
+                    Button {
+                        router.discoverPath.append(DiscoverRoute.bookCategoryBrowse(label: category.label, query: category.query))
+                    } label: {
+                        Text(category.label)
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.85))
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(GrippdTheme.Colors.surface, in: Capsule())
+                            .overlay(Capsule().stroke(.white.opacity(0.1), lineWidth: 1))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, GrippdTheme.Spacing.sm)
         }
     }
 
@@ -224,6 +294,10 @@ struct DiscoverView: View {
             EpisodeDetailView(showID: showID, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
         case .bookDetail(let googleBooksID):
             BookDetailView(googleBooksID: googleBooksID)
+        case .bookCategoryBrowse(let label, let query):
+            BookCategoryBrowseView(categoryLabel: label, query: query) { googleBooksID in
+                router.discoverPath.append(DiscoverRoute.bookDetail(googleBooksID: googleBooksID))
+            }
         case .personDetail: Text("Kişi Detay — Phase 3").foregroundStyle(.white)
         case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
         case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
