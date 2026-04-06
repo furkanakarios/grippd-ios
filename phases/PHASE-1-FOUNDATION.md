@@ -22,8 +22,8 @@
 - [x] **Step 5** — Authentication: Email/şifre kayıt ve giriş  
   Branch: `feature/phase-1-step-5-auth-email` ✅
 
-- [ ] **Step 6** — Onboarding: kullanıcı adı, ilgi alanları, profil fotoğrafı  
-  Branch: `feature/phase-1-step-6-onboarding`
+- [x] **Step 6** — Onboarding: kullanıcı adı, ilgi alanları, profil fotoğrafı  
+  Branch: `feature/phase-1-step-6-onboarding` ✅
 
 - [ ] **Step 7** — Ana navigasyon: TabBar, router/coordinator pattern  
   Branch: `feature/phase-1-step-7-navigation`
