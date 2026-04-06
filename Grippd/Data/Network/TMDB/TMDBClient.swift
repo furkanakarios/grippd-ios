@@ -33,6 +33,14 @@ final class TMDBClient {
         try await get("movie/\(id)", params: ["append_to_response": "credits"])
     }
 
+    func nowPlayingMovies(page: Int = 1) async throws -> TMDBPagedResponse<TMDBMovie> {
+        try await get("movie/now_playing", params: ["page": "\(page)", "region": "TR"])
+    }
+
+    func upcomingMovies(page: Int = 1) async throws -> TMDBPagedResponse<TMDBMovie> {
+        try await get("movie/upcoming", params: ["page": "\(page)", "region": "TR"])
+    }
+
     func searchMovies(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBMovie> {
         try await get("search/movie", params: ["query": query, "page": "\(page)"])
     }
@@ -60,6 +68,10 @@ final class TMDBClient {
             "tv/\(showID)/season/\(seasonNumber)/episode/\(episodeNumber)",
             params: ["append_to_response": "credits"]
         )
+    }
+
+    func onTheAirShows(page: Int = 1) async throws -> TMDBPagedResponse<TMDBTVShow> {
+        try await get("tv/on_the_air", params: ["page": "\(page)"])
     }
 
     func searchTVShows(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBTVShow> {

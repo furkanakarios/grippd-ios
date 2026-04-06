@@ -25,8 +25,8 @@
 - [x] **Step 6** — Unified search: film/dizi/kitap birlikte arama, filtreler  
   Branch: `feature/phase-2-step-6-search-full` ✅
 
-- [ ] **Step 7** — Custom içerik ekleme (Premium): user_created flow  
-  Branch: `feature/phase-2-step-7-custom-content`
+- [x] **Step 7** — Custom içerik ekleme (Premium): user_created flow  
+  Branch: `feature/phase-2-step-7-custom-content` ✅
 
 - [ ] **Step 8** — Trending & New Releases: TMDB trending, yeni çıkanlar  
   Branch: `feature/phase-2-step-8-trending`
