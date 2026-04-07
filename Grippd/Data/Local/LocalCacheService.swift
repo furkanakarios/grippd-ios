@@ -8,7 +8,7 @@ final class LocalCacheService {
     private let container: ModelContainer
 
     private init() {
-        let schema = Schema([CachedContent.self, CachedSearchQuery.self])
+        let schema = Schema([CachedContent.self, CachedSearchQuery.self, UserCreatedContent.self, LogEntry.self, WatchlistEntry.self, CustomList.self, CustomListItem.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {
             container = try ModelContainer(for: schema, configurations: config)

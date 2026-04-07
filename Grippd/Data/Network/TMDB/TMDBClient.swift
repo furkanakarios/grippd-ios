@@ -30,7 +30,15 @@ final class TMDBClient {
     }
 
     func movieDetail(id: Int) async throws -> TMDBMovie {
-        try await get("movie/\(id)", params: ["append_to_response": "genres"])
+        try await get("movie/\(id)", params: ["append_to_response": "credits"])
+    }
+
+    func nowPlayingMovies(page: Int = 1) async throws -> TMDBPagedResponse<TMDBMovie> {
+        try await get("movie/now_playing", params: ["page": "\(page)", "region": "TR"])
+    }
+
+    func upcomingMovies(page: Int = 1) async throws -> TMDBPagedResponse<TMDBMovie> {
+        try await get("movie/upcoming", params: ["page": "\(page)", "region": "TR"])
     }
 
     func searchMovies(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBMovie> {
@@ -48,21 +56,56 @@ final class TMDBClient {
     }
 
     func tvShowDetail(id: Int) async throws -> TMDBTVShow {
-        try await get("tv/\(id)", params: ["append_to_response": "genres,seasons"])
+        try await get("tv/\(id)", params: ["append_to_response": "credits"])
     }
 
     func seasonDetail(showID: Int, seasonNumber: Int) async throws -> TMDBSeason {
         try await get("tv/\(showID)/season/\(seasonNumber)", params: ["append_to_response": "episodes"])
     }
 
+    func episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int) async throws -> TMDBEpisode {
+        try await get(
+            "tv/\(showID)/season/\(seasonNumber)/episode/\(episodeNumber)",
+            params: ["append_to_response": "credits"]
+        )
+    }
+
+    func onTheAirShows(page: Int = 1) async throws -> TMDBPagedResponse<TMDBTVShow> {
+        try await get("tv/on_the_air", params: ["page": "\(page)"])
+    }
+
     func searchTVShows(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBTVShow> {
         try await get("search/tv", params: ["query": query, "page": "\(page)"])
+    }
+
+    // MARK: - Person Search
+
+    func searchPersons(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBPerson> {
+        try await get("search/person", params: ["query": query, "page": "\(page)"])
     }
 
     // MARK: - Multi Search (film + dizi birlikte)
 
     func searchMulti(query: String, page: Int = 1) async throws -> TMDBPagedResponse<TMDBSearchResult> {
         try await get("search/multi", params: ["query": query, "page": "\(page)"])
+    }
+
+    // MARK: - Discover by Genre
+
+    func discoverMovies(genreID: Int, page: Int = 1, sortBy: String = "popularity.desc") async throws -> TMDBPagedResponse<TMDBMovie> {
+        try await get("discover/movie", params: [
+            "with_genres": "\(genreID)",
+            "sort_by": sortBy,
+            "page": "\(page)"
+        ])
+    }
+
+    func discoverTVShows(genreID: Int, page: Int = 1, sortBy: String = "popularity.desc") async throws -> TMDBPagedResponse<TMDBTVShow> {
+        try await get("discover/tv", params: [
+            "with_genres": "\(genreID)",
+            "sort_by": sortBy,
+            "page": "\(page)"
+        ])
     }
 
     // MARK: - Genres

@@ -5,17 +5,37 @@ import SwiftUI
 enum FeedRoute: Hashable {
     case userProfile(userID: UUID)
     case contentDetail(contentID: UUID)
+    case movieDetail(tmdbID: Int)
+    case tvShowDetail(tmdbID: Int)
+    case seasonDetail(showID: Int, seasonNumber: Int)
+    case episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int)
+    case bookDetail(googleBooksID: String)
+    case personDetail(tmdbID: Int)
 }
 
 enum SearchRoute: Hashable {
     case contentDetail(contentID: UUID)
     case userProfile(userID: UUID)
+    case movieDetail(tmdbID: Int)
+    case tvShowDetail(tmdbID: Int)
+    case seasonDetail(showID: Int, seasonNumber: Int)
+    case episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int)
+    case bookDetail(googleBooksID: String)
+    case personDetail(tmdbID: Int)
 }
 
 enum DiscoverRoute: Hashable {
     case contentDetail(contentID: UUID)
     case userProfile(userID: UUID)
     case genre(String)
+    case genreBrowse(genre: TMDBGenre, kind: String)
+    case bookCategoryBrowse(label: String, query: String)
+    case movieDetail(tmdbID: Int)
+    case tvShowDetail(tmdbID: Int)
+    case seasonDetail(showID: Int, seasonNumber: Int)
+    case episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int)
+    case bookDetail(googleBooksID: String)
+    case personDetail(tmdbID: Int)
 }
 
 enum ProfileRoute: Hashable {
@@ -25,6 +45,13 @@ enum ProfileRoute: Hashable {
     case following(userID: UUID)
     case contentDetail(contentID: UUID)
     case userProfile(userID: UUID)
+    case movieDetail(tmdbID: Int)
+    case tvShowDetail(tmdbID: Int)
+    case seasonDetail(showID: Int, seasonNumber: Int)
+    case episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int)
+    case bookDetail(googleBooksID: String)
+    case personDetail(tmdbID: Int)
+    case customList(listID: String)
 }
 
 // MARK: - Router
