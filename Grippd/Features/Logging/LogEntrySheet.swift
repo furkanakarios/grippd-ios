@@ -334,7 +334,6 @@ struct LogEntrySheet: View {
     private func save() {
         let trimmedNote = note.trimmingCharacters(in: .whitespacesAndNewlines)
         let entry = LogEntry(
-            ownerID: LogService.shared.currentOwnerID,
             contentKey: contentKey,
             contentType: contentType,
             contentTitle: contentTitle,

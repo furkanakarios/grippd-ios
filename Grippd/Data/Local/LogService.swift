@@ -9,46 +9,12 @@ final class LogService {
 
     private init() {}
 
-    // MARK: - Current User ID
-
-    /// Mevcut auth kullanıcısının ID'si (sync, cache'li)
-    private var _cachedOwnerID: String?
-
-    var currentOwnerID: String {
-        if let cached = _cachedOwnerID { return cached }
-        // Sync fallback: Supabase session'dan UUID çekemiyoruz sync olarak,
-        // bu yüzden setOwner() ile dışarıdan set edilmesi beklenir.
-        return ""
-    }
-
-    /// Login/logout sırasında çağrılır
-    func setOwner(_ userID: String) {
-        _cachedOwnerID = userID
-        migrateOrphanedLogs(to: userID)
-    }
-
-    func clearOwner() {
-        _cachedOwnerID = nil
-    }
-
-    /// ownerID boş olan eski logları mevcut kullanıcıya ata (migration)
-    private func migrateOrphanedLogs(to userID: String) {
-        let descriptor = FetchDescriptor<LogEntry>(
-            predicate: #Predicate { $0.ownerID == "" }
-        )
-        let orphaned = (try? context.fetch(descriptor)) ?? []
-        guard !orphaned.isEmpty else { return }
-        orphaned.forEach { $0.ownerID = userID }
-        try? context.save()
-    }
-
     // MARK: - Fetch
 
     /// Belirli bir içeriğe ait tüm log kayıtları (en yeni önce)
     func logs(for contentKey: String) -> [LogEntry] {
-        let owner = currentOwnerID
         let descriptor = FetchDescriptor<LogEntry>(
-            predicate: #Predicate { $0.contentKey == contentKey && $0.ownerID == owner },
+            predicate: #Predicate { $0.contentKey == contentKey },
             sortBy: [SortDescriptor(\.watchedAt, order: .reverse)]
         )
         return (try? context.fetch(descriptor)) ?? []
@@ -56,9 +22,7 @@ final class LogService {
 
     /// Tüm log kayıtları (en yeni önce)
     func allLogs() -> [LogEntry] {
-        let owner = currentOwnerID
         let descriptor = FetchDescriptor<LogEntry>(
-            predicate: #Predicate { $0.ownerID == owner },
             sortBy: [SortDescriptor(\.watchedAt, order: .reverse)]
         )
         return (try? context.fetch(descriptor)) ?? []
@@ -66,10 +30,9 @@ final class LogService {
 
     /// Belirli bir içerik türündeki loglar
     func logs(for contentType: Content.ContentType) -> [LogEntry] {
-        let owner = currentOwnerID
         let raw = contentType.rawValue
         let descriptor = FetchDescriptor<LogEntry>(
-            predicate: #Predicate { $0.contentTypeRaw == raw && $0.ownerID == owner },
+            predicate: #Predicate { $0.contentTypeRaw == raw },
             sortBy: [SortDescriptor(\.watchedAt, order: .reverse)]
         )
         return (try? context.fetch(descriptor)) ?? []
@@ -90,21 +53,15 @@ final class LogService {
     func save(_ entry: LogEntry) {
         context.insert(entry)
         try? context.save()
-        Task { await LogSyncService.shared.sync(entry) }
     }
 
     func delete(_ entry: LogEntry) {
-        Task { await LogSyncService.shared.delete(entry) }
         context.delete(entry)
         try? context.save()
     }
 
     func deleteAll(for contentKey: String) {
-        let entries = logs(for: contentKey)
-        entries.forEach { entry in
-            Task { await LogSyncService.shared.delete(entry) }
-            context.delete(entry)
-        }
+        logs(for: contentKey).forEach { context.delete($0) }
         try? context.save()
     }
 

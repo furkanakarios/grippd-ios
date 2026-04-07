@@ -19,7 +19,6 @@ final class AuthViewModel {
             appState.currentUser = user
             appState.needsOnboarding = needsOnboarding
             appState.isAuthenticated = true
-            LogService.shared.setOwner(user.id.uuidString)
         }
     }
 
@@ -52,7 +51,6 @@ final class AuthViewModel {
                     appState.needsOnboarding = needsOnboarding
                     appState.isAuthenticated = true
                     isLoading = false
-                    LogService.shared.setOwner(user.id.uuidString)
                 }
             } catch {
                 await MainActor.run {
@@ -74,7 +72,6 @@ final class AuthViewModel {
         await MainActor.run {
             appState.currentUser = nil
             appState.isAuthenticated = false
-            LogService.shared.clearOwner()
         }
     }
 

@@ -13,24 +13,7 @@ final class LocalCacheService {
         do {
             container = try ModelContainer(for: schema, configurations: config)
         } catch {
-            // Şema değişikliğinde mevcut store uyumsuz olabilir — sil ve yeniden oluştur
-            Self.deleteStore()
-            do {
-                container = try ModelContainer(for: schema, configurations: config)
-            } catch {
-                fatalError("SwiftData container oluşturulamadı: \(error)")
-            }
-        }
-    }
-
-    private static func deleteStore() {
-        let urls = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-        guard let appSupport = urls.first else { return }
-        let storeURL = appSupport.appendingPathComponent("default.store")
-        let suffixes = ["", "-shm", "-wal"]
-        for suffix in suffixes {
-            let file = storeURL.appendingPathExtension(suffix == "" ? "" : suffix)
-            try? FileManager.default.removeItem(at: file)
+            fatalError("SwiftData container oluşturulamadı: \(error)")
         }
     }
 

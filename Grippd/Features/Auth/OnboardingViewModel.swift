@@ -88,7 +88,7 @@ final class OnboardingViewModel {
     // MARK: - Complete
 
     func complete(appState: AppState) async {
-        guard let userID = await MainActor.run(body: { appState.currentUser?.id }) else { return }
+        guard let userID = appState.currentUser?.id else { return }
 
         isLoading = true
         errorMessage = nil
@@ -105,7 +105,6 @@ final class OnboardingViewModel {
                 appState.currentUser = updatedUser
                 appState.needsOnboarding = false
                 isLoading = false
-                LogService.shared.setOwner(updatedUser.id.uuidString)
             }
         } catch {
             await MainActor.run {

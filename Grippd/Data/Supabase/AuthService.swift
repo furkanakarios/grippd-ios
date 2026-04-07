@@ -89,41 +89,33 @@ enum AuthError: LocalizedError {
 
 // MARK: - DB Row → Domain
 
-struct UserRow: Decodable {
+private struct UserRow: Decodable {
     let id: String
     let username: String
     let displayName: String?
     let avatarUrl: String?
-    let bannerUrl: String?
     let bio: String?
     let isPrivate: Bool
     let planType: String
-    let createdAt: String?
 
     enum CodingKeys: String, CodingKey {
         case id, username, bio
         case displayName = "display_name"
         case avatarUrl = "avatar_url"
-        case bannerUrl = "banner_url"
         case isPrivate = "is_private"
         case planType = "plan_type"
-        case createdAt = "created_at"
     }
 
     func toDomain() -> User {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        let date = createdAt.flatMap { formatter.date(from: $0) } ?? Date()
-        return User(
+        User(
             id: UUID(uuidString: id) ?? UUID(),
             username: username,
             displayName: displayName ?? username,
             bio: bio,
             avatarURL: avatarUrl.flatMap { URL(string: $0) },
-            bannerURL: bannerUrl.flatMap { URL(string: $0) },
             isPrivate: isPrivate,
             planType: planType == "premium" ? .premium : .free,
-            createdAt: date
+            createdAt: Date()
         )
     }
 }

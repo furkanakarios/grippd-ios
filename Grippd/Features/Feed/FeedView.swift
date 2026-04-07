@@ -1,62 +1,25 @@
 import SwiftUI
 
-// MARK: - ViewModel
-
-@Observable
-private final class FeedViewModel {
-    var activities: [FeedActivity] = []
-    var isLoading = false
-    var isLoadingMore = false
-    var error: String?
-    var hasMore = true
-    private var currentPage = 0
-
-    func load() async {
-        guard !isLoading else { return }
-        isLoading = true
-        error = nil
-        currentPage = 0
-        hasMore = true
-        do {
-            let result = try await FeedService.shared.fetchFeed(page: 0)
-            activities = result
-            hasMore = result.count == 20
-        } catch {
-            self.error = error.localizedDescription
-        }
-        isLoading = false
-    }
-
-    func loadMore() async {
-        guard !isLoadingMore, hasMore else { return }
-        isLoadingMore = true
-        currentPage += 1
-        do {
-            let result = try await FeedService.shared.fetchFeed(page: currentPage)
-            activities.append(contentsOf: result)
-            hasMore = result.count == 20
-        } catch {}
-        isLoadingMore = false
-    }
-
-    func refresh() async {
-        await load()
-    }
-}
-
-// MARK: - FeedView
-
 struct FeedView: View {
     @Environment(AppState.self) private var appState
     @Environment(AppRouter.self) private var router
-    @State private var viewModel = FeedViewModel()
 
     var body: some View {
         @Bindable var router = router
         NavigationStack(path: $router.feedPath) {
             ZStack {
                 GrippdBackground()
-                content
+                VStack(spacing: GrippdTheme.Spacing.md) {
+                    Image(systemName: "house.fill")
+                        .font(.system(size: 48))
+                        .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.3))
+                    Text("Feed")
+                        .font(GrippdTheme.Typography.headline)
+                        .foregroundStyle(.white)
+                    Text("Phase 2'de geliyor")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.white.opacity(0.35))
+                }
             }
             .navigationTitle("Feed")
             .navigationBarTitleDisplayMode(.inline)
@@ -65,130 +28,13 @@ struct FeedView: View {
             .navigationDestination(for: FeedRoute.self) { route in
                 feedDestination(route)
             }
-            .task { await viewModel.load() }
-            .refreshable { await viewModel.refresh() }
-        }
-    }
-
-    // MARK: - Content
-
-    @ViewBuilder
-    private var content: some View {
-        if viewModel.isLoading && viewModel.activities.isEmpty {
-            loadingView
-        } else if let error = viewModel.error, viewModel.activities.isEmpty {
-            errorView(error)
-        } else if viewModel.activities.isEmpty {
-            emptyFeedView
-        } else {
-            feedList
-        }
-    }
-
-    // MARK: - Feed List
-
-    private var feedList: some View {
-        ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 0) {
-                ForEach(viewModel.activities) { activity in
-                    FeedActivityCard(activity: activity) {
-                        navigateToContent(activity)
-                    } onUserTap: {
-                        router.feedPath.append(FeedRoute.userProfile(userID: activity.user.id))
-                    }
-                    Divider()
-                        .background(.white.opacity(0.06))
-
-                    // Sonsuz scroll tetikleyici
-                    if activity.id == viewModel.activities.last?.id {
-                        Color.clear.frame(height: 1)
-                            .onAppear { Task { await viewModel.loadMore() } }
-                    }
-                }
-
-                if viewModel.isLoadingMore {
-                    ProgressView()
-                        .tint(GrippdTheme.Colors.accent)
-                        .padding(.vertical, GrippdTheme.Spacing.lg)
-                }
-            }
-            .padding(.bottom, GrippdTheme.Spacing.xxl)
-        }
-    }
-
-    // MARK: - States
-
-    private var loadingView: some View {
-        VStack(spacing: GrippdTheme.Spacing.md) {
-            ProgressView().scaleEffect(1.3).tint(GrippdTheme.Colors.accent)
-            Text("Yükleniyor...").font(.system(size: 14)).foregroundStyle(.white.opacity(0.4))
-        }
-    }
-
-    private func errorView(_ message: String) -> some View {
-        VStack(spacing: GrippdTheme.Spacing.md) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 40))
-                .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.5))
-            Text(message)
-                .font(.system(size: 14))
-                .foregroundStyle(.white.opacity(0.45))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-            Button("Tekrar Dene") { Task { await viewModel.load() } }
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(GrippdTheme.Colors.accent)
-        }
-    }
-
-    private var emptyFeedView: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "person.2")
-                .font(.system(size: 52))
-                .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.25))
-            Text("Feed boş")
-                .font(.system(size: 20, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-            Text("Takip ettiğin kişilerin aktiviteleri\nburada görünecek.")
-                .font(.system(size: 14))
-                .foregroundStyle(.white.opacity(0.4))
-                .multilineTextAlignment(.center)
-            NavigationLink(destination: EmptyView()) {
-                Text("Kullanıcı Ara")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(GrippdTheme.Colors.background)
-                    .frame(height: 44)
-                    .padding(.horizontal, 28)
-                    .background(GrippdTheme.Colors.accent, in: Capsule())
-            }
-            .simultaneousGesture(TapGesture().onEnded {
-                appState.selectedTab = .search
-            })
-        }
-        .padding(.horizontal, 32)
-    }
-
-    // MARK: - Navigation
-
-    private func navigateToContent(_ activity: FeedActivity) {
-        let parts = activity.contentKey.split(separator: "-", maxSplits: 1)
-        guard parts.count == 2 else { return }
-        let idStr = String(parts[1])
-        switch activity.contentType {
-        case .movie:
-            if let id = Int(idStr) { router.feedPath.append(FeedRoute.movieDetail(tmdbID: id)) }
-        case .tv_show:
-            if let id = Int(idStr) { router.feedPath.append(FeedRoute.tvShowDetail(tmdbID: id)) }
-        case .book:
-            router.feedPath.append(FeedRoute.bookDetail(googleBooksID: idStr))
         }
     }
 
     @ViewBuilder
     private func feedDestination(_ route: FeedRoute) -> some View {
         switch route {
-        case .movieDetail(let tmdbID):
-            MovieDetailView(tmdbID: tmdbID)
+        case .movieDetail(let tmdbID): MovieDetailView(tmdbID: tmdbID)
         case .tvShowDetail(let tmdbID):
             TVShowDetailView(tmdbID: tmdbID) { showID, seasonNumber in
                 router.feedPath.append(FeedRoute.seasonDetail(showID: showID, seasonNumber: seasonNumber))
@@ -201,136 +47,9 @@ struct FeedView: View {
             EpisodeDetailView(showID: showID, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
         case .bookDetail(let googleBooksID):
             BookDetailView(googleBooksID: googleBooksID)
-        case .personDetail: Text("Kişi Detay — Phase 4").foregroundStyle(.white)
-        case .contentDetail: Text("İçerik Detay").foregroundStyle(.white)
-        case .userProfile(let userID): UserProfileView(userID: userID)
+        case .personDetail: Text("Kişi Detay — Phase 3").foregroundStyle(.white)
+        case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
+        case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
         }
-    }
-}
-
-// MARK: - Activity Card
-
-struct FeedActivityCard: View {
-    let activity: FeedActivity
-    let onContentTap: () -> Void
-    let onUserTap: () -> Void
-
-    private var typeIcon: String {
-        switch activity.contentType {
-        case .movie:   return "film"
-        case .tv_show: return "tv"
-        case .book:    return "book.closed"
-        }
-    }
-
-    private var relativeTime: String {
-        let diff = Date().timeIntervalSince(activity.watchedAt)
-        switch diff {
-        case ..<60:           return "az önce"
-        case ..<3600:         return "\(Int(diff/60))d önce"
-        case ..<86400:        return "\(Int(diff/3600))s önce"
-        case ..<604800:       return "\(Int(diff/86400))g önce"
-        default:
-            return activity.watchedAt.formatted(.dateTime.day().month(.abbreviated))
-        }
-    }
-
-    var body: some View {
-        Button(action: onContentTap) {
-            HStack(alignment: .top, spacing: 12) {
-                // Avatar
-                Button(action: onUserTap) {
-                    AsyncImage(url: activity.user.avatarURL) { phase in
-                        if case .success(let image) = phase {
-                            image.resizable().scaledToFill()
-                        } else {
-                            Circle()
-                                .fill(GrippdTheme.Colors.accent.opacity(0.12))
-                                .overlay(
-                                    Image(systemName: "person.fill")
-                                        .font(.system(size: 16))
-                                        .foregroundStyle(.white.opacity(0.3))
-                                )
-                        }
-                    }
-                    .frame(width: 42, height: 42)
-                    .clipShape(Circle())
-                }
-                .buttonStyle(.plain)
-
-                VStack(alignment: .leading, spacing: 6) {
-                    // Başlık satırı
-                    HStack(spacing: 4) {
-                        Text(activity.user.displayName)
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(.white)
-                        Text(activity.isRewatch ? "tekrar izledi" : "izledi")
-                            .font(.system(size: 13))
-                            .foregroundStyle(.white.opacity(0.45))
-                        Spacer()
-                        Text(relativeTime)
-                            .font(.system(size: 11))
-                            .foregroundStyle(.white.opacity(0.3))
-                    }
-
-                    // İçerik satırı
-                    HStack(spacing: 10) {
-                        // Poster
-                        Color.clear
-                            .aspectRatio(2/3, contentMode: .fit)
-                            .frame(width: 52)
-                            .overlay(
-                                AsyncImage(url: activity.posterURL) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        image.resizable().aspectRatio(contentMode: .fill)
-                                    default:
-                                        Rectangle()
-                                            .fill(GrippdTheme.Colors.surface)
-                                            .overlay(
-                                                Image(systemName: typeIcon)
-                                                    .font(.system(size: 16))
-                                                    .foregroundStyle(.white.opacity(0.2))
-                                            )
-                                    }
-                                }
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
-
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(activity.contentTitle)
-                                .font(.system(size: 15, weight: .semibold))
-                                .foregroundStyle(.white)
-                                .lineLimit(2)
-
-                            HStack(spacing: 8) {
-                                if let rating = activity.rating, rating > 0 {
-                                    StarRatingBadge(rating: rating, fontSize: 12)
-                                }
-                                if let emoji = activity.emoji {
-                                    Text(emoji).font(.system(size: 16))
-                                }
-                            }
-
-                            HStack(spacing: 4) {
-                                Image(systemName: typeIcon)
-                                    .font(.system(size: 10))
-                                    .foregroundStyle(.white.opacity(0.3))
-                                if activity.isRewatch {
-                                    Image(systemName: "arrow.clockwise")
-                                        .font(.system(size: 10))
-                                        .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.7))
-                                }
-                            }
-                        }
-                        Spacer()
-                    }
-                }
-            }
-            .padding(.horizontal, GrippdTheme.Spacing.md)
-            .padding(.vertical, 14)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
     }
 }

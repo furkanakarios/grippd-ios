@@ -114,3 +114,35 @@ enum OnboardingError: LocalizedError {
     }
 }
 
+// MARK: - User Row
+
+private struct UserRow: Decodable {
+    let id: String
+    let username: String
+    let displayName: String?
+    let avatarUrl: String?
+    let bio: String?
+    let isPrivate: Bool
+    let planType: String
+
+    enum CodingKeys: String, CodingKey {
+        case id, username, bio
+        case displayName = "display_name"
+        case avatarUrl = "avatar_url"
+        case isPrivate = "is_private"
+        case planType = "plan_type"
+    }
+
+    func toDomain() -> User {
+        User(
+            id: UUID(uuidString: id) ?? UUID(),
+            username: username,
+            displayName: displayName ?? username,
+            bio: bio,
+            avatarURL: avatarUrl.flatMap { URL(string: $0) },
+            isPrivate: isPrivate,
+            planType: planType == "premium" ? .premium : .free,
+            createdAt: Date()
+        )
+    }
+}
