@@ -71,8 +71,16 @@ final class LogService {
         let totalMovies: Int
         let totalShows: Int
         let totalBooks: Int
-        let totalWatchTime: Int     // dakika
+        let totalLogged: Int
         let averageRating: Double?
+        let ratingDistribution: [Int: Int]   // puan (1-10) → log sayısı
+        let topPlatform: LogPlatform?
+        let platformCounts: [(platform: LogPlatform, count: Int)]
+        let rewatchCount: Int
+        let thisYearCount: Int
+        let thisMonthCount: Int
+        let longestStreak: Int               // gün
+        let topEmoji: String?
     }
 
     func stats() -> LogStats {
@@ -84,12 +92,68 @@ final class LogService {
         let ratings = all.compactMap(\.rating).filter { $0 > 0 }
         let avgRating = ratings.isEmpty ? nil : ratings.reduce(0, +) / Double(ratings.count)
 
+        // Puan dağılımı (1-10 tam sayıya yuvarla)
+        var dist = [Int: Int]()
+        for r in ratings {
+            let key = Int(r.rounded())
+            dist[key, default: 0] += 1
+        }
+
+        // Platform sayıları
+        var platformMap = [LogPlatform: Int]()
+        for log in all {
+            if let p = log.platform { platformMap[p, default: 0] += 1 }
+        }
+        let platformCounts = platformMap
+            .map { (platform: $0.key, count: $0.value) }
+            .sorted { $0.count > $1.count }
+        let topPlatform = platformCounts.first?.platform
+
+        // Rewatch sayısı
+        let rewatchCount = all.filter { $0.isRewatch }.count
+
+        // Bu yıl / bu ay
+        let calendar = Calendar.current
+        let now = Date()
+        let thisYearCount = all.filter { calendar.isDate($0.watchedAt, equalTo: now, toGranularity: .year) }.count
+        let thisMonthCount = all.filter { calendar.isDate($0.watchedAt, equalTo: now, toGranularity: .month) }.count
+
+        // En uzun streak (gün bazlı)
+        let longestStreak = calculateStreak(logs: all)
+
+        // En çok kullanılan emoji
+        var emojiMap = [String: Int]()
+        for log in all { if let e = log.emoji { emojiMap[e, default: 0] += 1 } }
+        let topEmoji = emojiMap.max(by: { $0.value < $1.value })?.key
+
         return LogStats(
             totalMovies: movies.count,
             totalShows: shows.count,
             totalBooks: books.count,
-            totalWatchTime: 0,   // Step 9'da runtime hesabı eklenecek
-            averageRating: avgRating
+            totalLogged: all.count,
+            averageRating: avgRating,
+            ratingDistribution: dist,
+            topPlatform: topPlatform,
+            platformCounts: platformCounts,
+            rewatchCount: rewatchCount,
+            thisYearCount: thisYearCount,
+            thisMonthCount: thisMonthCount,
+            longestStreak: longestStreak,
+            topEmoji: topEmoji
         )
+    }
+
+    private func calculateStreak(logs: [LogEntry]) -> Int {
+        guard !logs.isEmpty else { return 0 }
+        let calendar = Calendar.current
+        let days = Set(logs.map { calendar.startOfDay(for: $0.watchedAt) }).sorted(by: >)
+        var maxStreak = 1
+        var current = 1
+        for i in 1..<days.count {
+            let diff = calendar.dateComponents([.day], from: days[i], to: days[i-1]).day ?? 0
+            if diff == 1 { current += 1; maxStreak = max(maxStreak, current) }
+            else { current = 1 }
+        }
+        return maxStreak
     }
 }

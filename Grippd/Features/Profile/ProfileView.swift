@@ -10,6 +10,7 @@ struct ProfileView: View {
     enum ProfileTab: String, CaseIterable {
         case logs = "Loglar"
         case watchlist = "Listelerim"
+        case stats = "İstatistik"
     }
 
     var body: some View {
@@ -149,6 +150,8 @@ struct ProfileView: View {
             LogsTabView(router: router)
         case .watchlist:
             WatchlistTabView(router: router)
+        case .stats:
+            StatsTabView()
         }
     }
 
@@ -636,6 +639,272 @@ private struct CustomListRow: View {
         .padding(.horizontal, GrippdTheme.Spacing.md)
         .padding(.vertical, 10)
         .contentShape(Rectangle())
+    }
+}
+
+// MARK: - Stats Tab
+
+private struct StatsTabView: View {
+    @State private var stats: LogService.LogStats? = nil
+
+    var body: some View {
+        Group {
+            if let s = stats {
+                if s.totalLogged == 0 {
+                    emptyState(icon: "chart.bar", message: "Henüz istatistik yok\nBiraz içerik logla!")
+                        .padding(.top, 40)
+                } else {
+                    statsContent(s)
+                }
+            } else {
+                ProgressView()
+                    .tint(GrippdTheme.Colors.accent)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 80)
+            }
+        }
+        .onAppear {
+            stats = LogService.shared.stats()
+        }
+    }
+
+    private func statsContent(_ s: LogService.LogStats) -> some View {
+        VStack(spacing: 16) {
+            // Content Type Breakdown
+            statsCard {
+                VStack(alignment: .leading, spacing: 12) {
+                    cardTitle("İçerik Dağılımı")
+                    let total = max(s.totalLogged, 1)
+                    ContentTypeBar(icon: "film", label: "Filmler", count: s.totalMovies, total: total, color: GrippdTheme.Colors.accent)
+                    ContentTypeBar(icon: "tv", label: "Diziler", count: s.totalShows, total: total, color: .blue)
+                    ContentTypeBar(icon: "book.closed", label: "Kitaplar", count: s.totalBooks, total: total, color: .green)
+                }
+            }
+
+            // Activity Row
+            HStack(spacing: 12) {
+                miniCard(value: "\(s.thisMonthCount)", label: "Bu Ay", icon: "calendar")
+                miniCard(value: "\(s.thisYearCount)", label: "Bu Yıl", icon: "chart.line.uptrend.xyaxis")
+                miniCard(value: "\(s.longestStreak)g", label: "En Uzun Seri", icon: "flame")
+            }
+
+            // Rating Distribution
+            if !s.ratingDistribution.isEmpty {
+                statsCard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            cardTitle("Puan Dağılımı")
+                            Spacer()
+                            if let avg = s.averageRating {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "star.fill")
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(GrippdTheme.Colors.accent)
+                                    Text(String(format: "%.1f", avg))
+                                        .font(.system(size: 13, weight: .semibold))
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                        }
+                        RatingDistributionChart(distribution: s.ratingDistribution)
+                    }
+                }
+            }
+
+            // Platforms
+            if !s.platformCounts.isEmpty {
+                statsCard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        cardTitle("Platform Dağılımı")
+                        let maxCount = s.platformCounts.first?.count ?? 1
+                        ForEach(s.platformCounts.prefix(5), id: \.platform) { item in
+                            PlatformBar(platform: item.platform, count: item.count, maxCount: maxCount)
+                        }
+                    }
+                }
+            }
+
+            // Fun Facts
+            HStack(spacing: 12) {
+                if s.rewatchCount > 0 {
+                    funFactCard(
+                        icon: "arrow.clockwise",
+                        value: "\(s.rewatchCount)",
+                        label: "Tekrar İzleme"
+                    )
+                }
+                if let emoji = s.topEmoji {
+                    funFactCard(
+                        icon: nil,
+                        emoji: emoji,
+                        value: emoji,
+                        label: "En Çok Kullanılan"
+                    )
+                }
+            }
+        }
+        .padding(.horizontal, GrippdTheme.Spacing.md)
+        .padding(.top, GrippdTheme.Spacing.md)
+        .padding(.bottom, GrippdTheme.Spacing.xxl)
+    }
+
+    private func statsCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        content()
+            .padding(16)
+            .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.lg))
+    }
+
+    private func cardTitle(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundStyle(.white.opacity(0.5))
+            .textCase(.uppercase)
+            .tracking(0.8)
+    }
+
+    private func miniCard(value: String, label: String, icon: String) -> some View {
+        VStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.system(size: 16))
+                .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.7))
+            Text(value)
+                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
+            Text(label)
+                .font(.system(size: 11))
+                .foregroundStyle(.white.opacity(0.4))
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.lg))
+    }
+
+    private func funFactCard(icon: String?, emoji: String? = nil, value: String, label: String) -> some View {
+        VStack(spacing: 6) {
+            if let e = emoji {
+                Text(e).font(.system(size: 28))
+            } else if let i = icon {
+                Image(systemName: i)
+                    .font(.system(size: 20))
+                    .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.7))
+            }
+            Text(value == emoji ? "" : value)
+                .font(.system(size: 20, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
+            Text(label)
+                .font(.system(size: 11))
+                .foregroundStyle(.white.opacity(0.4))
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.lg))
+    }
+}
+
+// MARK: - Stats Sub-components
+
+private struct ContentTypeBar: View {
+    let icon: String
+    let label: String
+    let count: Int
+    let total: Int
+    let color: Color
+
+    private var ratio: Double { Double(count) / Double(max(total, 1)) }
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 12))
+                .foregroundStyle(.white.opacity(0.5))
+                .frame(width: 16)
+
+            Text(label)
+                .font(.system(size: 13))
+                .foregroundStyle(.white.opacity(0.7))
+                .frame(width: 60, alignment: .leading)
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(.white.opacity(0.06)).frame(height: 8)
+                    Capsule()
+                        .fill(color.opacity(0.7))
+                        .frame(width: max(geo.size.width * ratio, 4), height: 8)
+                }
+            }
+            .frame(height: 8)
+
+            Text("\(count)")
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(.white)
+                .frame(width: 28, alignment: .trailing)
+        }
+    }
+}
+
+private struct RatingDistributionChart: View {
+    let distribution: [Int: Int]
+
+    private var maxCount: Int { distribution.values.max() ?? 1 }
+
+    var body: some View {
+        HStack(alignment: .bottom, spacing: 4) {
+            ForEach(1...10, id: \.self) { rating in
+                let count = distribution[rating] ?? 0
+                let ratio = Double(count) / Double(max(maxCount, 1))
+                VStack(spacing: 4) {
+                    if count > 0 {
+                        Text("\(count)")
+                            .font(.system(size: 9, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.5))
+                    }
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(count > 0 ? GrippdTheme.Colors.accent.opacity(0.6 + 0.4 * ratio) : Color.white.opacity(0.06))
+                        .frame(height: max(CGFloat(ratio) * 60, 6))
+                    Text("\(rating)")
+                        .font(.system(size: 9))
+                        .foregroundStyle(.white.opacity(0.35))
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .frame(height: 88)
+        .animation(.spring(response: 0.4), value: distribution.keys.sorted())
+    }
+}
+
+private struct PlatformBar: View {
+    let platform: LogPlatform
+    let count: Int
+    let maxCount: Int
+
+    private var ratio: Double { Double(count) / Double(max(maxCount, 1)) }
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Text(platform.rawValue)
+                .font(.system(size: 13))
+                .foregroundStyle(.white.opacity(0.7))
+                .frame(width: 90, alignment: .leading)
+                .lineLimit(1)
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(.white.opacity(0.06)).frame(height: 8)
+                    Capsule()
+                        .fill(GrippdTheme.Colors.accent.opacity(0.7))
+                        .frame(width: max(geo.size.width * ratio, 4), height: 8)
+                }
+            }
+            .frame(height: 8)
+
+            Text("\(count)")
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(.white)
+                .frame(width: 28, alignment: .trailing)
+        }
     }
 }
 

@@ -225,7 +225,7 @@ final class LogEntry {
 
 // MARK: - Log Platform
 
-enum LogPlatform: String, CaseIterable, Identifiable {
+enum LogPlatform: String, CaseIterable, Identifiable, Hashable {
     case netflix       = "netflix"
     case disneyPlus    = "disney_plus"
     case amazonPrime   = "amazon_prime"
