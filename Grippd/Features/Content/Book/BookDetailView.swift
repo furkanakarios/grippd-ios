@@ -49,6 +49,7 @@ struct BookDetailView: View {
     @State private var isLogged = false
     @State private var loggedRating: Double? = nil
     @State private var loggedEmoji: String? = nil
+    @State private var logHistory: [LogEntry] = []
 
     private var contentKey: String { "book-\(googleBooksID)" }
 
@@ -85,7 +86,8 @@ struct BookDetailView: View {
                 contentType: .book,
                 contentTitle: viewModel.book?.volumeInfo.title ?? "",
                 posterPath: viewModel.book?.volumeInfo.imageLinks?.thumbnail,
-                isPresented: $showLogSheet
+                isPresented: $showLogSheet,
+                defaultIsRewatch: isLogged
             ) {
                 refreshLogState()
             }
@@ -95,10 +97,16 @@ struct BookDetailView: View {
     }
 
     private func refreshLogState() {
-        let log = LogService.shared.latestLog(for: contentKey)
+        logHistory = LogService.shared.logs(for: contentKey)
+        let log = logHistory.first
         isLogged = log != nil
         loggedRating = log?.rating
         loggedEmoji = log?.emoji
+    }
+
+    private func deleteLog(_ entry: LogEntry) {
+        LogService.shared.delete(entry)
+        refreshLogState()
     }
 
     // MARK: - Main Content
@@ -114,6 +122,14 @@ struct BookDetailView: View {
                 CommunityStatsView(contentKey: "book-\(googleBooksID)")
                     .padding(.horizontal, GrippdTheme.Spacing.md)
                     .padding(.top, GrippdTheme.Spacing.sm)
+
+                if logHistory.count > 0 {
+                    LogHistorySection(logs: logHistory, contentType: .book) { entry in
+                        deleteLog(entry)
+                    }
+                    .padding(.horizontal, GrippdTheme.Spacing.md)
+                    .padding(.top, GrippdTheme.Spacing.sm)
+                }
 
                 if let description = book.volumeInfo.description {
                     descriptionSection(description)
@@ -264,7 +280,20 @@ struct BookDetailView: View {
                         .transition(.scale.combined(with: .opacity))
                 }
             }
+            .overlay(alignment: .bottomLeading) {
+                if logHistory.count > 1 {
+                    Text("\(logHistory.count)×")
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .foregroundStyle(GrippdTheme.Colors.background)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
+                        .background(GrippdTheme.Colors.accent, in: Capsule())
+                        .offset(x: 4, y: 5)
+                        .transition(.scale.combined(with: .opacity))
+                }
+            }
             .animation(.spring(response: 0.3), value: loggedRating != nil || loggedEmoji != nil)
+            .animation(.spring(response: 0.3), value: logHistory.count)
 
             Button {
                 withAnimation(.spring(response: 0.3)) {

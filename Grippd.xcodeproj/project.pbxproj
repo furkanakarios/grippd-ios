@@ -24,6 +24,8 @@
 		3139A09C704144F6B6D7416F /* CommunityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C092ED7E14E90B7C9AA11 /* CommunityService.swift */; };
 		1D8DD65D76A047DCB969DAA2 /* CommunityStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA650D47349D4E40A296B666 /* CommunityStatsView.swift */; };
 		A0AECF0F65CA46DDAAA31BD5 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15FAC924D7D4A1FBB57C846 /* StarRatingView.swift */; };
+		CC5E9A2C3D1F7E8A4C2B9D6F /* LogHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5E9A2B3D1F7E8A4C2B9D6F /* LogHistorySection.swift */; };
+		CC5E9A2C3D1F7E8A4C2B9D6F /* LogHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5E9A2B3D1F7E8A4C2B9D6F /* LogHistorySection.swift */; };
 		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
 		0048F6EB1E1341D7803ECE66 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BE0029CA8A04A79B832D912 /* Assets.xcassets */; };
 		33AF8FE290C0154E1E2BF576 /* SwiftDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */; };
@@ -110,6 +112,7 @@
 		074C092ED7E14E90B7C9AA11 /* CommunityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityService.swift; sourceTree = "<group>"; };
 		EA650D47349D4E40A296B666 /* CommunityStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStatsView.swift; sourceTree = "<group>"; };
 		A15FAC924D7D4A1FBB57C846 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
+		CC5E9A2B3D1F7E8A4C2B9D6F /* LogHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogHistorySection.swift; sourceTree = "<group>"; };
 		3FB51BD89D752BBE1288E9CC /* AddCustomContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomContentView.swift; sourceTree = "<group>"; };
 		404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GrippedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
@@ -415,6 +418,7 @@
 				3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */,
 				EA650D47349D4E40A296B666 /* CommunityStatsView.swift */,
 				A15FAC924D7D4A1FBB57C846 /* StarRatingView.swift */,
+				CC5E9A2B3D1F7E8A4C2B9D6F /* LogHistorySection.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -721,6 +725,7 @@
 				3139A09C704144F6B6D7416F /* CommunityService.swift in Sources */,
 				1D8DD65D76A047DCB969DAA2 /* CommunityStatsView.swift in Sources */,
 				A0AECF0F65CA46DDAAA31BD5 /* StarRatingView.swift in Sources */,
+					CC5E9A2C3D1F7E8A4C2B9D6F /* LogHistorySection.swift in Sources */,
 				8EA99FD01206A4834FC06D44 /* ProfileView.swift in Sources */,
 				9C205D397566ACA00F458697 /* Review.swift in Sources */,
 				928B78DF03DA910125615ADD /* SearchHistoryService.swift in Sources */,
