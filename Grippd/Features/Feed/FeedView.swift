@@ -80,6 +80,7 @@ struct FeedView: View {
     @Environment(AppState.self) private var appState
     @Environment(AppRouter.self) private var router
     @State private var viewModel = FeedViewModel()
+    @State private var selectedActivityForComments: FeedActivity?
 
     var body: some View {
         @Bindable var router = router
@@ -97,6 +98,15 @@ struct FeedView: View {
             }
             .task { await viewModel.load(userInterests: appState.currentUser?.interests ?? []) }
             .refreshable { await viewModel.refresh(userInterests: appState.currentUser?.interests ?? []) }
+            .sheet(item: $selectedActivityForComments) { activity in
+                CommentsSheetView(
+                    logID: activity.id,
+                    contentTitle: activity.contentTitle,
+                    commentCount: commentCountBinding(for: activity.id)
+                )
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+            }
         }
     }
 
@@ -127,6 +137,8 @@ struct FeedView: View {
                         router.feedPath.append(FeedRoute.userProfile(userID: activity.user.id))
                     } onLike: {
                         Task { await viewModel.toggleLike(activityID: activity.id) }
+                    } onComment: {
+                        selectedActivityForComments = activity
                     }
                     Divider()
                         .background(.white.opacity(0.06))
@@ -223,6 +235,17 @@ struct FeedView: View {
             }
             .padding(.bottom, GrippdTheme.Spacing.xxl)
         }
+    }
+
+    private func commentCountBinding(for activityID: UUID) -> Binding<Int> {
+        Binding(
+            get: { viewModel.activities.first(where: { $0.id == activityID })?.commentCount ?? 0 },
+            set: { newCount in
+                if let idx = viewModel.activities.firstIndex(where: { $0.id == activityID }) {
+                    viewModel.activities[idx].commentCount = newCount
+                }
+            }
+        )
     }
 
     private func navigateToSuggestion(_ content: Content) {
@@ -375,6 +398,7 @@ struct FeedActivityCard: View {
     let onContentTap: () -> Void
     let onUserTap: () -> Void
     let onLike: () -> Void
+    let onComment: () -> Void
 
     private var typeIcon: String {
         switch activity.contentType {
@@ -486,20 +510,38 @@ struct FeedActivityCard: View {
                         }
                         Spacer()
 
-                        // Like butonu
-                        Button(action: onLike) {
-                            HStack(spacing: 4) {
-                                Image(systemName: activity.isLiked ? "heart.fill" : "heart")
-                                    .font(.system(size: 15))
-                                    .foregroundStyle(activity.isLiked ? .red : .white.opacity(0.35))
-                                if activity.likeCount > 0 {
-                                    Text(verbatim: "\(activity.likeCount)")
-                                        .font(.system(size: 12))
+                        // Aksiyon butonları
+                        HStack(spacing: 14) {
+                            // Yorum butonu
+                            Button(action: onComment) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "bubble.left")
+                                        .font(.system(size: 14))
                                         .foregroundStyle(.white.opacity(0.35))
+                                    if activity.commentCount > 0 {
+                                        Text(verbatim: "\(activity.commentCount)")
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(.white.opacity(0.35))
+                                    }
                                 }
                             }
+                            .buttonStyle(.plain)
+
+                            // Like butonu
+                            Button(action: onLike) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: activity.isLiked ? "heart.fill" : "heart")
+                                        .font(.system(size: 15))
+                                        .foregroundStyle(activity.isLiked ? .red : .white.opacity(0.35))
+                                    if activity.likeCount > 0 {
+                                        Text(verbatim: "\(activity.likeCount)")
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(.white.opacity(0.35))
+                                    }
+                                }
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                         .padding(.top, 4)
                     }
                 }

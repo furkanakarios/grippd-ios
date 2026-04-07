@@ -16,6 +16,7 @@ struct FeedActivity: Identifiable {
     let isRewatch: Bool
     var likeCount: Int
     var isLiked: Bool
+    var commentCount: Int
 }
 
 struct FeedUser: Identifiable {
@@ -58,14 +59,19 @@ final class FeedService {
 
         var activities = rows.compactMap { $0.toDomain() }
 
-        // Like verilerini batch olarak çek
+        // Like ve yorum verilerini batch olarak çek
         let logIDs = activities.map { $0.id }
-        let likeData = await LikeService.shared.fetchLikeData(logIDs: logIDs, myID: myID)
+        async let likeData = LikeService.shared.fetchLikeData(logIDs: logIDs, myID: myID)
+        async let commentCounts = CommentService.shared.fetchCommentCounts(logIDs: logIDs)
+        let (likes, comments) = await (likeData, commentCounts)
+
         for i in activities.indices {
-            if let data = likeData[activities[i].id] {
+            let id = activities[i].id
+            if let data = likes[id] {
                 activities[i].likeCount = data.count
                 activities[i].isLiked = data.isLiked
             }
+            activities[i].commentCount = comments[id] ?? 0
         }
 
         return activities
@@ -166,7 +172,8 @@ private struct FeedRow: Decodable {
             emoji: emojiReaction,
             isRewatch: isRewatch,
             likeCount: 0,
-            isLiked: false
+            isLiked: false,
+            commentCount: 0
         )
     }
 }
