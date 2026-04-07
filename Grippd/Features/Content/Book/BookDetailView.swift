@@ -46,6 +46,7 @@ struct BookDetailView: View {
     @State private var viewModel = BookDetailViewModel()
     @State private var showFullDescription = false
     @State private var showLogSheet = false
+    @State private var showAddToList = false
     @State private var isLogged = false
     @State private var isWatchlisted = false
     @State private var loggedRating: Double? = nil
@@ -83,6 +84,17 @@ struct BookDetailView: View {
         .onAppear {
             refreshLogState()
             isWatchlisted = WatchlistService.shared.isInWatchlist(contentKey)
+        }
+        .sheet(isPresented: $showAddToList) {
+            AddToListSheet(
+                contentKey: contentKey,
+                contentType: .book,
+                contentTitle: viewModel.book?.volumeInfo.title ?? "",
+                posterPath: viewModel.book?.volumeInfo.imageLinks?.thumbnail,
+                isPresented: $showAddToList
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $showLogSheet) {
             LogEntrySheet(
@@ -322,6 +334,14 @@ struct BookDetailView: View {
                     isWatchlisted ? GrippdTheme.Colors.accent.opacity(0.15) : Color.white.opacity(0.1),
                     in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
                 )
+            }
+
+            Button { showAddToList = true } label: {
+                Image(systemName: "list.bullet.rectangle.portrait")
+                    .font(.system(size: 16))
+                    .foregroundStyle(.white.opacity(0.7))
+                    .frame(width: 44, height: 44)
+                    .background(.white.opacity(0.1), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
             }
         }
     }

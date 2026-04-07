@@ -6,6 +6,7 @@ struct MovieDetailView: View {
     @State private var viewModel = MovieDetailViewModel()
     @State private var showFullOverview = false
     @State private var showLogSheet = false
+    @State private var showAddToList = false
     @State private var isLogged = false
     @State private var isWatchlisted = false
     @State private var loggedRating: Double? = nil
@@ -33,6 +34,17 @@ struct MovieDetailView: View {
         .onAppear {
             refreshLogState()
             isWatchlisted = WatchlistService.shared.isInWatchlist(contentKey)
+        }
+        .sheet(isPresented: $showAddToList) {
+            AddToListSheet(
+                contentKey: contentKey,
+                contentType: .movie,
+                contentTitle: viewModel.movie?.title ?? "",
+                posterPath: viewModel.movie?.posterPath,
+                isPresented: $showAddToList
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $showLogSheet) {
             LogEntrySheet(
@@ -290,6 +302,23 @@ struct MovieDetailView: View {
                         title: viewModel.movie?.title ?? "",
                         posterPath: viewModel.movie?.posterPath
                     )
+                }
+            }
+
+            Button { showAddToList = true } label: {
+                VStack(spacing: 6) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: GrippdTheme.Radius.sm)
+                            .fill(.white.opacity(0.06))
+                            .overlay(RoundedRectangle(cornerRadius: GrippdTheme.Radius.sm).stroke(.white.opacity(0.1), lineWidth: 1))
+                        Image(systemName: "list.bullet.rectangle.portrait")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                    .frame(height: 52)
+                    Text("Listeye Ekle")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.45))
                 }
             }
 

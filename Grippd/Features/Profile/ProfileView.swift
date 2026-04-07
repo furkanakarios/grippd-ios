@@ -194,6 +194,10 @@ struct ProfileView: View {
         case .following: Text("Takip Edilenler — Phase 4").foregroundStyle(.white)
         case .contentDetail: Text("İçerik Detay").foregroundStyle(.white)
         case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
+        case .customList(let listID):
+            if let list = CustomListService.shared.allLists().first(where: { $0.id == listID }) {
+                CustomListDetailView(list: list)
+            }
         }
     }
 }
@@ -284,7 +288,9 @@ private struct LogsTabView: View {
 private struct WatchlistTabView: View {
     let router: AppRouter
     @State private var entries: [WatchlistEntry] = []
+    @State private var customLists: [CustomList] = []
     @State private var filter: Content.ContentType? = nil
+    @State private var showCreateList = false
 
     private var filtered: [WatchlistEntry] {
         guard let f = filter else { return entries }
@@ -305,27 +311,89 @@ private struct WatchlistTabView: View {
                 .padding(.vertical, GrippdTheme.Spacing.sm)
             }
 
-            if filtered.isEmpty {
+            if filtered.isEmpty && customLists.isEmpty {
                 emptyState(
                     icon: "bookmark",
                     message: filter == nil ? "Listelenen içerik yok" : "Bu kategoride içerik yok"
                 )
             } else {
                 LazyVStack(spacing: 0) {
-                    ForEach(filtered, id: \.contentKey) { entry in
-                        WatchlistRowCell(entry: entry) {
-                            navigate(entry: entry)
-                        } onRemove: {
-                            WatchlistService.shared.remove(entry.contentKey)
-                            entries = WatchlistService.shared.all()
+                    // İzleme listesi içerikleri
+                    if !filtered.isEmpty {
+                        sectionHeader("İzleme Listesi")
+                        ForEach(filtered, id: \.contentKey) { entry in
+                            WatchlistRowCell(entry: entry) {
+                                navigate(entry: entry)
+                            } onRemove: {
+                                WatchlistService.shared.remove(entry.contentKey)
+                                entries = WatchlistService.shared.all()
+                            }
+                            Divider().background(.white.opacity(0.06)).padding(.leading, 80)
                         }
-                        Divider().background(.white.opacity(0.06)).padding(.leading, 80)
+                    }
+
+                    // Custom listeler
+                    sectionHeader("Özel Listeler") {
+                        Button {
+                            showCreateList = true
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(GrippdTheme.Colors.accent)
+                        }
+                    }
+
+                    if customLists.isEmpty {
+                        Button {
+                            showCreateList = true
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "plus.circle.fill")
+                                    .foregroundStyle(GrippdTheme.Colors.accent)
+                                Text("Yeni Liste Oluştur")
+                                    .foregroundStyle(GrippdTheme.Colors.accent)
+                            }
+                            .font(.system(size: 14, weight: .medium))
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 48)
+                            .background(GrippdTheme.Colors.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+                        }
+                        .padding(.horizontal, GrippdTheme.Spacing.md)
+                        .padding(.vertical, GrippdTheme.Spacing.sm)
+                    } else {
+                        ForEach(customLists) { list in
+                            Button {
+                                router.profilePath.append(ProfileRoute.customList(listID: list.id))
+                            } label: {
+                                CustomListRow(list: list)
+                            }
+                            .buttonStyle(.plain)
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    CustomListService.shared.deleteList(list)
+                                    customLists = CustomListService.shared.allLists()
+                                } label: {
+                                    Label("Sil", systemImage: "trash")
+                                }
+                            }
+                            Divider().background(.white.opacity(0.06)).padding(.leading, 72)
+                        }
                     }
                 }
-                .padding(.bottom, GrippdTheme.Spacing.xl)
+                .padding(.bottom, GrippdTheme.Spacing.xxl)
             }
         }
-        .onAppear { entries = WatchlistService.shared.all() }
+        .onAppear {
+            entries = WatchlistService.shared.all()
+            customLists = CustomListService.shared.allLists()
+        }
+        .sheet(isPresented: $showCreateList) {
+            CustomListFormSheet(isPresented: $showCreateList) { _ in
+                customLists = CustomListService.shared.allLists()
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
     }
 
     private func filterChip(label: String, type: Content.ContentType?) -> some View {
@@ -342,6 +410,35 @@ private struct WatchlistTabView: View {
                     in: Capsule()
                 )
         }
+    }
+
+    private func sectionHeader(_ title: String) -> some View {
+        HStack {
+            Text(title)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.4))
+                .textCase(.uppercase)
+                .tracking(1.0)
+            Spacer()
+        }
+        .padding(.horizontal, GrippdTheme.Spacing.md)
+        .padding(.top, GrippdTheme.Spacing.md)
+        .padding(.bottom, 4)
+    }
+
+    private func sectionHeader<T: View>(_ title: String, @ViewBuilder trailing: () -> T) -> some View {
+        HStack {
+            Text(title)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.4))
+                .textCase(.uppercase)
+                .tracking(1.0)
+            Spacer()
+            trailing()
+        }
+        .padding(.horizontal, GrippdTheme.Spacing.md)
+        .padding(.top, GrippdTheme.Spacing.md)
+        .padding(.bottom, 4)
     }
 
     private func navigate(entry: WatchlistEntry) {
@@ -506,6 +603,39 @@ private struct WatchlistRowCell: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+}
+
+// MARK: - Custom List Row
+
+private struct CustomListRow: View {
+    let list: CustomList
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Text(list.emoji)
+                .font(.system(size: 26))
+                .frame(width: 44, height: 44)
+                .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 10))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(list.name)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                Text("\(list.items.count) içerik")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.white.opacity(0.4))
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(.white.opacity(0.2))
+        }
+        .padding(.horizontal, GrippdTheme.Spacing.md)
+        .padding(.vertical, 10)
+        .contentShape(Rectangle())
     }
 }
 

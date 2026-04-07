@@ -14,6 +14,10 @@
 		132FDEF360F2544D6B795EEC /* UserContentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F163E79088ACED45114CDFF8 /* UserContentService.swift */; };
 		BDFFBFF80C584D6688A0C62F /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF71D7A438D432F868EFB2A /* LogService.swift */; };
 		CC7B3A1E4E2F8C9A5D3B0E7F /* WatchlistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7B3A1D4E2F8C9A5D3B0E7F /* WatchlistService.swift */; };
+		CC8A1B2C3D4E5F6A7B8C9D3F /* AddToListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A1B2C3D4E5F6A7B8C9D3E /* AddToListSheet.swift */; };
+		CC8A1B2C3D4E5F6A7B8C9D2F /* CustomListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A1B2C3D4E5F6A7B8C9D2E /* CustomListDetailView.swift */; };
+		CC8A1B2C3D4E5F6A7B8C9D1F /* CustomListFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A1B2C3D4E5F6A7B8C9D1E /* CustomListFormSheet.swift */; };
+		CC8A1B2C3D4E5F6A7B8C9D0F /* CustomListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A1B2C3D4E5F6A7B8C9D0E /* CustomListService.swift */; };
 		B996696A6AD9488393DE6E06 /* LogEntrySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038A548B3411475F955E84F3 /* LogEntrySheet.swift */; };
 		134380FF58547AF0CC4388DD /* SupabaseClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */; };
 		175A5EBA0E18393D9163DBC0 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9344A381848C54CF5FE99A0D /* DIContainer.swift */; };
@@ -167,6 +171,10 @@
 		F163E79088ACED45114CDFF8 /* UserContentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContentService.swift; sourceTree = "<group>"; };
 		5CF71D7A438D432F868EFB2A /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		CC7B3A1D4E2F8C9A5D3B0E7F /* WatchlistService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistService.swift; sourceTree = "<group>"; };
+		CC8A1B2C3D4E5F6A7B8C9D3E /* AddToListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grippd/Features/Lists/AddToListSheet.swift; sourceTree = SOURCE_ROOT; };
+		CC8A1B2C3D4E5F6A7B8C9D2E /* CustomListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grippd/Features/Lists/CustomListDetailView.swift; sourceTree = SOURCE_ROOT; };
+		CC8A1B2C3D4E5F6A7B8C9D1E /* CustomListFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grippd/Features/Lists/CustomListFormSheet.swift; sourceTree = SOURCE_ROOT; };
+		CC8A1B2C3D4E5F6A7B8C9D0E /* CustomListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListService.swift; sourceTree = "<group>"; };
 		038A548B3411475F955E84F3 /* LogEntrySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntrySheet.swift; sourceTree = "<group>"; };
 		F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCacheService.swift; sourceTree = "<group>"; };
 		FF053B89084A730815FE5768 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -297,6 +305,7 @@
 				F163E79088ACED45114CDFF8 /* UserContentService.swift */,
 				5CF71D7A438D432F868EFB2A /* LogService.swift */,
 				CC7B3A1D4E2F8C9A5D3B0E7F /* WatchlistService.swift */,
+				CC8A1B2C3D4E5F6A7B8C9D0E /* CustomListService.swift */,
 			);
 			path = Local;
 			sourceTree = "<group>";
@@ -422,6 +431,7 @@
 				EA650D47349D4E40A296B666 /* CommunityStatsView.swift */,
 				A15FAC924D7D4A1FBB57C846 /* StarRatingView.swift */,
 				CC5E9A2B3D1F7E8A4C2B9D6F /* LogHistorySection.swift */,
+				CC8A1B2C3D4E5F6A7B8C9D3E /* AddToListSheet.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -536,6 +546,8 @@
 			isa = PBXGroup;
 			children = (
 				9B6CEA8D04D9ED636549509A /* ProfileView.swift */,
+				CC8A1B2C3D4E5F6A7B8C9D1E /* CustomListFormSheet.swift */,
+				CC8A1B2C3D4E5F6A7B8C9D2E /* CustomListDetailView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -749,6 +761,10 @@
 				132FDEF360F2544D6B795EEC /* UserContentService.swift in Sources */,
 				BDFFBFF80C584D6688A0C62F /* LogService.swift in Sources */,
 					CC7B3A1E4E2F8C9A5D3B0E7F /* WatchlistService.swift in Sources */,
+					CC8A1B2C3D4E5F6A7B8C9D0F /* CustomListService.swift in Sources */,
+					CC8A1B2C3D4E5F6A7B8C9D1F /* CustomListFormSheet.swift in Sources */,
+					CC8A1B2C3D4E5F6A7B8C9D2F /* CustomListDetailView.swift in Sources */,
+					CC8A1B2C3D4E5F6A7B8C9D3F /* AddToListSheet.swift in Sources */,
 				B996696A6AD9488393DE6E06 /* LogEntrySheet.swift in Sources */,
 				B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */,
 				BBF9A0FAA5C2A0490F6D6FD6 /* View+Extensions.swift in Sources */,
