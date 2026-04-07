@@ -179,6 +179,7 @@ final class LogEntry {
     var rating: Double?                             // 0.0–10.0, 0.5 adımlı; nil = puanlanmadı
     var emoji: String?                              // tek emoji reaksiyon
     var note: String?                               // kısa not
+    var remoteID: String?                           // Supabase logs.id — silme için
 
     var createdAt: Date
 

@@ -12,6 +12,7 @@
 		BE6F7F37BF4F47CD99F1E9CD /* SocialService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6AF6EEC9A4D5E95038590 /* SocialService.swift */; };
 		ED1927994D784341B02D9216 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311AA89A13DE4B05AD656B05 /* FollowService.swift */; };
 		A14E028B76CF4696A5D2AF17 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAE6A0041674DB183E8A153 /* FeedService.swift */; };
+		D42AD4B1BAEC43EFAA3E0FE3 /* LogSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */; };
 		0CE79A92654B6457CDA82879 /* BooksRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265835ED6A83105317F3EDC5 /* BooksRepository.swift */; };
 		116A3439D527C894C318EDA3 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B348645889240B57745ED216 /* OnboardingService.swift */; };
 		11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */; };
@@ -124,6 +125,7 @@
 		26F6AF6EEC9A4D5E95038590 /* SocialService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialService.swift; sourceTree = "<group>"; };
 		311AA89A13DE4B05AD656B05 /* FollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FollowService.swift; path = Grippd/Data/Supabase/FollowService.swift; sourceTree = SOURCE_ROOT; };
 		6CAE6A0041674DB183E8A153 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedService.swift; path = Grippd/Data/Supabase/FeedService.swift; sourceTree = SOURCE_ROOT; };
+		80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogSyncService.swift; path = Grippd/Data/Supabase/LogSyncService.swift; sourceTree = SOURCE_ROOT; };
 		EA650D47349D4E40A296B666 /* CommunityStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStatsView.swift; sourceTree = "<group>"; };
 		A15FAC924D7D4A1FBB57C846 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		CC5E9A2B3D1F7E8A4C2B9D6F /* LogHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogHistorySection.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				26F6AF6EEC9A4D5E95038590 /* SocialService.swift */,
 				311AA89A13DE4B05AD656B05 /* FollowService.swift */,
 				6CAE6A0041674DB183E8A153 /* FeedService.swift */,
+				80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */,
 			);
 			path = Supabase;
 			sourceTree = "<group>";
@@ -722,6 +725,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B0CCD829CB8E54E2FE889EE /* AddCustomContentView.swift in Sources */,
+				D42AD4B1BAEC43EFAA3E0FE3 /* LogSyncService.swift in Sources */,
 				B00EA2B788344F0EB8B6DF3A /* UserProfileView.swift in Sources */,
 				BE6F7F37BF4F47CD99F1E9CD /* SocialService.swift in Sources */,
 				ED1927994D784341B02D9216 /* FollowService.swift in Sources */,

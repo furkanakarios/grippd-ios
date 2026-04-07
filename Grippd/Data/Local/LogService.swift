@@ -90,15 +90,21 @@ final class LogService {
     func save(_ entry: LogEntry) {
         context.insert(entry)
         try? context.save()
+        Task { await LogSyncService.shared.sync(entry) }
     }
 
     func delete(_ entry: LogEntry) {
+        Task { await LogSyncService.shared.delete(entry) }
         context.delete(entry)
         try? context.save()
     }
 
     func deleteAll(for contentKey: String) {
-        logs(for: contentKey).forEach { context.delete($0) }
+        let entries = logs(for: contentKey)
+        entries.forEach { entry in
+            Task { await LogSyncService.shared.delete(entry) }
+            context.delete(entry)
+        }
         try? context.save()
     }
 
