@@ -8,16 +8,36 @@ struct LogEntrySheet: View {
     let contentTitle: String
     let posterPath: String?
     @Binding var isPresented: Bool
+    var defaultIsRewatch: Bool = false
     var onSaved: (() -> Void)?
 
     @State private var watchedAt: Date = Date()
     @State private var selectedPlatform: LogPlatform?
-    @State private var isRewatch: Bool = false
+    @State private var isRewatch: Bool
     @State private var rating: Double? = nil
     @State private var selectedEmoji: String? = nil
     @State private var customEmoji: String = ""
     @State private var showCustomEmojiInput: Bool = false
     @State private var note: String = ""
+
+    init(
+        contentKey: String,
+        contentType: Content.ContentType,
+        contentTitle: String,
+        posterPath: String?,
+        isPresented: Binding<Bool>,
+        defaultIsRewatch: Bool = false,
+        onSaved: (() -> Void)? = nil
+    ) {
+        self.contentKey = contentKey
+        self.contentType = contentType
+        self.contentTitle = contentTitle
+        self.posterPath = posterPath
+        self._isPresented = isPresented
+        self.defaultIsRewatch = defaultIsRewatch
+        self.onSaved = onSaved
+        self._isRewatch = State(initialValue: defaultIsRewatch)
+    }
 
     private var presetEmojis: [String] {
         switch contentType {

@@ -9,6 +9,7 @@ struct MovieDetailView: View {
     @State private var isLogged = false
     @State private var loggedRating: Double? = nil
     @State private var loggedEmoji: String? = nil
+    @State private var logHistory: [LogEntry] = []
 
     private var contentKey: String { "movie-\(tmdbID)" }
 
@@ -35,7 +36,8 @@ struct MovieDetailView: View {
                 contentType: .movie,
                 contentTitle: viewModel.movie?.title ?? "",
                 posterPath: viewModel.movie?.posterPath,
-                isPresented: $showLogSheet
+                isPresented: $showLogSheet,
+                defaultIsRewatch: isLogged
             ) { refreshLogState() }
             .presentationDetents([.large])
             .presentationDragIndicator(.visible)
@@ -43,10 +45,16 @@ struct MovieDetailView: View {
     }
 
     private func refreshLogState() {
-        let log = LogService.shared.latestLog(for: contentKey)
+        logHistory = LogService.shared.logs(for: contentKey)
+        let log = logHistory.first
         isLogged = log != nil
         loggedRating = log?.rating
         loggedEmoji = log?.emoji
+    }
+
+    private func deleteLog(_ entry: LogEntry) {
+        LogService.shared.delete(entry)
+        refreshLogState()
     }
 
     // MARK: - Content
@@ -124,6 +132,14 @@ struct MovieDetailView: View {
                 // Community stats
                 CommunityStatsView(contentKey: "movie-\(tmdbID)")
                     .padding(.horizontal, GrippdTheme.Spacing.md)
+
+                // Log geçmişi
+                if logHistory.count > 0 {
+                    LogHistorySection(logs: logHistory, contentType: .movie) { entry in
+                        deleteLog(entry)
+                    }
+                    .padding(.horizontal, GrippdTheme.Spacing.md)
+                }
 
                 // Streaming platforms
                 PlatformAvailabilityView(kind: .movie(tmdbID: tmdbID))
@@ -251,7 +267,8 @@ struct MovieDetailView: View {
                 activeColor: Color(red: 0.2, green: 0.8, blue: 0.4),
                 badge: (loggedRating != nil || loggedEmoji != nil)
                     ? AnyView(LogBadge(emoji: loggedEmoji, rating: loggedRating, fontSize: 12))
-                    : nil
+                    : nil,
+                watchCount: logHistory.count > 1 ? logHistory.count : nil
             ) {
                 showLogSheet = true
             }
@@ -415,6 +432,7 @@ private struct MovieActionButton: View {
     let isActive: Bool
     let activeColor: Color
     var badge: AnyView? = nil
+    var watchCount: Int? = nil
     let action: () -> Void
 
     var body: some View {
@@ -441,6 +459,18 @@ private struct MovieActionButton: View {
                             .transition(.scale.combined(with: .opacity))
                     }
                 }
+                .overlay(alignment: .bottomLeading) {
+                    if let count = watchCount {
+                        Text("\(count)×")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .foregroundStyle(activeColor)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 2)
+                            .background(activeColor.opacity(0.15), in: Capsule())
+                            .offset(x: 4, y: 5)
+                            .transition(.scale.combined(with: .opacity))
+                    }
+                }
 
                 Text(label)
                     .font(.system(size: 11, weight: .medium))
@@ -448,6 +478,7 @@ private struct MovieActionButton: View {
             }
         }
         .animation(.spring(response: 0.3), value: badge != nil)
+        .animation(.spring(response: 0.3), value: watchCount)
     }
 }
 
