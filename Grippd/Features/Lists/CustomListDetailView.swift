@@ -24,29 +24,29 @@ struct CustomListDetailView: View {
                         .padding(.horizontal, GrippdTheme.Spacing.xl)
                 }
             } else {
-                ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 0) {
-                        ForEach(items) { item in
-                            Button {
-                                navigate(item: item)
-                            } label: {
-                                CustomListItemRow(item: item)
-                            }
-                            .buttonStyle(.plain)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    CustomListService.shared.removeItem(from: list, contentKey: item.contentKey)
-                                    items = list.items.sorted { $0.addedAt > $1.addedAt }
-                                } label: {
-                                    Label("Çıkar", systemImage: "trash")
-                                }
-                            }
-
-                            Divider().background(.white.opacity(0.06)).padding(.leading, 80)
+                List {
+                    ForEach(items) { item in
+                        Button {
+                            navigate(item: item)
+                        } label: {
+                            CustomListItemRow(item: item)
                         }
+                        .buttonStyle(.plain)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                CustomListService.shared.removeItem(from: list, contentKey: item.contentKey)
+                                items = list.items.sorted { $0.addedAt > $1.addedAt }
+                            } label: {
+                                Label("Çıkar", systemImage: "trash")
+                            }
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowSeparatorTint(.white.opacity(0.06))
+                        .listRowInsets(EdgeInsets())
                     }
-                    .padding(.bottom, GrippdTheme.Spacing.xxl)
                 }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
             }
         }
         .navigationTitle("\(list.emoji) \(list.name)")
