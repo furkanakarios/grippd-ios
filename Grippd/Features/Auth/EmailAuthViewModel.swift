@@ -30,9 +30,10 @@ final class EmailAuthViewModel {
                 let user = try await fetchProfile(id: response.user.id)
                 await MainActor.run {
                     appState.currentUser = user
-                    appState.needsOnboarding = true  // new signup always needs onboarding
+                    appState.needsOnboarding = true
                     appState.isAuthenticated = true
                     isLoading = false
+                    LogService.shared.setOwner(user.id.uuidString)
                 }
             } else {
                 // Email confirmation required
@@ -66,6 +67,7 @@ final class EmailAuthViewModel {
                 appState.needsOnboarding = needsOnboarding
                 appState.isAuthenticated = true
                 isLoading = false
+                LogService.shared.setOwner(user.id.uuidString)
             }
         } catch {
             await MainActor.run {
