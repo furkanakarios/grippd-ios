@@ -166,6 +166,7 @@ final class UserCreatedContent {
 @Model
 final class LogEntry {
     @Attribute(.unique) var id: String              // UUID string
+    var ownerID: String                             // auth.uid() — hangi kullanıcıya ait
     var contentKey: String                          // "movie-27205", "tv-1396", "book-abc"
     var contentTypeRaw: String                      // "movie", "tv_show", "book"
     var contentTitle: String
@@ -182,6 +183,7 @@ final class LogEntry {
     var createdAt: Date
 
     init(
+        ownerID: String,
         contentKey: String,
         contentType: Content.ContentType,
         contentTitle: String,
@@ -194,6 +196,7 @@ final class LogEntry {
         note: String? = nil
     ) {
         self.id = UUID().uuidString
+        self.ownerID = ownerID
         self.contentKey = contentKey
         self.contentTypeRaw = contentType.rawValue
         self.contentTitle = contentTitle

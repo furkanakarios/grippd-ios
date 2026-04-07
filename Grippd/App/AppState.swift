@@ -4,7 +4,15 @@ import SwiftUI
 final class AppState {
     var isCheckingAuth: Bool = true   // splash gösterim için
     var isAuthenticated: Bool = false
-    var currentUser: User?
+    var currentUser: User? {
+        didSet {
+            if let user = currentUser {
+                LogService.shared.setOwner(user.id.uuidString)
+            } else {
+                LogService.shared.clearOwner()
+            }
+        }
+    }
     var needsOnboarding: Bool = false
     var selectedTab: AppTab = .feed
     var pendingDeepLink: DeepLink?
