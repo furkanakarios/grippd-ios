@@ -7,6 +7,8 @@ struct ProfileView: View {
     @State private var showSignOutConfirm = false
     @State private var showWrapped = false
     @State private var selectedTab: ProfileTab = .logs
+    @State private var followerCount: Int = 0
+    @State private var followingCount: Int = 0
 
     enum ProfileTab: String, CaseIterable {
         case logs = "Loglar"
@@ -114,22 +116,38 @@ struct ProfileView: View {
             }
 
             // Stats
-            let stats = LogService.shared.stats()
-            let watchlistCount = WatchlistService.shared.all().count
+            let logCount = LogService.shared.stats().totalLogged
             HStack(spacing: 0) {
-                StatItem(value: "\(stats.totalMovies + stats.totalShows + stats.totalBooks)", label: "Log")
+                StatItem(value: "\(logCount)", label: "Log")
                 Divider().frame(height: 28).background(.white.opacity(0.1))
-                StatItem(value: "\(watchlistCount)", label: "Listede")
-                Divider().frame(height: 28).background(.white.opacity(0.1))
-                if let avg = stats.averageRating {
-                    StatItem(value: String(format: "%.1f", avg), label: "Ort. Puan")
-                } else {
-                    StatItem(value: "—", label: "Ort. Puan")
+                Button {
+                    if let id = appState.currentUser?.id {
+                        router.profilePath.append(ProfileRoute.followers(userID: id))
+                    }
+                } label: {
+                    StatItem(value: "\(followerCount)", label: "Takipçi")
                 }
+                .buttonStyle(.plain)
+                Divider().frame(height: 28).background(.white.opacity(0.1))
+                Button {
+                    if let id = appState.currentUser?.id {
+                        router.profilePath.append(ProfileRoute.following(userID: id))
+                    }
+                } label: {
+                    StatItem(value: "\(followingCount)", label: "Takip")
+                }
+                .buttonStyle(.plain)
             }
             .padding(.vertical, 16)
             .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
             .padding(.top, 8)
+            .task {
+                guard let id = appState.currentUser?.id else { return }
+                if let data = try? await SocialService.shared.fetchProfile(userID: id) {
+                    followerCount = data.followerCount
+                    followingCount = data.followingCount
+                }
+            }
         }
         .padding(.horizontal, GrippdTheme.Spacing.lg)
         .padding(.top, GrippdTheme.Spacing.xl)
@@ -213,10 +231,10 @@ struct ProfileView: View {
         case .personDetail: Text("Kişi Detay — Phase 4").foregroundStyle(.white)
         case .settings: SettingsPlaceholderView()
         case .editProfile: Text("Profil Düzenle — Phase 4").foregroundStyle(.white)
-        case .followers: Text("Takipçiler — Phase 4").foregroundStyle(.white)
-        case .following: Text("Takip Edilenler — Phase 4").foregroundStyle(.white)
+        case .followers(let userID): FollowListView(userID: userID, mode: .followers)
+        case .following(let userID): FollowListView(userID: userID, mode: .following)
         case .contentDetail: Text("İçerik Detay").foregroundStyle(.white)
-        case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
+        case .userProfile(let userID): UserProfileView(userID: userID)
         case .customList(let listID):
             if let list = CustomListService.shared.allLists().first(where: { $0.id == listID }) {
                 CustomListDetailView(list: list)
