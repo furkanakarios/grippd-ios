@@ -347,6 +347,17 @@ struct SearchView: View {
             }
             .buttonStyle(.plain)
             Divider().background(.white.opacity(0.06)).padding(.leading, 86)
+
+        case .user(let user):
+            Button {
+                router.searchPath.append(SearchRoute.userProfile(userID: user.id))
+            } label: {
+                UserRowCell(user: user)
+                    .padding(.horizontal, GrippdTheme.Spacing.md)
+                    .padding(.vertical, 6)
+            }
+            .buttonStyle(.plain)
+            Divider().background(.white.opacity(0.06)).padding(.leading, 68)
         }
     }
 
@@ -373,8 +384,8 @@ struct SearchView: View {
             PersonDetailPlaceholderView(tmdbID: tmdbID)
         case .contentDetail(let contentID):
             CustomContentDetailView(contentID: contentID)
-        case .userProfile:
-            Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
+        case .userProfile(let userID):
+            UserProfileView(userID: userID)
         }
     }
 }
