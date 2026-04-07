@@ -5,6 +5,7 @@ struct ProfileView: View {
     @Environment(AppRouter.self) private var router
     @State private var authVM = AuthViewModel()
     @State private var showSignOutConfirm = false
+    @State private var showWrapped = false
     @State private var selectedTab: ProfileTab = .logs
 
     enum ProfileTab: String, CaseIterable {
@@ -33,6 +34,20 @@ struct ProfileView: View {
             .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if LogService.shared.wrappedStats() != nil {
+                        Button {
+                            showWrapped = true
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "sparkles")
+                                Text("\(Calendar.current.component(.year, from: Date()))")
+                                    .font(.system(size: 13, weight: .semibold))
+                            }
+                            .foregroundStyle(GrippdTheme.Colors.accent)
+                        }
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         router.profilePath.append(ProfileRoute.settings)
@@ -40,6 +55,11 @@ struct ProfileView: View {
                         Image(systemName: "gearshape")
                             .foregroundStyle(.white.opacity(0.7))
                     }
+                }
+            }
+            .fullScreenCover(isPresented: $showWrapped) {
+                if let wrapped = LogService.shared.wrappedStats() {
+                    WrappedView(stats: wrapped, isPresented: $showWrapped)
                 }
             }
             .navigationDestination(for: ProfileRoute.self) { route in
