@@ -7,17 +7,47 @@ private final class UserProfileViewModel {
     var profileData: UserProfileData?
     var isLoading = false
     var error: String?
+    var isFollowing = false
+    var isFollowLoading = false
 
     func load(userID: UUID) async {
         guard profileData == nil else { return }
         isLoading = true
         error = nil
         do {
-            profileData = try await SocialService.shared.fetchProfile(userID: userID)
+            async let profile = SocialService.shared.fetchProfile(userID: userID)
+            async let following = FollowService.shared.isFollowing(targetUserID: userID)
+            let (p, f) = try await (profile, following)
+            profileData = p
+            isFollowing = f
         } catch {
             self.error = error.localizedDescription
         }
         isLoading = false
+    }
+
+    func toggleFollow(targetUserID: UUID) async {
+        isFollowLoading = true
+        do {
+            if isFollowing {
+                try await FollowService.shared.unfollow(targetUserID: targetUserID)
+                isFollowing = false
+                if let d = profileData {
+                    profileData = UserProfileData(user: d.user, followerCount: max(0, d.followerCount - 1),
+                                                  followingCount: d.followingCount, logCount: d.logCount,
+                                                  recentLogs: d.recentLogs)
+                }
+            } else {
+                try await FollowService.shared.follow(targetUserID: targetUserID)
+                isFollowing = true
+                if let d = profileData {
+                    profileData = UserProfileData(user: d.user, followerCount: d.followerCount + 1,
+                                                  followingCount: d.followingCount, logCount: d.logCount,
+                                                  recentLogs: d.recentLogs)
+                }
+            }
+        } catch {}
+        isFollowLoading = false
     }
 }
 
@@ -28,6 +58,10 @@ struct UserProfileView: View {
 
     @Environment(AppState.self) private var appState
     @State private var viewModel = UserProfileViewModel()
+
+    private var isOwnProfile: Bool {
+        appState.currentUser?.id == userID
+    }
 
     var body: some View {
         ZStack {
@@ -75,6 +109,12 @@ struct UserProfileView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, GrippdTheme.Spacing.lg)
                         .padding(.top, GrippdTheme.Spacing.sm)
+                }
+
+                if !isOwnProfile {
+                    followButton
+                        .padding(.horizontal, GrippdTheme.Spacing.md)
+                        .padding(.top, GrippdTheme.Spacing.md)
                 }
 
                 recentLogsSection(logs: data.recentLogs)
@@ -207,6 +247,35 @@ struct UserProfileView: View {
                 .foregroundStyle(.white.opacity(0.4))
         }
         .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Follow Button
+
+    private var followButton: some View {
+        Button {
+            Task { await viewModel.toggleFollow(targetUserID: userID) }
+        } label: {
+            HStack(spacing: 8) {
+                if viewModel.isFollowLoading {
+                    ProgressView().tint(viewModel.isFollowing ? GrippdTheme.Colors.background : .white)
+                        .scaleEffect(0.8)
+                } else {
+                    Image(systemName: viewModel.isFollowing ? "person.badge.minus" : "person.badge.plus")
+                        .font(.system(size: 15))
+                    Text(viewModel.isFollowing ? "Takibi Bırak" : "Takip Et")
+                        .font(.system(size: 15, weight: .semibold))
+                }
+            }
+            .foregroundStyle(viewModel.isFollowing ? GrippdTheme.Colors.background : .white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 44)
+            .background(
+                viewModel.isFollowing ? GrippdTheme.Colors.accent : Color.white.opacity(0.12),
+                in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
+            )
+        }
+        .disabled(viewModel.isFollowLoading)
+        .animation(.spring(response: 0.3), value: viewModel.isFollowing)
     }
 
     // MARK: - Recent Logs Grid
