@@ -708,8 +708,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B493C5FA697B4E379C049D11 /* GrippedTests.swift in Sources */,
-				B00EA2B788344F0EB8B6DF3A /* UserProfileView.swift in Sources */,
-				BE6F7F37BF4F47CD99F1E9CD /* SocialService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -718,6 +716,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B0CCD829CB8E54E2FE889EE /* AddCustomContentView.swift in Sources */,
+				B00EA2B788344F0EB8B6DF3A /* UserProfileView.swift in Sources */,
+				BE6F7F37BF4F47CD99F1E9CD /* SocialService.swift in Sources */,
 				C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */,
 				9C42B2865B070B827521A67A /* AppRouter.swift in Sources */,
 				70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */,
