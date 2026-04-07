@@ -7,6 +7,7 @@ struct MovieDetailView: View {
     @State private var showFullOverview = false
     @State private var showLogSheet = false
     @State private var isLogged = false
+    @State private var isWatchlisted = false
     @State private var loggedRating: Double? = nil
     @State private var loggedEmoji: String? = nil
     @State private var logHistory: [LogEntry] = []
@@ -29,7 +30,10 @@ struct MovieDetailView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task { await viewModel.load(tmdbID: tmdbID) }
-        .onAppear { refreshLogState() }
+        .onAppear {
+            refreshLogState()
+            isWatchlisted = WatchlistService.shared.isInWatchlist(contentKey)
+        }
         .sheet(isPresented: $showLogSheet) {
             LogEntrySheet(
                 contentKey: contentKey,
@@ -274,12 +278,19 @@ struct MovieDetailView: View {
             }
 
             MovieActionButton(
-                icon: viewModel.isBookmarked ? "bookmark.fill" : "bookmark",
-                label: "Listele",
-                isActive: viewModel.isBookmarked,
+                icon: isWatchlisted ? "bookmark.fill" : "bookmark",
+                label: isWatchlisted ? "Listede" : "Listele",
+                isActive: isWatchlisted,
                 activeColor: GrippdTheme.Colors.accent
             ) {
-                viewModel.isBookmarked.toggle()
+                withAnimation(.spring(response: 0.3)) {
+                    isWatchlisted = WatchlistService.shared.toggle(
+                        contentKey: contentKey,
+                        contentType: .movie,
+                        title: viewModel.movie?.title ?? "",
+                        posterPath: viewModel.movie?.posterPath
+                    )
+                }
             }
 
             ShareLink(item: "Grippd'de \(movie.title) filmini keşfet!") {

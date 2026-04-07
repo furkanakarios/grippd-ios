@@ -47,6 +47,7 @@ struct BookDetailView: View {
     @State private var showFullDescription = false
     @State private var showLogSheet = false
     @State private var isLogged = false
+    @State private var isWatchlisted = false
     @State private var loggedRating: Double? = nil
     @State private var loggedEmoji: String? = nil
     @State private var logHistory: [LogEntry] = []
@@ -79,7 +80,10 @@ struct BookDetailView: View {
         .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task { await viewModel.load(googleBooksID: googleBooksID) }
-        .onAppear { refreshLogState() }
+        .onAppear {
+            refreshLogState()
+            isWatchlisted = WatchlistService.shared.isInWatchlist(contentKey)
+        }
         .sheet(isPresented: $showLogSheet) {
             LogEntrySheet(
                 contentKey: contentKey,
@@ -297,19 +301,27 @@ struct BookDetailView: View {
 
             Button {
                 withAnimation(.spring(response: 0.3)) {
-                    viewModel.isBookmarked.toggle()
+                    isWatchlisted = WatchlistService.shared.toggle(
+                        contentKey: contentKey,
+                        contentType: .book,
+                        title: viewModel.book?.volumeInfo.title ?? "",
+                        posterPath: viewModel.book?.volumeInfo.imageLinks?.thumbnail
+                    )
                 }
             } label: {
                 HStack(spacing: 8) {
-                    Image(systemName: viewModel.isBookmarked ? "bookmark.fill" : "bookmark")
+                    Image(systemName: isWatchlisted ? "bookmark.fill" : "bookmark")
                         .font(.system(size: 16))
-                    Text(viewModel.isBookmarked ? "Listede" : "Listele")
+                    Text(isWatchlisted ? "Listede" : "Listele")
                         .font(.system(size: 14, weight: .semibold))
                 }
-                .foregroundStyle(.white)
+                .foregroundStyle(isWatchlisted ? GrippdTheme.Colors.accent : .white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 44)
-                .background(.white.opacity(0.1), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
+                .background(
+                    isWatchlisted ? GrippdTheme.Colors.accent.opacity(0.15) : Color.white.opacity(0.1),
+                    in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
+                )
             }
         }
     }

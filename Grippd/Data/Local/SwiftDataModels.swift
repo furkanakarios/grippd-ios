@@ -291,6 +291,40 @@ enum LogPlatform: String, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - Watchlist Entry
+
+@Model
+final class WatchlistEntry {
+    @Attribute(.unique) var contentKey: String   // "movie-27205", "tv-1396", "book-abc"
+    var contentTypeRaw: String
+    var contentTitle: String
+    var posterPath: String?
+    var addedAt: Date
+
+    init(
+        contentKey: String,
+        contentType: Content.ContentType,
+        contentTitle: String,
+        posterPath: String? = nil
+    ) {
+        self.contentKey = contentKey
+        self.contentTypeRaw = contentType.rawValue
+        self.contentTitle = contentTitle
+        self.posterPath = posterPath
+        self.addedAt = Date()
+    }
+
+    var contentType: Content.ContentType {
+        Content.ContentType(rawValue: contentTypeRaw) ?? .movie
+    }
+
+    var posterURL: URL? {
+        guard let path = posterPath else { return nil }
+        if path.hasPrefix("http") { return URL(string: path) }
+        return URL(string: "https://image.tmdb.org/t/p/w500\(path)")
+    }
+}
+
 // MARK: - Cached Search Query
 
 @Model
