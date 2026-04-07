@@ -5,6 +5,7 @@ struct ProfileView: View {
     @Environment(AppRouter.self) private var router
     @State private var authVM = AuthViewModel()
     @State private var showSignOutConfirm = false
+    @State private var showWrapped = false
     @State private var selectedTab: ProfileTab = .logs
 
     enum ProfileTab: String, CaseIterable {
@@ -33,6 +34,20 @@ struct ProfileView: View {
             .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if LogService.shared.wrappedStats() != nil {
+                        Button {
+                            showWrapped = true
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "sparkles")
+                                Text(verbatim: "\(Calendar.current.component(.year, from: Date()))")
+                                    .font(.system(size: 13, weight: .semibold))
+                            }
+                            .foregroundStyle(GrippdTheme.Colors.accent)
+                        }
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         router.profilePath.append(ProfileRoute.settings)
@@ -40,6 +55,11 @@ struct ProfileView: View {
                         Image(systemName: "gearshape")
                             .foregroundStyle(.white.opacity(0.7))
                     }
+                }
+            }
+            .fullScreenCover(isPresented: $showWrapped) {
+                if let wrapped = LogService.shared.wrappedStats() {
+                    WrappedView(stats: wrapped, isPresented: $showWrapped)
                 }
             }
             .navigationDestination(for: ProfileRoute.self) { route in
@@ -364,23 +384,31 @@ private struct WatchlistTabView: View {
                         .padding(.horizontal, GrippdTheme.Spacing.md)
                         .padding(.vertical, GrippdTheme.Spacing.sm)
                     } else {
-                        ForEach(customLists) { list in
-                            Button {
-                                router.profilePath.append(ProfileRoute.customList(listID: list.id))
-                            } label: {
-                                CustomListRow(list: list)
-                            }
-                            .buttonStyle(.plain)
-                            .swipeActions(edge: .trailing) {
-                                Button(role: .destructive) {
-                                    CustomListService.shared.deleteList(list)
-                                    customLists = CustomListService.shared.allLists()
+                        List {
+                            ForEach(customLists) { list in
+                                Button {
+                                    router.profilePath.append(ProfileRoute.customList(listID: list.id))
                                 } label: {
-                                    Label("Sil", systemImage: "trash")
+                                    CustomListRow(list: list)
                                 }
+                                .buttonStyle(.plain)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        CustomListService.shared.deleteList(list)
+                                        customLists = CustomListService.shared.allLists()
+                                    } label: {
+                                        Label("Sil", systemImage: "trash")
+                                    }
+                                }
+                                .listRowBackground(Color.clear)
+                                .listRowSeparatorTint(.white.opacity(0.06))
+                                .listRowInsets(EdgeInsets())
                             }
-                            Divider().background(.white.opacity(0.06)).padding(.leading, 72)
                         }
+                        .listStyle(.plain)
+                        .scrollContentBackground(.hidden)
+                        .scrollDisabled(true)
+                        .frame(height: CGFloat(customLists.count) * 64)
                     }
                 }
                 .padding(.bottom, GrippdTheme.Spacing.xxl)
@@ -884,7 +912,7 @@ private struct PlatformBar: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Text(platform.rawValue)
+            Text(platform.displayName)
                 .font(.system(size: 13))
                 .foregroundStyle(.white.opacity(0.7))
                 .frame(width: 90, alignment: .leading)
