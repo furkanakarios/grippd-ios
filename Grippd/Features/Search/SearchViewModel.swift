@@ -8,6 +8,7 @@ enum SearchFilter: String, CaseIterable {
     case tv = "Diziler"
     case books = "Kitaplar"
     case person = "Kişiler"
+    case users = "Kullanıcılar"
 }
 
 // MARK: - Unified Result
@@ -18,6 +19,7 @@ enum UnifiedSearchResult: Identifiable {
     case book(GoogleBook)
     case person(TMDBPerson)
     case userContent(Content)
+    case user(User)
 
     var id: String {
         switch self {
@@ -25,7 +27,8 @@ enum UnifiedSearchResult: Identifiable {
         case .tv(let t): return "tv-\(t.id)"
         case .book(let b): return "book-\(b.id)"
         case .person(let p): return "person-\(p.id)"
-        case .userContent(let c): return "user-\(c.id.uuidString)"
+        case .userContent(let c): return "user-content-\(c.id.uuidString)"
+        case .user(let u): return "user-\(u.id.uuidString)"
         }
     }
 }
@@ -149,6 +152,10 @@ final class SearchViewModel {
             case .person:
                 let response = try await TMDBClient.shared.searchPersons(query: query)
                 results = response.results.map { .person($0) }
+
+            case .users:
+                let users = try await FollowService.shared.searchUsers(query: query)
+                results = users.map { .user($0) }
             }
 
             // Aramayı geçmişe kaydet

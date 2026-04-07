@@ -7,17 +7,47 @@ private final class UserProfileViewModel {
     var profileData: UserProfileData?
     var isLoading = false
     var error: String?
+    var isFollowing = false
+    var isFollowLoading = false
 
     func load(userID: UUID) async {
         guard profileData == nil else { return }
         isLoading = true
         error = nil
         do {
-            profileData = try await SocialService.shared.fetchProfile(userID: userID)
+            async let profile = SocialService.shared.fetchProfile(userID: userID)
+            async let following = FollowService.shared.isFollowing(targetUserID: userID)
+            let (p, f) = try await (profile, following)
+            profileData = p
+            isFollowing = f
         } catch {
             self.error = error.localizedDescription
         }
         isLoading = false
+    }
+
+    func toggleFollow(targetUserID: UUID) async {
+        isFollowLoading = true
+        do {
+            if isFollowing {
+                try await FollowService.shared.unfollow(targetUserID: targetUserID)
+                isFollowing = false
+                if let d = profileData {
+                    profileData = UserProfileData(user: d.user, followerCount: max(0, d.followerCount - 1),
+                                                  followingCount: d.followingCount, logCount: d.logCount,
+                                                  recentLogs: d.recentLogs)
+                }
+            } else {
+                try await FollowService.shared.follow(targetUserID: targetUserID)
+                isFollowing = true
+                if let d = profileData {
+                    profileData = UserProfileData(user: d.user, followerCount: d.followerCount + 1,
+                                                  followingCount: d.followingCount, logCount: d.logCount,
+                                                  recentLogs: d.recentLogs)
+                }
+            }
+        } catch {}
+        isFollowLoading = false
     }
 }
 
@@ -28,6 +58,10 @@ struct UserProfileView: View {
 
     @Environment(AppState.self) private var appState
     @State private var viewModel = UserProfileViewModel()
+
+    private var isOwnProfile: Bool {
+        appState.currentUser?.id == userID
+    }
 
     var body: some View {
         ZStack {
@@ -77,7 +111,13 @@ struct UserProfileView: View {
                         .padding(.top, GrippdTheme.Spacing.sm)
                 }
 
-                recentLogsSection(logs: data.recentLogs)
+                if !isOwnProfile {
+                    followButton
+                        .padding(.horizontal, GrippdTheme.Spacing.md)
+                        .padding(.top, GrippdTheme.Spacing.md)
+                }
+
+                recentLogsSection(logs: localRecentLogs(fallback: data.recentLogs))
                     .padding(.top, GrippdTheme.Spacing.lg)
             }
             .padding(.bottom, GrippdTheme.Spacing.xxl)
@@ -87,37 +127,30 @@ struct UserProfileView: View {
     // MARK: - Header
 
     private func headerSection(data: UserProfileData) -> some View {
-        ZStack(alignment: .bottom) {
-            // Banner
-            if let bannerURL = data.user.bannerURL {
-                AsyncImage(url: bannerURL) { phase in
-                    if case .success(let image) = phase {
-                        image.resizable().aspectRatio(contentMode: .fill)
-                    } else {
-                        bannerPlaceholder
+        VStack(spacing: 0) {
+            // Banner + avatar
+            ZStack(alignment: .bottom) {
+                if let bannerURL = data.user.bannerURL {
+                    AsyncImage(url: bannerURL) { phase in
+                        if case .success(let image) = phase {
+                            image.resizable().aspectRatio(contentMode: .fill)
+                        } else {
+                            bannerPlaceholder
+                        }
                     }
+                    .frame(height: 120)
+                    .clipped()
+                } else {
+                    bannerPlaceholder.frame(height: 120)
                 }
-                .frame(height: 140)
-                .clipped()
-            } else {
-                bannerPlaceholder
-                    .frame(height: 140)
-            }
 
-            // Avatar (altta ortada)
-            VStack(spacing: 0) {
-                Spacer()
                 avatarView(url: data.user.avatarURL)
-                    .offset(y: 44)
+                    .offset(y: 45)
             }
-        }
-        .frame(height: 140)
-        .padding(.bottom, 52) // avatar taşması için
+            .frame(height: 120)
 
-        // İsim + username
-        .overlay(alignment: .bottom) {
+            // İsim + username — avatar için boşluk bırak
             VStack(spacing: 4) {
-                Spacer().frame(height: 140 + 52)
                 Text(data.user.displayName)
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
@@ -125,7 +158,8 @@ struct UserProfileView: View {
                     .font(.system(size: 14))
                     .foregroundStyle(.white.opacity(0.45))
             }
-            .padding(.top, 8)
+            .padding(.top, 52)
+            .padding(.bottom, 8)
         }
     }
 
@@ -176,8 +210,12 @@ struct UserProfileView: View {
     // MARK: - Stats Row
 
     private func statsRow(data: UserProfileData) -> some View {
-        HStack(spacing: 0) {
-            profileStat(value: "\(data.logCount)", label: "Log")
+        // Kendi profilinde yerel SwiftData, başkasında Supabase logCount
+        let displayLogCount = isOwnProfile
+            ? LogService.shared.stats().totalLogged
+            : data.logCount
+        return HStack(spacing: 0) {
+            profileStat(value: "\(displayLogCount)", label: "Log")
             Divider().frame(height: 28).background(.white.opacity(0.1))
             NavigationLink {
                 FollowListView(userID: userID, mode: .followers)
@@ -207,6 +245,52 @@ struct UserProfileView: View {
                 .foregroundStyle(.white.opacity(0.4))
         }
         .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Follow Button
+
+    private var followButton: some View {
+        Button {
+            Task { await viewModel.toggleFollow(targetUserID: userID) }
+        } label: {
+            HStack(spacing: 8) {
+                if viewModel.isFollowLoading {
+                    ProgressView().tint(viewModel.isFollowing ? GrippdTheme.Colors.background : .white)
+                        .scaleEffect(0.8)
+                } else {
+                    Image(systemName: viewModel.isFollowing ? "person.badge.minus" : "person.badge.plus")
+                        .font(.system(size: 15))
+                    Text(viewModel.isFollowing ? "Takibi Bırak" : "Takip Et")
+                        .font(.system(size: 15, weight: .semibold))
+                }
+            }
+            .foregroundStyle(viewModel.isFollowing ? GrippdTheme.Colors.background : .white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 44)
+            .background(
+                viewModel.isFollowing ? GrippdTheme.Colors.accent : Color.white.opacity(0.12),
+                in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
+            )
+        }
+        .disabled(viewModel.isFollowLoading)
+        .animation(.spring(response: 0.3), value: viewModel.isFollowing)
+    }
+
+    // Kendi profili için SwiftData'dan, değilse Supabase verisinden
+    private func localRecentLogs(fallback: [PublicLog]) -> [PublicLog] {
+        guard isOwnProfile else { return fallback }
+        return LogService.shared.allLogs().prefix(12).compactMap { entry in
+            guard let uuid = UUID(uuidString: entry.id) else { return nil }
+            return PublicLog(
+                id: uuid,
+                contentTitle: entry.contentTitle,
+                posterURL: entry.posterURL,
+                contentType: entry.contentType,
+                watchedAt: entry.watchedAt,
+                rating: entry.rating,
+                emoji: entry.emoji
+            )
+        }
     }
 
     // MARK: - Recent Logs Grid
