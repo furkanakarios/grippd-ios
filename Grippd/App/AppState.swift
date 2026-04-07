@@ -1,6 +1,7 @@
 import SwiftUI
 
 @Observable
+@MainActor
 final class AppState {
     var isCheckingAuth: Bool = true   // splash gösterim için
     var isAuthenticated: Bool = false
