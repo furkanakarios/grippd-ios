@@ -9,6 +9,7 @@ struct User: Identifiable, Codable, Equatable {
     var bannerURL: URL?
     var isPrivate: Bool
     var planType: PlanType
+    var interests: [String]
     let createdAt: Date
 
     enum PlanType: String, Codable {
