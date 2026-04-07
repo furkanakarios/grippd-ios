@@ -12,6 +12,8 @@
 		BE6F7F37BF4F47CD99F1E9CD /* SocialService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6AF6EEC9A4D5E95038590 /* SocialService.swift */; };
 		ED1927994D784341B02D9216 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311AA89A13DE4B05AD656B05 /* FollowService.swift */; };
 		B2F1A3C945DE4B78A95C5678 /* LikeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E4F5A831BC4F56B07C1234 /* LikeService.swift */; };
+		A3C2D1E845DE4B78A95C9012 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8A9B021BC4F56B07C3456 /* CommentService.swift */; };
+		C4D3E2F945DE4B78A95C7890 /* CommentsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C421BC4F56B07C5678 /* CommentsSheetView.swift */; };
 		A14E028B76CF4696A5D2AF17 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAE6A0041674DB183E8A153 /* FeedService.swift */; };
 		C3A1F2B845DE4B78A95C1234 /* FeedSuggestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D3E4A921BC4F56B07C9E12 /* FeedSuggestionService.swift */; };
 		D42AD4B1BAEC43EFAA3E0FE3 /* LogSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */; };
@@ -128,6 +130,8 @@
 		26F6AF6EEC9A4D5E95038590 /* SocialService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialService.swift; sourceTree = "<group>"; };
 		311AA89A13DE4B05AD656B05 /* FollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FollowService.swift; path = Grippd/Data/Supabase/FollowService.swift; sourceTree = SOURCE_ROOT; };
 		D9E4F5A831BC4F56B07C1234 /* LikeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LikeService.swift; path = Grippd/Data/Supabase/LikeService.swift; sourceTree = SOURCE_ROOT; };
+		E7F8A9B021BC4F56B07C3456 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CommentService.swift; path = Grippd/Data/Supabase/CommentService.swift; sourceTree = SOURCE_ROOT; };
+		F1A2B3C421BC4F56B07C5678 /* CommentsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CommentsSheetView.swift; path = Grippd/Features/Feed/CommentsSheetView.swift; sourceTree = SOURCE_ROOT; };
 		6CAE6A0041674DB183E8A153 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedService.swift; path = Grippd/Data/Supabase/FeedService.swift; sourceTree = SOURCE_ROOT; };
 		80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogSyncService.swift; path = Grippd/Data/Supabase/LogSyncService.swift; sourceTree = SOURCE_ROOT; };
 		EA650D47349D4E40A296B666 /* CommunityStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStatsView.swift; sourceTree = "<group>"; };
@@ -313,6 +317,7 @@
 				26F6AF6EEC9A4D5E95038590 /* SocialService.swift */,
 				311AA89A13DE4B05AD656B05 /* FollowService.swift */,
 				D9E4F5A831BC4F56B07C1234 /* LikeService.swift */,
+				E7F8A9B021BC4F56B07C3456 /* CommentService.swift */,
 				6CAE6A0041674DB183E8A153 /* FeedService.swift */,
 				80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */,
 			);
@@ -392,6 +397,7 @@
 			isa = PBXGroup;
 			children = (
 				FF053B89084A730815FE5768 /* FeedView.swift */,
+				F1A2B3C421BC4F56B07C5678 /* CommentsSheetView.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -737,6 +743,8 @@
 				BE6F7F37BF4F47CD99F1E9CD /* SocialService.swift in Sources */,
 				ED1927994D784341B02D9216 /* FollowService.swift in Sources */,
 				B2F1A3C945DE4B78A95C5678 /* LikeService.swift in Sources */,
+				A3C2D1E845DE4B78A95C9012 /* CommentService.swift in Sources */,
+				C4D3E2F945DE4B78A95C7890 /* CommentsSheetView.swift in Sources */,
 				A14E028B76CF4696A5D2AF17 /* FeedService.swift in Sources */,
 				C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */,
 				9C42B2865B070B827521A67A /* AppRouter.swift in Sources */,
