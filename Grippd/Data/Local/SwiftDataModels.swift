@@ -291,6 +291,58 @@ enum LogPlatform: String, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - Custom List
+
+@Model
+final class CustomList {
+    @Attribute(.unique) var id: String
+    var name: String
+    var emoji: String          // liste ikonu
+    var createdAt: Date
+    var updatedAt: Date
+
+    @Relationship(deleteRule: .cascade) var items: [CustomListItem] = []
+
+    init(name: String, emoji: String = "📋") {
+        self.id = UUID().uuidString
+        self.name = name
+        self.emoji = emoji
+        self.createdAt = Date()
+        self.updatedAt = Date()
+    }
+}
+
+@Model
+final class CustomListItem {
+    @Attribute(.unique) var id: String
+    var contentKey: String
+    var contentTypeRaw: String
+    var contentTitle: String
+    var posterPath: String?
+    var addedAt: Date
+
+    var list: CustomList?
+
+    init(contentKey: String, contentType: Content.ContentType, contentTitle: String, posterPath: String? = nil) {
+        self.id = UUID().uuidString
+        self.contentKey = contentKey
+        self.contentTypeRaw = contentType.rawValue
+        self.contentTitle = contentTitle
+        self.posterPath = posterPath
+        self.addedAt = Date()
+    }
+
+    var contentType: Content.ContentType {
+        Content.ContentType(rawValue: contentTypeRaw) ?? .movie
+    }
+
+    var posterURL: URL? {
+        guard let path = posterPath else { return nil }
+        if path.hasPrefix("http") { return URL(string: path) }
+        return URL(string: "https://image.tmdb.org/t/p/w500\(path)")
+    }
+}
+
 // MARK: - Watchlist Entry
 
 @Model
