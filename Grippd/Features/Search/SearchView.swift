@@ -373,8 +373,8 @@ struct SearchView: View {
             PersonDetailPlaceholderView(tmdbID: tmdbID)
         case .contentDetail(let contentID):
             CustomContentDetailView(contentID: contentID)
-        case .userProfile:
-            Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
+        case .userProfile(let userID):
+            UserProfileView(userID: userID)
         }
     }
 }

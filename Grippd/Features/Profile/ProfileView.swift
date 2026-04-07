@@ -213,10 +213,10 @@ struct ProfileView: View {
         case .personDetail: Text("Kişi Detay — Phase 4").foregroundStyle(.white)
         case .settings: SettingsPlaceholderView()
         case .editProfile: Text("Profil Düzenle — Phase 4").foregroundStyle(.white)
-        case .followers: Text("Takipçiler — Phase 4").foregroundStyle(.white)
-        case .following: Text("Takip Edilenler — Phase 4").foregroundStyle(.white)
+        case .followers(let userID): FollowListView(userID: userID, mode: .followers)
+        case .following(let userID): FollowListView(userID: userID, mode: .following)
         case .contentDetail: Text("İçerik Detay").foregroundStyle(.white)
-        case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
+        case .userProfile(let userID): UserProfileView(userID: userID)
         case .customList(let listID):
             if let list = CustomListService.shared.allLists().first(where: { $0.id == listID }) {
                 CustomListDetailView(list: list)

@@ -49,7 +49,7 @@ struct FeedView: View {
             BookDetailView(googleBooksID: googleBooksID)
         case .personDetail: Text("Kişi Detay — Phase 3").foregroundStyle(.white)
         case .contentDetail: Text("İçerik Detay — Phase 3").foregroundStyle(.white)
-        case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
+        case .userProfile(let userID): UserProfileView(userID: userID)
         }
     }
 }
