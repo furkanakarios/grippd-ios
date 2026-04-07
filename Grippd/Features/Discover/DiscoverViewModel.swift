@@ -11,10 +11,25 @@ final class DiscoverViewModel {
     var onTheAirShows: [TMDBTVShow] = []
     var movieGenres: [TMDBGenre] = []
     var tvGenres: [TMDBGenre] = []
+    var featuredBooks: [GoogleBook] = []
 
     var isLoadingTrending = false
     var isLoadingNowPlaying = false
     var isLoadingOnTheAir = false
+    var isLoadingBooks = false
+
+    let bookCategories: [(label: String, query: String)] = [
+        ("Kurgu", "subject:fiction"),
+        ("Bilim Kurgu", "subject:science+fiction"),
+        ("Tarih", "subject:history"),
+        ("Biyografi", "subject:biography"),
+        ("Psikoloji", "subject:psychology"),
+        ("Felsefe", "subject:philosophy"),
+        ("Polisiye", "subject:crime+thriller"),
+        ("Kişisel Gelişim", "subject:self+help"),
+        ("Bilim", "subject:science"),
+        ("Ekonomi", "subject:economics")
+    ]
 
     var error: String?
 
@@ -36,6 +51,7 @@ final class DiscoverViewModel {
         onTheAirShows = []
         movieGenres = []
         tvGenres = []
+        featuredBooks = []
         await load()
     }
 
@@ -44,7 +60,8 @@ final class DiscoverViewModel {
         async let nowPlaying: Void = loadNowPlaying()
         async let onTheAir: Void = loadOnTheAir()
         async let genres: Void = loadGenres()
-        _ = await (trending, nowPlaying, onTheAir, genres)
+        async let books: Void = loadFeaturedBooks()
+        _ = await (trending, nowPlaying, onTheAir, genres, books)
     }
 
     private func loadGenres() async {
@@ -93,5 +110,18 @@ final class DiscoverViewModel {
             // sessizce geç
         }
         isLoadingOnTheAir = false
+    }
+
+    private func loadFeaturedBooks() async {
+        isLoadingBooks = true
+        do {
+            let response = try await GoogleBooksClient.shared.searchFeatured(maxResults: 15)
+            featuredBooks = (response.items ?? []).filter {
+                $0.volumeInfo.imageLinks?.thumbnailURL != nil
+            }
+        } catch {
+            // sessizce geç
+        }
+        isLoadingBooks = false
     }
 }

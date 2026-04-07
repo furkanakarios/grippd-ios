@@ -22,8 +22,17 @@ final class GoogleBooksClient {
             "q": query,
             "startIndex": "\(startIndex)",
             "maxResults": "\(maxResults)",
+            "printType": "books"
+        ])
+    }
+
+    func searchFeatured(maxResults: Int = 15) async throws -> GoogleBooksResponse {
+        try await get("volumes", params: [
+            "q": "subject:fiction",
+            "orderBy": "relevance",
+            "maxResults": "\(maxResults)",
             "printType": "books",
-            "projection": "lite"
+            "langRestrict": "en"
         ])
     }
 
@@ -49,14 +58,24 @@ final class GoogleBooksClient {
 
         guard let url = components.url else { throw BooksError.invalidURL }
 
-        let (data, response) = try await session.data(from: url)
+        var request = URLRequest(url: url)
+        if let bundleID = Bundle.main.bundleIdentifier {
+            request.setValue(bundleID, forHTTPHeaderField: "X-Ios-Bundle-Identifier")
+        }
+        let (data, response) = try await session.data(for: request)
 
-        guard let http = response as? HTTPURLResponse,
-              (200...299).contains(http.statusCode) else {
-            throw BooksError.httpError
+        guard let http = response as? HTTPURLResponse else {
+            throw BooksError.httpError(statusCode: 0)
+        }
+        guard (200...299).contains(http.statusCode) else {
+            throw BooksError.httpError(statusCode: http.statusCode)
         }
 
-        return try JSONDecoder().decode(T.self, from: data)
+        do {
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            throw BooksError.decodingError(error.localizedDescription)
+        }
     }
 }
 
@@ -64,14 +83,16 @@ final class GoogleBooksClient {
 
 enum BooksError: LocalizedError {
     case invalidURL
-    case httpError
+    case httpError(statusCode: Int)
     case notFound
+    case decodingError(String)
 
     var errorDescription: String? {
         switch self {
         case .invalidURL: return "Geçersiz URL."
-        case .httpError: return "Sunucu hatası."
+        case .httpError(let code): return "Sunucu hatası (\(code))."
         case .notFound: return "Kitap bulunamadı."
+        case .decodingError(let msg): return "Veri hatası: \(msg)"
         }
     }
 }

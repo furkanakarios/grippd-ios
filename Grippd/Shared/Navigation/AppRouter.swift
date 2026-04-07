@@ -29,6 +29,7 @@ enum DiscoverRoute: Hashable {
     case userProfile(userID: UUID)
     case genre(String)
     case genreBrowse(genre: TMDBGenre, kind: String)
+    case bookCategoryBrowse(label: String, query: String)
     case movieDetail(tmdbID: Int)
     case tvShowDetail(tmdbID: Int)
     case seasonDetail(showID: Int, seasonNumber: Int)

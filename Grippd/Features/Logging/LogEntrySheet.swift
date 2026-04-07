@@ -14,7 +14,19 @@ struct LogEntrySheet: View {
     @State private var selectedPlatform: LogPlatform?
     @State private var isRewatch: Bool = false
     @State private var rating: Double? = nil
+    @State private var selectedEmoji: String? = nil
+    @State private var customEmoji: String = ""
+    @State private var showCustomEmojiInput: Bool = false
     @State private var note: String = ""
+
+    private var presetEmojis: [String] {
+        switch contentType {
+        case .movie, .tv_show:
+            return ["🤩","😍","😭","😂","😱","🔥","💀","🥱","🤔","💔","👌","🎬"]
+        case .book:
+            return ["🤩","😍","😭","😂","🤯","💡","🔥","❤️","📚","👌","🤔","😴"]
+        }
+    }
 
     private var availablePlatforms: [LogPlatform] {
         LogPlatform.platforms(for: contentType)
@@ -42,6 +54,7 @@ struct LogEntrySheet: View {
                         dateSection
                         platformSection
                         ratingSection
+                        emojiSection
                         rewatchSection
                         noteSection
                         saveButton
@@ -120,6 +133,123 @@ struct LogEntrySheet: View {
         }
     }
 
+    // MARK: - Emoji Section
+
+    private var emojiSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            sectionLabel("Reaksiyon (İsteğe Bağlı)")
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    // Preset emojiler
+                    ForEach(presetEmojis, id: \.self) { emoji in
+                        EmojiChip(
+                            emoji: emoji,
+                            isSelected: selectedEmoji == emoji
+                        ) {
+                            withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) {
+                                if selectedEmoji == emoji {
+                                    selectedEmoji = nil
+                                } else {
+                                    selectedEmoji = emoji
+                                    customEmoji = ""
+                                    showCustomEmojiInput = false
+                                }
+                            }
+                        }
+                    }
+
+                    // Serbest emoji butonu
+                    Button {
+                        withAnimation(.spring(response: 0.25)) {
+                            showCustomEmojiInput.toggle()
+                            if !showCustomEmojiInput { customEmoji = "" }
+                        }
+                    } label: {
+                        Text(showCustomEmojiInput ? "✕" : "+")
+                            .font(.system(size: showCustomEmojiInput ? 14 : 20, weight: .medium))
+                            .frame(width: 48, height: 48)
+                            .background(
+                                showCustomEmojiInput
+                                    ? Color.white.opacity(0.15)
+                                    : Color.white.opacity(0.07),
+                                in: RoundedRectangle(cornerRadius: 12)
+                            )
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                }
+                .padding(.horizontal, 2)
+                .padding(.vertical, 4)
+            }
+
+            // Serbest emoji input
+            if showCustomEmojiInput {
+                HStack(spacing: 10) {
+                    TextField("Emoji gir...", text: $customEmoji)
+                        .font(.system(size: 28))
+                        .frame(width: 52, height: 52)
+                        .multilineTextAlignment(.center)
+                        .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 12))
+                        .onChange(of: customEmoji) { _, new in
+                            // Sadece ilk karakteri (emoji) al
+                            let emojis = new.filter { $0.isEmoji }
+                            if let first = emojis.first {
+                                customEmoji = String(first)
+                            } else {
+                                customEmoji = ""
+                            }
+                        }
+
+                    if !customEmoji.isEmpty {
+                        Button {
+                            withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) {
+                                selectedEmoji = customEmoji
+                                showCustomEmojiInput = false
+                            }
+                        } label: {
+                            Text("Seç")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(GrippdTheme.Colors.background)
+                                .padding(.horizontal, 16)
+                                .frame(height: 44)
+                                .background(GrippdTheme.Colors.accent, in: RoundedRectangle(cornerRadius: 10))
+                        }
+                        .transition(.scale.combined(with: .opacity))
+                    }
+
+                    Spacer()
+                }
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+
+            // Seçili emoji önizleme
+            if let emoji = selectedEmoji {
+                HStack(spacing: 8) {
+                    Text(emoji)
+                        .font(.system(size: 22))
+                    Text("Reaksiyonun seçildi")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.white.opacity(0.5))
+                    Spacer()
+                    Button {
+                        withAnimation(.spring(response: 0.2)) {
+                            selectedEmoji = nil
+                            customEmoji = ""
+                        }
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(.white.opacity(0.05), in: RoundedRectangle(cornerRadius: 12))
+                .transition(.scale(scale: 0.95).combined(with: .opacity))
+            }
+        }
+    }
+
     // MARK: - Rewatch Section
 
     private var rewatchSection: some View {
@@ -192,11 +322,42 @@ struct LogEntrySheet: View {
             platform: selectedPlatform,
             isRewatch: isRewatch,
             rating: rating,
+            emoji: selectedEmoji,
             note: trimmedNote.isEmpty ? nil : trimmedNote
         )
         LogService.shared.save(entry)
         onSaved?()
         isPresented = false
+    }
+}
+
+// MARK: - Emoji Chip
+
+private struct EmojiChip: View {
+    let emoji: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(emoji)
+                .font(.system(size: 24))
+                .frame(width: 48, height: 48)
+                .background(
+                    isSelected
+                        ? GrippdTheme.Colors.accent.opacity(0.2)
+                        : Color.white.opacity(0.07),
+                    in: RoundedRectangle(cornerRadius: 12)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(
+                            isSelected ? GrippdTheme.Colors.accent.opacity(0.7) : Color.clear,
+                            lineWidth: 1.5
+                        )
+                )
+                .scaleEffect(isSelected ? 1.08 : 1.0)
+        }
     }
 }
 

@@ -121,6 +121,19 @@ struct SearchView: View {
             Spacer()
         } else if viewModel.query.count < 2 {
             emptyState
+        } else if let error = viewModel.error {
+            VStack(spacing: GrippdTheme.Spacing.md) {
+                Spacer()
+                Image(systemName: "exclamationmark.triangle")
+                    .font(.system(size: 40))
+                    .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.5))
+                Text(error)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white.opacity(0.5))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, GrippdTheme.Spacing.xl)
+                Spacer()
+            }
         } else if viewModel.results.isEmpty {
             noResults
         } else {
