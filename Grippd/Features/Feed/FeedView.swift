@@ -48,6 +48,25 @@ private final class FeedViewModel {
         await load(userInterests: userInterests)
     }
 
+    func toggleLike(activityID: UUID) async {
+        guard let idx = activities.firstIndex(where: { $0.id == activityID }) else { return }
+        let wasLiked = activities[idx].isLiked
+        // Optimistic update
+        activities[idx].isLiked = !wasLiked
+        activities[idx].likeCount += wasLiked ? -1 : 1
+        do {
+            if wasLiked {
+                try await LikeService.shared.unlike(logID: activityID)
+            } else {
+                try await LikeService.shared.like(logID: activityID)
+            }
+        } catch {
+            // Revert on failure
+            activities[idx].isLiked = wasLiked
+            activities[idx].likeCount += wasLiked ? 1 : -1
+        }
+    }
+
     private func loadSuggestions(interests: [String]) async {
         isLoadingSuggestions = true
         suggestions = await FeedSuggestionService.shared.fetchSuggestions(interests: interests)
@@ -106,6 +125,8 @@ struct FeedView: View {
                         navigateToContent(activity)
                     } onUserTap: {
                         router.feedPath.append(FeedRoute.userProfile(userID: activity.user.id))
+                    } onLike: {
+                        Task { await viewModel.toggleLike(activityID: activity.id) }
                     }
                     Divider()
                         .background(.white.opacity(0.06))
@@ -353,6 +374,7 @@ struct FeedActivityCard: View {
     let activity: FeedActivity
     let onContentTap: () -> Void
     let onUserTap: () -> Void
+    let onLike: () -> Void
 
     private var typeIcon: String {
         switch activity.contentType {
@@ -463,6 +485,22 @@ struct FeedActivityCard: View {
                             }
                         }
                         Spacer()
+
+                        // Like butonu
+                        Button(action: onLike) {
+                            HStack(spacing: 4) {
+                                Image(systemName: activity.isLiked ? "heart.fill" : "heart")
+                                    .font(.system(size: 15))
+                                    .foregroundStyle(activity.isLiked ? .red : .white.opacity(0.35))
+                                if activity.likeCount > 0 {
+                                    Text(verbatim: "\(activity.likeCount)")
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.white.opacity(0.35))
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.top, 4)
                     }
                 }
             }

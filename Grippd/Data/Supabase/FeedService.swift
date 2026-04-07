@@ -14,6 +14,8 @@ struct FeedActivity: Identifiable {
     let rating: Double?
     let emoji: String?
     let isRewatch: Bool
+    var likeCount: Int
+    var isLiked: Bool
 }
 
 struct FeedUser: Identifiable {
@@ -54,7 +56,19 @@ final class FeedService {
             .execute()
             .value
 
-        return rows.compactMap { $0.toDomain() }
+        var activities = rows.compactMap { $0.toDomain() }
+
+        // Like verilerini batch olarak çek
+        let logIDs = activities.map { $0.id }
+        let likeData = await LikeService.shared.fetchLikeData(logIDs: logIDs, myID: myID)
+        for i in activities.indices {
+            if let data = likeData[activities[i].id] {
+                activities[i].likeCount = data.count
+                activities[i].isLiked = data.isLiked
+            }
+        }
+
+        return activities
     }
 
     // Takip edilen kullanıcı ID'lerini çek
@@ -150,7 +164,9 @@ private struct FeedRow: Decodable {
             watchedAt: date,
             rating: rating,
             emoji: emojiReaction,
-            isRewatch: isRewatch
+            isRewatch: isRewatch,
+            likeCount: 0,
+            isLiked: false
         )
     }
 }
