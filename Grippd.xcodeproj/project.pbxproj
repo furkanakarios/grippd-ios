@@ -12,7 +12,9 @@
 		BE6F7F37BF4F47CD99F1E9CD /* SocialService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6AF6EEC9A4D5E95038590 /* SocialService.swift */; };
 		ED1927994D784341B02D9216 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311AA89A13DE4B05AD656B05 /* FollowService.swift */; };
 		A14E028B76CF4696A5D2AF17 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAE6A0041674DB183E8A153 /* FeedService.swift */; };
+		C3A1F2B845DE4B78A95C1234 /* FeedSuggestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D3E4A921BC4F56B07C9E12 /* FeedSuggestionService.swift */; };
 		D42AD4B1BAEC43EFAA3E0FE3 /* LogSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */; };
+		F8D3E4A921BC4F56B07C9E12 /* FeedSuggestionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedSuggestionService.swift; path = Grippd/Data/Network/FeedSuggestionService.swift; sourceTree = SOURCE_ROOT; };
 		0CE79A92654B6457CDA82879 /* BooksRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265835ED6A83105317F3EDC5 /* BooksRepository.swift */; };
 		116A3439D527C894C318EDA3 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B348645889240B57745ED216 /* OnboardingService.swift */; };
 		11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */; };
@@ -516,6 +518,7 @@
 				73F078758BC5D9DE33F02FB9 /* Books */,
 				D19A8B8CFC1ADB65BD0FD1D7 /* TMDB */,
 				E5B6E5657B45D19E7D4BB7AD /* Watchmode */,
+				F8D3E4A921BC4F56B07C9E12 /* FeedSuggestionService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -726,6 +729,7 @@
 			files = (
 				9B0CCD829CB8E54E2FE889EE /* AddCustomContentView.swift in Sources */,
 				D42AD4B1BAEC43EFAA3E0FE3 /* LogSyncService.swift in Sources */,
+				C3A1F2B845DE4B78A95C1234 /* FeedSuggestionService.swift in Sources */,
 				B00EA2B788344F0EB8B6DF3A /* UserProfileView.swift in Sources */,
 				BE6F7F37BF4F47CD99F1E9CD /* SocialService.swift in Sources */,
 				ED1927994D784341B02D9216 /* FollowService.swift in Sources */,

@@ -132,23 +132,6 @@ final class EmailAuthViewModel {
     // MARK: - Profile Fetch
 
     private func fetchProfile(id: UUID) async throws -> User {
-        struct UserRow: Decodable {
-            let id: String
-            let username: String
-            let displayName: String?
-            let avatarUrl: String?
-            let bio: String?
-            let isPrivate: Bool
-            let planType: String
-            enum CodingKeys: String, CodingKey {
-                case id, username, bio
-                case displayName = "display_name"
-                case avatarUrl = "avatar_url"
-                case isPrivate = "is_private"
-                case planType = "plan_type"
-            }
-        }
-
         // DB trigger creates profile; retry once if not yet available
         for attempt in 0...1 {
             if attempt == 1 { try await Task.sleep(for: .milliseconds(600)) }
@@ -160,16 +143,7 @@ final class EmailAuthViewModel {
                 .execute()
                 .value
             if let row = rows.first {
-                return User(
-                    id: UUID(uuidString: row.id) ?? UUID(),
-                    username: row.username,
-                    displayName: row.displayName ?? row.username,
-                    bio: row.bio,
-                    avatarURL: row.avatarUrl.flatMap { URL(string: $0) },
-                    isPrivate: row.isPrivate,
-                    planType: row.planType == "premium" ? .premium : .free,
-                    createdAt: Date()
-                )
+                return row.toDomain()
             }
         }
         throw AuthError.profileCreationFailed

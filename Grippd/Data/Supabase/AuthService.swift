@@ -98,10 +98,11 @@ struct UserRow: Decodable {
     let bio: String?
     let isPrivate: Bool
     let planType: String
+    let interests: [String]?
     let createdAt: String?
 
     enum CodingKeys: String, CodingKey {
-        case id, username, bio
+        case id, username, bio, interests
         case displayName = "display_name"
         case avatarUrl = "avatar_url"
         case bannerUrl = "banner_url"
@@ -123,6 +124,7 @@ struct UserRow: Decodable {
             bannerURL: bannerUrl.flatMap { URL(string: $0) },
             isPrivate: isPrivate,
             planType: planType == "premium" ? .premium : .free,
+            interests: interests ?? [],
             createdAt: date
         )
     }

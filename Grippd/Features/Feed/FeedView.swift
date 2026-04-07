@@ -5,13 +5,15 @@ import SwiftUI
 @Observable
 private final class FeedViewModel {
     var activities: [FeedActivity] = []
+    var suggestions: [FeedSuggestionService.SuggestionSection] = []
     var isLoading = false
     var isLoadingMore = false
+    var isLoadingSuggestions = false
     var error: String?
     var hasMore = true
     private var currentPage = 0
 
-    func load() async {
+    func load(userInterests: [String]) async {
         guard !isLoading else { return }
         isLoading = true
         error = nil
@@ -21,6 +23,9 @@ private final class FeedViewModel {
             let result = try await FeedService.shared.fetchFeed(page: 0)
             activities = result
             hasMore = result.count == 20
+            if result.isEmpty {
+                await loadSuggestions(interests: userInterests)
+            }
         } catch {
             self.error = error.localizedDescription
         }
@@ -39,8 +44,14 @@ private final class FeedViewModel {
         isLoadingMore = false
     }
 
-    func refresh() async {
-        await load()
+    func refresh(userInterests: [String]) async {
+        await load(userInterests: userInterests)
+    }
+
+    private func loadSuggestions(interests: [String]) async {
+        isLoadingSuggestions = true
+        suggestions = await FeedSuggestionService.shared.fetchSuggestions(interests: interests)
+        isLoadingSuggestions = false
     }
 }
 
@@ -65,8 +76,8 @@ struct FeedView: View {
             .navigationDestination(for: FeedRoute.self) { route in
                 feedDestination(route)
             }
-            .task { await viewModel.load() }
-            .refreshable { await viewModel.refresh() }
+            .task { await viewModel.load(userInterests: appState.currentUser?.interests ?? []) }
+            .refreshable { await viewModel.refresh(userInterests: appState.currentUser?.interests ?? []) }
         }
     }
 
@@ -135,37 +146,77 @@ struct FeedView: View {
                 .foregroundStyle(.white.opacity(0.45))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
-            Button("Tekrar Dene") { Task { await viewModel.load() } }
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(GrippdTheme.Colors.accent)
+            Button("Tekrar Dene") {
+                Task { await viewModel.load(userInterests: appState.currentUser?.interests ?? []) }
+            }
+            .font(.system(size: 14, weight: .semibold))
+            .foregroundStyle(GrippdTheme.Colors.accent)
         }
     }
 
     private var emptyFeedView: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "person.2")
-                .font(.system(size: 52))
-                .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.25))
-            Text("Feed boş")
-                .font(.system(size: 20, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-            Text("Takip ettiğin kişilerin aktiviteleri\nburada görünecek.")
-                .font(.system(size: 14))
-                .foregroundStyle(.white.opacity(0.4))
-                .multilineTextAlignment(.center)
-            NavigationLink(destination: EmptyView()) {
-                Text("Kullanıcı Ara")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(GrippdTheme.Colors.background)
-                    .frame(height: 44)
-                    .padding(.horizontal, 28)
-                    .background(GrippdTheme.Colors.accent, in: Capsule())
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 32) {
+                // Başlık
+                VStack(spacing: 12) {
+                    Image(systemName: "person.2")
+                        .font(.system(size: 48))
+                        .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.25))
+                    Text("Feed boş")
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                    Text("Takip ettiğin kişilerin aktiviteleri\nburada görünecek.")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.white.opacity(0.4))
+                        .multilineTextAlignment(.center)
+                    Button {
+                        appState.selectedTab = .search
+                    } label: {
+                        Text("Kullanıcı Ara")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(GrippdTheme.Colors.background)
+                            .frame(height: 44)
+                            .padding(.horizontal, 28)
+                            .background(GrippdTheme.Colors.accent, in: Capsule())
+                    }
+                }
+                .padding(.top, 40)
+
+                // Öneriler
+                if viewModel.isLoadingSuggestions {
+                    ProgressView().tint(GrippdTheme.Colors.accent)
+                } else if !viewModel.suggestions.isEmpty {
+                    VStack(alignment: .leading, spacing: 24) {
+                        Text("Senin İçin Öneriler")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, GrippdTheme.Spacing.md)
+
+                        ForEach(viewModel.suggestions) { section in
+                            SuggestionSectionRow(section: section) { content in
+                                navigateToSuggestion(content)
+                            }
+                        }
+                    }
+                }
             }
-            .simultaneousGesture(TapGesture().onEnded {
-                appState.selectedTab = .search
-            })
+            .padding(.bottom, GrippdTheme.Spacing.xxl)
         }
-        .padding(.horizontal, 32)
+    }
+
+    private func navigateToSuggestion(_ content: Content) {
+        if let tmdbID = content.tmdbID {
+            switch content.contentType {
+            case .movie:
+                router.feedPath.append(FeedRoute.movieDetail(tmdbID: tmdbID))
+            case .tv_show:
+                router.feedPath.append(FeedRoute.tvShowDetail(tmdbID: tmdbID))
+            case .book:
+                break
+            }
+        } else if let booksID = content.googleBooksID {
+            router.feedPath.append(FeedRoute.bookDetail(googleBooksID: booksID))
+        }
     }
 
     // MARK: - Navigation
@@ -205,6 +256,94 @@ struct FeedView: View {
         case .contentDetail: Text("İçerik Detay").foregroundStyle(.white)
         case .userProfile(let userID): UserProfileView(userID: userID)
         }
+    }
+}
+
+// MARK: - Suggestion Section
+
+private struct SuggestionSectionRow: View {
+    let section: FeedSuggestionService.SuggestionSection
+    let onTap: (Content) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 6) {
+                Text(section.emoji)
+                Text(section.title)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.85))
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(section.items) { content in
+                        Button { onTap(content) } label: {
+                            SuggestionCard(content: content)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, GrippdTheme.Spacing.md)
+            }
+        }
+    }
+}
+
+private struct SuggestionCard: View {
+    let content: Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Color.clear
+                .aspectRatio(2/3, contentMode: .fit)
+                .frame(width: 90)
+                .overlay(
+                    Group {
+                        if let url = content.posterURL {
+                            AsyncImage(url: url) { phase in
+                                switch phase {
+                                case .success(let image):
+                                    image.resizable().aspectRatio(contentMode: .fill)
+                                default:
+                                    posterPlaceholder
+                                }
+                            }
+                        } else {
+                            posterPlaceholder
+                        }
+                    }
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+
+            Text(content.title)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(.white.opacity(0.75))
+                .lineLimit(2)
+                .frame(width: 90, alignment: .leading)
+
+            if let rating = content.averageRating, rating > 0 {
+                HStack(spacing: 3) {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 9))
+                        .foregroundStyle(.yellow.opacity(0.8))
+                    Text(String(format: "%.1f", rating))
+                        .font(.system(size: 10))
+                        .foregroundStyle(.white.opacity(0.4))
+                }
+            }
+        }
+        .frame(width: 90)
+    }
+
+    private var posterPlaceholder: some View {
+        Rectangle()
+            .fill(GrippdTheme.Colors.surface)
+            .overlay(
+                Image(systemName: content.contentType == .book ? "book.closed" : "film")
+                    .font(.system(size: 20))
+                    .foregroundStyle(.white.opacity(0.15))
+            )
     }
 }
 
