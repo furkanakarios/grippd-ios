@@ -102,7 +102,7 @@
 /* Begin PBXFileReference section */
 		03449CA286DD3544FE53B7B2 /* BooksModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksModels.swift; sourceTree = "<group>"; };
 		07C3D51F02E1AE282175FA62 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		555368DF53D7462C8251C5BF /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		555368DF53D7462C8251C5BF /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserProfileView.swift; path = Grippd/Features/Social/UserProfileView.swift; sourceTree = SOURCE_ROOT; };
 		08940053FF164140782E01FB /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		09F4DD0039F13A4706C8805F /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClientService.swift; sourceTree = "<group>"; };
@@ -265,6 +265,7 @@
 				B43AFE4810394D2D81633872 /* Logging */,
 				309B307DE089F37E0245A26A /* Notifications */,
 				E854957021460A291F7125D5 /* Profile */,
+				B77516013D6244F6A9CEDF47 /* Social */,
 				B23FB579AB2E063D908E8486 /* Search */,
 			);
 			path = Features;
@@ -553,12 +554,19 @@
 			isa = PBXGroup;
 			children = (
 				9B6CEA8D04D9ED636549509A /* ProfileView.swift */,
-				555368DF53D7462C8251C5BF /* UserProfileView.swift */,
 				CC8A1B2C3D4E5F6A7B8C9D1E /* CustomListFormSheet.swift */,
 				CC8A1B2C3D4E5F6A7B8C9D2E /* CustomListDetailView.swift */,
 		
 				2507E92A4456453FA66FC8C7 /* WrappedView.swift */,	);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		B77516013D6244F6A9CEDF47 /* Social */ = {
+			isa = PBXGroup;
+			children = (
+				555368DF53D7462C8251C5BF /* UserProfileView.swift */,
+			);
+			path = Social;
 			sourceTree = "<group>";
 		};
 		F2262D7F0BCC789F72E329D3 /* App */ = {
