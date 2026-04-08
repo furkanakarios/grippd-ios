@@ -23,6 +23,9 @@ final class DiscoverViewModel {
     var grippedTrending: [TrendingItem] = []
     var isLoadingGrippedTrending = false
 
+    var trendingUsers: [TrendingUser] = []
+    var isLoadingTrendingUsers = false
+
     // MARK: - Content
 
     var trendingMovies: [TMDBMovie] = []
@@ -77,6 +80,7 @@ final class DiscoverViewModel {
     func refresh() async {
         didLoad = false
         grippedTrending = []
+        trendingUsers = []
         trendingMovies = []
         trendingShows = []
         popularMovies = []
@@ -91,13 +95,20 @@ final class DiscoverViewModel {
 
     private func load() async {
         async let grippd: Void     = loadGrippedTrending()
+        async let users: Void      = loadTrendingUsers()
         async let trending: Void   = loadTrending()
         async let popular: Void    = loadPopular()
         async let nowPlaying: Void = loadNowPlaying()
         async let onTheAir: Void   = loadOnTheAir()
         async let genres: Void     = loadGenres()
         async let books: Void      = loadFeaturedBooks()
-        _ = await (grippd, trending, popular, nowPlaying, onTheAir, genres, books)
+        _ = await (grippd, users, trending, popular, nowPlaying, onTheAir, genres, books)
+    }
+
+    private func loadTrendingUsers() async {
+        isLoadingTrendingUsers = true
+        trendingUsers = await TrendingService.shared.fetchTrendingUsers(limit: 10)
+        isLoadingTrendingUsers = false
     }
 
     private func loadGrippedTrending() async {

@@ -97,9 +97,20 @@ struct DiscoverView: View {
                     }
                 }
 
+                // Trend Kullanıcılar
+                if viewModel.isLoadingTrendingUsers || !viewModel.trendingUsers.isEmpty {
+                    sectionHeader(title: "Aktif Kullanıcılar", icon: "person.2.fill", badge: "Bu Hafta")
+                        .padding(.top, GrippdTheme.Spacing.lg)
+                    if viewModel.isLoadingTrendingUsers {
+                        userCarouselSkeleton
+                    } else {
+                        trendingUsersCarousel(viewModel.trendingUsers)
+                    }
+                }
+
                 // Trend Filmler
                 sectionHeader(title: "Trend Filmler", icon: "flame.fill")
-                    .padding(.top, viewModel.grippedTrending.isEmpty && !viewModel.isLoadingGrippedTrending ? 0 : GrippdTheme.Spacing.lg)
+                    .padding(.top, GrippdTheme.Spacing.lg)
                 if viewModel.isLoadingTrending {
                     skeletonRow()
                 } else {
@@ -431,6 +442,53 @@ struct DiscoverView: View {
         }
     }
 
+    // MARK: - Trending Users Carousel
+
+    private func trendingUsersCarousel(_ users: [TrendingUser]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(users) { user in
+                    Button {
+                        if let id = user.userUUID {
+                            router.discoverPath.append(DiscoverRoute.userProfile(userID: id))
+                        }
+                    } label: {
+                        TrendingUserCard(user: user)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, GrippdTheme.Spacing.sm)
+        }
+    }
+
+    private var userCarouselSkeleton: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(0..<5, id: \.self) { _ in
+                    VStack(spacing: 8) {
+                        Circle()
+                            .fill(GrippdTheme.Colors.surface)
+                            .frame(width: 64, height: 64)
+                            .shimmering()
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(GrippdTheme.Colors.surface)
+                            .frame(width: 60, height: 10)
+                            .shimmering()
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(GrippdTheme.Colors.surface)
+                            .frame(width: 44, height: 8)
+                            .shimmering()
+                    }
+                    .frame(width: 80)
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, GrippdTheme.Spacing.sm)
+        }
+    }
+
     // MARK: - Grippd Trending Carousel
 
     private func grippedTrendingCarousel(_ items: [TrendingItem]) -> some View {
@@ -747,6 +805,57 @@ struct DiscoverPosterCard: View {
                 .lineLimit(2)
                 .frame(width: 110, alignment: .leading)
         }
+    }
+}
+
+// MARK: - Trending User Card
+
+struct TrendingUserCard: View {
+    let user: TrendingUser
+
+    var body: some View {
+        VStack(spacing: 8) {
+            // Avatar
+            ZStack(alignment: .bottomTrailing) {
+                AsyncImage(url: user.avatarURL) { phase in
+                    if case .success(let image) = phase {
+                        image.resizable().scaledToFill()
+                    } else {
+                        Circle()
+                            .fill(GrippdTheme.Colors.accent.opacity(0.12))
+                            .overlay(
+                                Image(systemName: "person.fill")
+                                    .font(.system(size: 24))
+                                    .foregroundStyle(.white.opacity(0.3))
+                            )
+                    }
+                }
+                .frame(width: 64, height: 64)
+                .clipShape(Circle())
+                .overlay(Circle().strokeBorder(.white.opacity(0.08), lineWidth: 1))
+
+                // Log count badge
+                Text("\(user.logCount)")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(GrippdTheme.Colors.background)
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 2)
+                    .background(GrippdTheme.Colors.accent, in: Capsule())
+                    .offset(x: 4, y: 4)
+            }
+
+            // Name
+            Text(user.displayName)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+
+            Text("@\(user.username)")
+                .font(.system(size: 11))
+                .foregroundStyle(.white.opacity(0.4))
+                .lineLimit(1)
+        }
+        .frame(width: 80)
     }
 }
 
