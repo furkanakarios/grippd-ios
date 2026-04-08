@@ -15,6 +15,9 @@
 		A3C2D1E845DE4B78A95C9012 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8A9B021BC4F56B07C3456 /* CommentService.swift */; };
 		C4D3E2F945DE4B78A95C7890 /* CommentsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C421BC4F56B07C5678 /* CommentsSheetView.swift */; };
 		D5E6F7A831BC4F56B07C2345 /* PaywallSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C7D8E921BC4F56B07C6789 /* PaywallSheetView.swift */; };
+		E1F2A3B421BC4F56B07C1111 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A3B4C521BC4F56B07C2222 /* NotificationService.swift */; };
+		A2B3C4D521BC4F56B07C3333 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C4D5E621BC4F56B07C4444 /* NotificationsView.swift */; };
+		C5D6E7F821BC4F56B07C5555 /* LogCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E7F8A921BC4F56B07C6666 /* LogCommentsView.swift */; };
 		A14E028B76CF4696A5D2AF17 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAE6A0041674DB183E8A153 /* FeedService.swift */; };
 		C3A1F2B845DE4B78A95C1234 /* FeedSuggestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D3E4A921BC4F56B07C9E12 /* FeedSuggestionService.swift */; };
 		D42AD4B1BAEC43EFAA3E0FE3 /* LogSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */; };
@@ -135,6 +138,9 @@
 		F1A2B3C421BC4F56B07C5678 /* CommentsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CommentsSheetView.swift; path = Grippd/Features/Feed/CommentsSheetView.swift; sourceTree = SOURCE_ROOT; };
 		B6C7D8E921BC4F56B07C6789 /* PaywallSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PaywallSheetView.swift; path = Grippd/Features/Paywall/PaywallSheetView.swift; sourceTree = SOURCE_ROOT; };
 		A9B0C1D221BC4F56B07C9012 /* Paywall */ = {isa = PBXGroup; children = (B6C7D8E921BC4F56B07C6789 /* PaywallSheetView.swift */,); path = Paywall; sourceTree = "<group>"; };
+		F2A3B4C521BC4F56B07C2222 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationService.swift; path = Grippd/Data/Supabase/NotificationService.swift; sourceTree = SOURCE_ROOT; };
+		B3C4D5E621BC4F56B07C4444 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationsView.swift; path = Grippd/Features/Notifications/NotificationsView.swift; sourceTree = SOURCE_ROOT; };
+		D6E7F8A921BC4F56B07C6666 /* LogCommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogCommentsView.swift; path = Grippd/Features/Notifications/LogCommentsView.swift; sourceTree = SOURCE_ROOT; };
 		6CAE6A0041674DB183E8A153 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedService.swift; path = Grippd/Data/Supabase/FeedService.swift; sourceTree = SOURCE_ROOT; };
 		80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogSyncService.swift; path = Grippd/Data/Supabase/LogSyncService.swift; sourceTree = SOURCE_ROOT; };
 		EA650D47349D4E40A296B666 /* CommunityStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStatsView.swift; sourceTree = "<group>"; };
@@ -252,6 +258,8 @@
 		309B307DE089F37E0245A26A /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
+				B3C4D5E621BC4F56B07C4444 /* NotificationsView.swift */,
+				D6E7F8A921BC4F56B07C6666 /* LogCommentsView.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -322,6 +330,7 @@
 				311AA89A13DE4B05AD656B05 /* FollowService.swift */,
 				D9E4F5A831BC4F56B07C1234 /* LikeService.swift */,
 				E7F8A9B021BC4F56B07C3456 /* CommentService.swift */,
+				F2A3B4C521BC4F56B07C2222 /* NotificationService.swift */,
 				6CAE6A0041674DB183E8A153 /* FeedService.swift */,
 				80C60D6BBF6C4C89AB2620D2 /* LogSyncService.swift */,
 			);
@@ -750,6 +759,9 @@
 				A3C2D1E845DE4B78A95C9012 /* CommentService.swift in Sources */,
 				C4D3E2F945DE4B78A95C7890 /* CommentsSheetView.swift in Sources */,
 				D5E6F7A831BC4F56B07C2345 /* PaywallSheetView.swift in Sources */,
+				E1F2A3B421BC4F56B07C1111 /* NotificationService.swift in Sources */,
+				A2B3C4D521BC4F56B07C3333 /* NotificationsView.swift in Sources */,
+				C5D6E7F821BC4F56B07C5555 /* LogCommentsView.swift in Sources */,
 				A14E028B76CF4696A5D2AF17 /* FeedService.swift in Sources */,
 				C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */,
 				9C42B2865B070B827521A67A /* AppRouter.swift in Sources */,

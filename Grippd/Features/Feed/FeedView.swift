@@ -54,16 +54,10 @@ private final class FeedViewModel {
         // Optimistic update
         activities[idx].isLiked = !wasLiked
         activities[idx].likeCount += wasLiked ? -1 : 1
-        do {
-            if wasLiked {
-                try await LikeService.shared.unlike(logID: activityID)
-            } else {
-                try await LikeService.shared.like(logID: activityID)
-            }
-        } catch {
-            // Revert on failure
-            activities[idx].isLiked = wasLiked
-            activities[idx].likeCount += wasLiked ? 1 : -1
+        if wasLiked {
+            await LikeService.shared.unlike(logID: activityID)
+        } else {
+            await LikeService.shared.like(logID: activityID)
         }
     }
 

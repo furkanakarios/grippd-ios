@@ -14,11 +14,14 @@ final class AuthViewModel {
     // Called by AppState on launch to restore session
     func restoreSession(appState: AppState) async {
         guard let user = try? await authService.restoreSession() else { return }
-        let needsOnboarding = (try? await OnboardingService.shared.needsOnboarding(userID: user.id)) ?? false
+        async let needsOnboarding = OnboardingService.shared.needsOnboarding(userID: user.id)
+        async let unreadCount = NotificationService.shared.unreadCount()
+        let (onboarding, count) = await ((try? needsOnboarding) ?? false, unreadCount)
         await MainActor.run {
             appState.currentUser = user
-            appState.needsOnboarding = needsOnboarding
+            appState.needsOnboarding = onboarding
             appState.isAuthenticated = true
+            appState.unreadNotificationCount = count
             LogService.shared.setOwner(user.id.uuidString)
         }
     }
@@ -46,11 +49,14 @@ final class AuthViewModel {
 
             do {
                 let user = try await authService.signInWithApple(idToken: idToken, nonce: nonce)
-                let needsOnboarding = (try? await OnboardingService.shared.needsOnboarding(userID: user.id)) ?? false
+                async let needsOnboarding = OnboardingService.shared.needsOnboarding(userID: user.id)
+                async let unreadCount = NotificationService.shared.unreadCount()
+                let (onboarding, count) = await ((try? needsOnboarding) ?? false, unreadCount)
                 await MainActor.run {
                     appState.currentUser = user
-                    appState.needsOnboarding = needsOnboarding
+                    appState.needsOnboarding = onboarding
                     appState.isAuthenticated = true
+                    appState.unreadNotificationCount = count
                     isLoading = false
                     LogService.shared.setOwner(user.id.uuidString)
                 }
