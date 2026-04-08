@@ -52,6 +52,7 @@ enum ProfileRoute: Hashable {
     case bookDetail(googleBooksID: String)
     case personDetail(tmdbID: Int)
     case customList(listID: String)
+    case logComments(logID: UUID)
 }
 
 // MARK: - Router

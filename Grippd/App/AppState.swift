@@ -8,6 +8,7 @@ final class AppState {
     var needsOnboarding: Bool = false
     var selectedTab: AppTab = .feed
     var pendingDeepLink: DeepLink?
+    var unreadNotificationCount: Int = 0
 
     enum AppTab {
         case feed, search, discover, profile

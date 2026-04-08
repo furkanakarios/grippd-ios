@@ -61,11 +61,14 @@ final class EmailAuthViewModel {
         do {
             let session = try await client.auth.signIn(email: email, password: password)
             let user = try await fetchProfile(id: session.user.id)
-            let needsOnboarding = (try? await OnboardingService.shared.needsOnboarding(userID: user.id)) ?? false
+            async let needsOnboarding = OnboardingService.shared.needsOnboarding(userID: user.id)
+            async let unreadCount = NotificationService.shared.unreadCount()
+            let (onboarding, count) = await ((try? needsOnboarding) ?? false, unreadCount)
             await MainActor.run {
                 appState.currentUser = user
-                appState.needsOnboarding = needsOnboarding
+                appState.needsOnboarding = onboarding
                 appState.isAuthenticated = true
+                appState.unreadNotificationCount = count
                 isLoading = false
                 LogService.shared.setOwner(user.id.uuidString)
             }

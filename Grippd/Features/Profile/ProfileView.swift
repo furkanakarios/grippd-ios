@@ -6,6 +6,7 @@ struct ProfileView: View {
     @State private var authVM = AuthViewModel()
     @State private var showSignOutConfirm = false
     @State private var showWrapped = false
+    @State private var showNotifications = false
     @State private var selectedTab: ProfileTab = .logs
     @State private var followerCount: Int = 0
     @State private var followingCount: Int = 0
@@ -51,17 +52,45 @@ struct ProfileView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        router.profilePath.append(ProfileRoute.settings)
-                    } label: {
-                        Image(systemName: "gearshape")
-                            .foregroundStyle(.white.opacity(0.7))
+                    HStack(spacing: 16) {
+                        // Bildirim zili
+                        Button {
+                            showNotifications = true
+                        } label: {
+                            ZStack(alignment: .topTrailing) {
+                                Image(systemName: "bell")
+                                    .foregroundStyle(.white.opacity(0.7))
+                                if appState.unreadNotificationCount > 0 {
+                                    Circle()
+                                        .fill(.red)
+                                        .frame(width: 8, height: 8)
+                                        .offset(x: 4, y: -4)
+                                }
+                            }
+                        }
+                        // Ayarlar
+                        Button {
+                            router.profilePath.append(ProfileRoute.settings)
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .foregroundStyle(.white.opacity(0.7))
+                        }
                     }
                 }
             }
             .fullScreenCover(isPresented: $showWrapped) {
                 if let wrapped = LogService.shared.wrappedStats() {
                     WrappedView(stats: wrapped, isPresented: $showWrapped)
+                }
+            }
+            .sheet(isPresented: $showNotifications) {
+                NotificationsView(onNavigate: { route in
+                    router.profilePath.append(route)
+                })
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+                .onDisappear {
+                    appState.unreadNotificationCount = 0
                 }
             }
             .navigationDestination(for: ProfileRoute.self) { route in
@@ -141,12 +170,16 @@ struct ProfileView: View {
             .padding(.vertical, 16)
             .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
             .padding(.top, 8)
-            .task {
-                guard let id = appState.currentUser?.id else { return }
-                if let data = try? await SocialService.shared.fetchProfile(userID: id) {
+            .task(id: appState.selectedTab) {
+                guard appState.selectedTab == .profile,
+                      let id = appState.currentUser?.id else { return }
+                async let profileData = SocialService.shared.fetchProfile(userID: id)
+                async let count = NotificationService.shared.unreadCount()
+                if let data = try? await profileData {
                     followerCount = data.followerCount
                     followingCount = data.followingCount
                 }
+                appState.unreadNotificationCount = await count
             }
         }
         .padding(.horizontal, GrippdTheme.Spacing.lg)
@@ -239,6 +272,8 @@ struct ProfileView: View {
             if let list = CustomListService.shared.allLists().first(where: { $0.id == listID }) {
                 CustomListDetailView(list: list)
             }
+        case .logComments(let logID):
+            LogCommentsView(logID: logID)
         }
     }
 }

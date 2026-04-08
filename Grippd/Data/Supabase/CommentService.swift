@@ -185,36 +185,35 @@ final class CommentService {
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         let startString = formatter.string(from: startOfMonth)
 
-        struct CountRow: Decodable { let count: Int }
+        struct CountRow: Decodable { let id: String }
         let rows: [CountRow] = (try? await client
             .from("comments")
-            .select("count:id.count()")
+            .select("id")
             .eq("user_id", value: myID.uuidString)
             .gte("created_at", value: startString)
             .execute()
             .value) ?? []
 
-        return rows.first?.count ?? 0
+        return rows.count
     }
 
     // MARK: - Comment Count (batch, feed için)
 
     func fetchCommentCounts(logIDs: [UUID]) async -> [UUID: Int] {
         guard !logIDs.isEmpty else { return [:] }
-        struct Row: Decodable {
-            let log_id: String
-            let count: Int
-        }
+        struct Row: Decodable { let log_id: String }
         let rows: [Row] = (try? await client
             .from("comments")
-            .select("log_id, count:id.count()")
+            .select("log_id")
             .in("log_id", values: logIDs.map { $0.uuidString })
             .execute()
             .value) ?? []
 
         var result: [UUID: Int] = [:]
         for row in rows {
-            if let id = UUID(uuidString: row.log_id) { result[id] = row.count }
+            if let id = UUID(uuidString: row.log_id) {
+                result[id, default: 0] += 1
+            }
         }
         return result
     }
@@ -224,11 +223,17 @@ final class CommentService {
     func likeComment(commentID: UUID) async throws {
         guard let myID = try? await client.auth.session.user.id else { return }
         struct Payload: Encodable { let user_id: String; let comment_id: String }
-        try await client
-            .from("comment_likes")
-            .upsert(Payload(user_id: myID.uuidString, comment_id: commentID.uuidString),
-                    onConflict: "user_id,comment_id")
-            .execute()
+        do {
+            try await client
+                .from("comment_likes")
+                .insert(Payload(user_id: myID.uuidString, comment_id: commentID.uuidString))
+                .execute()
+        } catch {
+            let msg = error.localizedDescription.lowercased()
+            guard msg.contains("23505") || msg.contains("duplicate") || msg.contains("unique") else {
+                throw error
+            }
+        }
     }
 
     func unlikeComment(commentID: UUID) async throws {
