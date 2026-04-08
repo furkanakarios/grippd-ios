@@ -86,6 +86,7 @@
 		DEDEE8BE2C747DC52F43C09C /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260B3CDE2227DB3566791581 /* StarRatingView.swift */; };
 		E0143E850210E440D62D37EB /* GoogleBooksClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */; };
 		E4A2AD4006928763D27846B2 /* GrippdComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2D418182291CD3ED6B16F /* GrippdComponents.swift */; };
+		E7DB6C37E249BE05C40526D4 /* TrendingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6ED2BF31A5FD3A067A8394 /* TrendingService.swift */; };
 		E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 57B8F951E1296882A2860113 /* Supabase */; };
 		E9F116064D6A081F52F0BFE6 /* LocalCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */; };
 		EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */; };
@@ -136,6 +137,7 @@
 		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		344DCE7D1A69AD1E653EAFA4 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		3B216F04C46ADC79E57A7119 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3B6ED2BF31A5FD3A067A8394 /* TrendingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingService.swift; sourceTree = "<group>"; };
 		3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformAvailabilityView.swift; sourceTree = "<group>"; };
 		3FB51BD89D752BBE1288E9CC /* AddCustomContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomContentView.swift; sourceTree = "<group>"; };
 		3FF21B1AD09C228B8FD1D3C5 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
@@ -327,6 +329,7 @@
 				B348645889240B57745ED216 /* OnboardingService.swift */,
 				E896A0A7D86B89FC9DA417F4 /* SocialService.swift */,
 				0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */,
+				3B6ED2BF31A5FD3A067A8394 /* TrendingService.swift */,
 			);
 			path = Supabase;
 			sourceTree = "<group>";
@@ -839,6 +842,7 @@
 				11F3A1E0403C5317DCDA1AA4 /* TMDBModels.swift in Sources */,
 				BAEE70C4E7A12644BE0BB456 /* TVShowDetailView.swift in Sources */,
 				F410313188D2095981C7A154 /* TVShowDetailViewModel.swift in Sources */,
+				E7DB6C37E249BE05C40526D4 /* TrendingService.swift in Sources */,
 				1E497CC5BB09798EA83402F2 /* User.swift in Sources */,
 				132FDEF360F2544D6B795EEC /* UserContentService.swift in Sources */,
 				75A48A889966C58D0BB08244 /* UserProfileView.swift in Sources */,
