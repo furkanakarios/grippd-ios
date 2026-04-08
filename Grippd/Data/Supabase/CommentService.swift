@@ -170,6 +170,33 @@ final class CommentService {
             .execute()
     }
 
+    // MARK: - Monthly Limit
+
+    static let freeMonthlyLimit = 20
+
+    /// Kullanıcının bu ay yaptığı yorum sayısını döner.
+    func monthlyCommentCount() async -> Int {
+        guard let myID = try? await client.auth.session.user.id else { return 0 }
+        let calendar = Calendar.current
+        let now = Date()
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) else { return 0 }
+
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let startString = formatter.string(from: startOfMonth)
+
+        struct CountRow: Decodable { let count: Int }
+        let rows: [CountRow] = (try? await client
+            .from("comments")
+            .select("count:id.count()")
+            .eq("user_id", value: myID.uuidString)
+            .gte("created_at", value: startString)
+            .execute()
+            .value) ?? []
+
+        return rows.first?.count ?? 0
+    }
+
     // MARK: - Comment Count (batch, feed için)
 
     func fetchCommentCounts(logIDs: [UUID]) async -> [UUID: Int] {

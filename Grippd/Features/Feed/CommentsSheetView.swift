@@ -10,20 +10,32 @@ private final class CommentsViewModel {
     var draftText = ""
     var error: String?
 
-    func load(logID: UUID) async {
+    // Limit tracking
+    var monthlyCount: Int = 0
+    var isPremium: Bool = false
+    var isLimitReached: Bool { !isPremium && monthlyCount >= CommentService.freeMonthlyLimit }
+    var remainingComments: Int { max(0, CommentService.freeMonthlyLimit - monthlyCount) }
+
+    func load(logID: UUID, isPremium: Bool) async {
+        self.isPremium = isPremium
         isLoading = true
-        comments = (try? await CommentService.shared.fetchComments(logID: logID)) ?? []
+        async let fetchedComments = CommentService.shared.fetchComments(logID: logID)
+        async let fetchedCount = CommentService.shared.monthlyCommentCount()
+        let (c, count) = await (try? fetchedComments, fetchedCount)
+        comments = c ?? []
+        monthlyCount = count
         isLoading = false
     }
 
     func send(logID: UUID) async {
         let trimmed = draftText.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty, !isSending else { return }
+        guard !trimmed.isEmpty, !isSending, !isLimitReached else { return }
         isSending = true
         draftText = ""
         do {
             let comment = try await CommentService.shared.addComment(logID: logID, body: trimmed)
             comments.append(comment)
+            monthlyCount += 1
         } catch {
             self.error = error.localizedDescription
             draftText = trimmed // restore on failure
@@ -60,9 +72,11 @@ private final class CommentsViewModel {
 struct CommentsSheetView: View {
     let logID: UUID
     let contentTitle: String
+    let isPremium: Bool
     @Binding var commentCount: Int
 
     @State private var viewModel = CommentsViewModel()
+    @State private var showPaywall = false
     @FocusState private var isInputFocused: Bool
 
     var body: some View {
@@ -72,7 +86,11 @@ struct CommentsSheetView: View {
                 VStack(spacing: 0) {
                     commentsList
                     Divider().background(.white.opacity(0.08))
-                    inputBar
+                    if viewModel.isLimitReached {
+                        lockedInputBar
+                    } else {
+                        inputBar
+                    }
                 }
             }
             .navigationTitle("Yorumlar")
@@ -80,9 +98,12 @@ struct CommentsSheetView: View {
             .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
         }
-        .task { await viewModel.load(logID: logID) }
+        .task { await viewModel.load(logID: logID, isPremium: isPremium) }
         .onChange(of: viewModel.comments.count) { _, newCount in
             commentCount = newCount
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallSheetView()
         }
     }
 
@@ -129,37 +150,81 @@ struct CommentsSheetView: View {
     // MARK: - Input Bar
 
     private var inputBar: some View {
-        HStack(spacing: 10) {
-            TextField("Yorum yaz...", text: $viewModel.draftText, axis: .vertical)
-                .lineLimit(1...4)
-                .font(.system(size: 15))
-                .foregroundStyle(.white)
-                .focused($isInputFocused)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(GrippdTheme.Colors.surface, in: RoundedRectangle(cornerRadius: 20))
+        VStack(spacing: 0) {
+            // Kalan hak göstergesi (son 5'te uyar)
+            if !isPremium && viewModel.remainingComments <= 5 {
+                Text("\(viewModel.remainingComments) yorum hakkın kaldı")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.orange.opacity(0.8))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 6)
+            }
 
-            if viewModel.isSending {
-                ProgressView()
-                    .tint(GrippdTheme.Colors.accent)
-                    .frame(width: 36, height: 36)
-            } else {
-                Button {
-                    Task { await viewModel.send(logID: logID) }
-                } label: {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .font(.system(size: 32))
-                        .foregroundStyle(
-                            viewModel.draftText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                            ? .white.opacity(0.2)
-                            : GrippdTheme.Colors.accent
-                        )
+            HStack(spacing: 10) {
+                TextField("Yorum yaz...", text: $viewModel.draftText, axis: .vertical)
+                    .lineLimit(1...4)
+                    .font(.system(size: 15))
+                    .foregroundStyle(.white)
+                    .focused($isInputFocused)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(GrippdTheme.Colors.surface, in: RoundedRectangle(cornerRadius: 20))
+
+                if viewModel.isSending {
+                    ProgressView()
+                        .tint(GrippdTheme.Colors.accent)
+                        .frame(width: 36, height: 36)
+                } else {
+                    Button {
+                        Task { await viewModel.send(logID: logID) }
+                    } label: {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .font(.system(size: 32))
+                            .foregroundStyle(
+                                viewModel.draftText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                ? .white.opacity(0.2)
+                                : GrippdTheme.Colors.accent
+                            )
+                    }
+                    .disabled(viewModel.draftText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
-                .disabled(viewModel.draftText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, 10)
+            .padding(.bottom, 4)
+        }
+    }
+
+    // MARK: - Locked Input Bar (limit doldu)
+
+    private var lockedInputBar: some View {
+        VStack(spacing: 10) {
+            HStack(spacing: 8) {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 13))
+                    .foregroundStyle(.orange)
+                Text("Bu ayki yorum hakkını (20) kullandın")
+                    .font(.system(size: 13))
+                    .foregroundStyle(.white.opacity(0.6))
+            }
+
+            Button {
+                showPaywall = true
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "crown.fill")
+                        .font(.system(size: 13))
+                    Text("Premium'a Geç — Sınırsız Yorum")
+                        .font(.system(size: 14, weight: .semibold))
+                }
+                .foregroundStyle(GrippdTheme.Colors.background)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background(GrippdTheme.Colors.accent, in: RoundedRectangle(cornerRadius: 12))
+                .padding(.horizontal, GrippdTheme.Spacing.md)
             }
         }
-        .padding(.horizontal, GrippdTheme.Spacing.md)
-        .padding(.vertical, 10)
+        .padding(.vertical, 12)
         .padding(.bottom, 4)
     }
 }
