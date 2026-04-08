@@ -38,6 +38,13 @@ final class DiscoverViewModel {
     var tvGenres: [TMDBGenre] = []
     var featuredBooks: [GoogleBook] = []
 
+    // MARK: - Personalized Recommendations
+
+    var recommendedMovies: [TMDBMovie] = []
+    var recommendedShows: [TMDBTVShow] = []
+    var isLoadingRecommendations = false
+    var hasRecommendations: Bool { !recommendedMovies.isEmpty || !recommendedShows.isEmpty }
+
     // MARK: - Loading
 
     var isLoadingTrending = false
@@ -90,6 +97,8 @@ final class DiscoverViewModel {
         movieGenres = []
         tvGenres = []
         featuredBooks = []
+        recommendedMovies = []
+        recommendedShows = []
         await load()
     }
 
@@ -102,7 +111,8 @@ final class DiscoverViewModel {
         async let onTheAir: Void   = loadOnTheAir()
         async let genres: Void     = loadGenres()
         async let books: Void      = loadFeaturedBooks()
-        _ = await (grippd, users, trending, popular, nowPlaying, onTheAir, genres, books)
+        async let recs: Void       = loadRecommendations()
+        _ = await (grippd, users, trending, popular, nowPlaying, onTheAir, genres, books, recs)
     }
 
     private func loadTrendingUsers() async {
@@ -169,6 +179,82 @@ final class DiscoverViewModel {
             onTheAirShows = Array(response.results.prefix(10))
         } catch {}
         isLoadingOnTheAir = false
+    }
+
+    @MainActor
+    private func loadRecommendations() async {
+        isLoadingRecommendations = true
+        defer { isLoadingRecommendations = false }
+
+        // Son 90 günde izlenen film ve dizi loglarını al (max 5 adet)
+        let allLogs = LogService.shared.allLogs()
+        let cutoff = Date().addingTimeInterval(-90 * 24 * 3600)
+        let recentLogs = allLogs
+            .filter { $0.watchedAt >= cutoff }
+            .prefix(5)
+
+        var movieIDs: [Int] = []
+        var showIDs: [Int] = []
+
+        for log in recentLogs {
+            // contentKey format: "movie-12345" veya "tv_show-67890"
+            let parts = log.contentKey.split(separator: "-", maxSplits: 1)
+            guard parts.count == 2, let tmdbID = Int(parts[1]) else { continue }
+            if log.contentKey.hasPrefix("movie") {
+                movieIDs.append(tmdbID)
+            } else if log.contentKey.hasPrefix("tv") {
+                showIDs.append(tmdbID)
+            }
+        }
+
+        // Her kaynak için similar içerik çek, sonuçları birleştir
+        var movies: [TMDBMovie] = []
+        var shows: [TMDBTVShow] = []
+        let loggedKeys = Set(allLogs.map { $0.contentKey })
+
+        await withTaskGroup(of: [TMDBMovie].self) { group in
+            for id in movieIDs.prefix(3) {
+                group.addTask {
+                    (try? await TMDBClient.shared.similarMovies(id: id))?.results ?? []
+                }
+            }
+            for await result in group { movies.append(contentsOf: result) }
+        }
+
+        await withTaskGroup(of: [TMDBTVShow].self) { group in
+            for id in showIDs.prefix(3) {
+                group.addTask {
+                    (try? await TMDBClient.shared.similarTVShows(id: id))?.results ?? []
+                }
+            }
+            for await result in group { shows.append(contentsOf: result) }
+        }
+
+        // Tekrarları kaldır, zaten izlenenleri filtrele
+        var seenMovieIDs = Set(movieIDs)
+        var seenShowIDs = Set(showIDs)
+
+        let filteredMovies = movies.filter { movie in
+            let key = "movie-\(movie.id)"
+            guard !loggedKeys.contains(key), !seenMovieIDs.contains(movie.id) else { return false }
+            seenMovieIDs.insert(movie.id)
+            return true
+        }
+
+        let filteredShows = shows.filter { show in
+            let key = "tv_show-\(show.id)"
+            guard !loggedKeys.contains(key), !seenShowIDs.contains(show.id) else { return false }
+            seenShowIDs.insert(show.id)
+            return true
+        }
+
+        // Popülerliğe göre sırala
+        recommendedMovies = Array(
+            filteredMovies.sorted { $0.popularity > $1.popularity }.prefix(12)
+        )
+        recommendedShows = Array(
+            filteredShows.sorted { $0.popularity > $1.popularity }.prefix(12)
+        )
     }
 
     private func loadFeaturedBooks() async {
