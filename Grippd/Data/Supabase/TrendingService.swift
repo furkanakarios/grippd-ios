@@ -35,6 +35,28 @@ struct TrendingItem: Decodable, Identifiable {
     }
 }
 
+// MARK: - Trending User
+
+struct TrendingUser: Decodable, Identifiable {
+    let userId: String
+    let username: String
+    let displayName: String
+    let avatarUrl: String?
+    let logCount: Int
+
+    enum CodingKeys: String, CodingKey {
+        case userId      = "user_id"
+        case username
+        case displayName = "display_name"
+        case avatarUrl   = "avatar_url"
+        case logCount    = "log_count"
+    }
+
+    var id: String { userId }
+    var avatarURL: URL? { avatarUrl.flatMap { URL(string: $0) } }
+    var userUUID: UUID? { UUID(uuidString: userId) }
+}
+
 // MARK: - Service
 
 @MainActor
@@ -51,6 +73,19 @@ final class TrendingService {
                 .execute()
                 .value
             return items
+        } catch {
+            return []
+        }
+    }
+
+    /// Son 7 günde en aktif kullanıcılar (log sayısına göre)
+    func fetchTrendingUsers(limit: Int = 10) async -> [TrendingUser] {
+        do {
+            let users: [TrendingUser] = try await client
+                .rpc("get_trending_users", params: ["limit_count": limit])
+                .execute()
+                .value
+            return users
         } catch {
             return []
         }
