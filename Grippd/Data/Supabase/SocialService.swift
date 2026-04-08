@@ -131,6 +131,17 @@ final class SocialService {
 
         return rows.compactMap { $0.following?.toDomain() }
     }
+
+    // MARK: - Profile Update
+
+    func updatePrivacy(isPrivate: Bool) async throws {
+        guard let userID = client.auth.currentUser?.id else { return }
+        try await client
+            .from("users")
+            .update(["is_private": isPrivate])
+            .eq("id", value: userID.uuidString)
+            .execute()
+    }
 }
 
 // MARK: - Errors
