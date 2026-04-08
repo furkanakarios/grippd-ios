@@ -134,6 +134,17 @@ struct FeedView: View {
                         Task { await viewModel.toggleLike(activityID: activity.id) }
                     } onComment: {
                         selectedActivityForComments = activity
+                    } onShare: {
+                        Task {
+                            await ShareService.shared.present(item: ShareItem(
+                                contentTitle: activity.contentTitle,
+                                posterURL: activity.posterURL,
+                                rating: activity.rating,
+                                emoji: activity.emoji,
+                                username: activity.user.displayName,
+                                isOwnLog: false
+                            ))
+                        }
                     }
                     Divider()
                         .background(.white.opacity(0.06))
@@ -394,6 +405,7 @@ struct FeedActivityCard: View {
     let onUserTap: () -> Void
     let onLike: () -> Void
     let onComment: () -> Void
+    var onShare: (() -> Void)? = nil
 
     private var typeIcon: String {
         switch activity.contentType {
@@ -536,6 +548,16 @@ struct FeedActivityCard: View {
                                 }
                             }
                             .buttonStyle(.plain)
+
+                            // Paylaş butonu
+                            if let onShare {
+                                Button(action: onShare) {
+                                    Image(systemName: "square.and.arrow.up")
+                                        .font(.system(size: 14))
+                                        .foregroundStyle(.white.opacity(0.35))
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
                         .padding(.top, 4)
                     }

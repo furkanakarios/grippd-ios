@@ -549,6 +549,7 @@ private struct WatchlistTabView: View {
 private struct LogRowCell: View {
     let log: LogEntry
     let onTap: () -> Void
+    @Environment(AppState.self) private var appState
 
     private var typeIcon: String {
         switch log.contentType {
@@ -597,9 +598,29 @@ private struct LogRowCell: View {
 
                 Spacer()
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.2))
+                HStack(spacing: 12) {
+                    Button {
+                        Task {
+                            await ShareService.shared.present(item: ShareItem(
+                                contentTitle: log.contentTitle,
+                                posterURL: log.posterURL,
+                                rating: log.rating,
+                                emoji: log.emoji,
+                                username: appState.currentUser?.displayName ?? "",
+                                isOwnLog: true
+                            ))
+                        }
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                    .buttonStyle(.plain)
+
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.2))
+                }
             }
             .padding(.horizontal, GrippdTheme.Spacing.md)
             .padding(.vertical, 10)
