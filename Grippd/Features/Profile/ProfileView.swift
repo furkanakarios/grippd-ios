@@ -607,7 +607,8 @@ private struct LogRowCell: View {
                                 rating: log.rating,
                                 emoji: log.emoji,
                                 username: appState.currentUser?.displayName ?? "",
-                                isOwnLog: true
+                                isOwnLog: true,
+                                contentType: log.contentType
                             ))
                         }
                     } label: {

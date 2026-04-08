@@ -142,7 +142,8 @@ struct FeedView: View {
                                 rating: activity.rating,
                                 emoji: activity.emoji,
                                 username: activity.user.displayName,
-                                isOwnLog: false
+                                isOwnLog: false,
+                                contentType: activity.contentType
                             ))
                         }
                     }

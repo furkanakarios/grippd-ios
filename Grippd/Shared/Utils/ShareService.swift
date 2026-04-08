@@ -10,6 +10,7 @@ struct ShareItem {
     let emoji: String?
     let username: String
     let isOwnLog: Bool
+    let contentType: Content.ContentType
 }
 
 // MARK: - Share Service
@@ -61,7 +62,7 @@ final class ShareService {
     private func renderCard(item: ShareItem, posterImage: UIImage?) -> UIImage? {
         let view = ShareCardView(item: item, posterImage: posterImage)
         let renderer = ImageRenderer(content: view)
-        renderer.scale = UIScreen.main.scale
+        renderer.scale = 3.0
         return renderer.uiImage
     }
 
@@ -140,99 +141,226 @@ private struct ShareCardView: View {
     let item: ShareItem
     let posterImage: UIImage?
 
+    private let W: CGFloat = 320
+    private let H: CGFloat = 520
+    private let accent = Color(red: 0.47, green: 0.82, blue: 0.64)
+
     var body: some View {
+        ZStack(alignment: .bottom) {
+            backgroundLayer
+            gradientOverlay
+            contentLayer
+            borderOverlay
+        }
+        .frame(width: W, height: H)
+        .clipShape(RoundedRectangle(cornerRadius: 26))
+    }
+
+    // MARK: - Layers
+
+    private var backgroundLayer: some View {
         ZStack {
-            // Blurred poster background
+            Color(red: 0.05, green: 0.05, blue: 0.10)
             if let poster = posterImage {
                 Image(uiImage: poster)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 300, height: 450)
-                    .blur(radius: 24)
-                    .overlay(Color.black.opacity(0.65))
-            } else {
-                LinearGradient(
-                    colors: [Color(red: 0.08, green: 0.08, blue: 0.14), Color(red: 0.04, green: 0.04, blue: 0.08)],
-                    startPoint: .top, endPoint: .bottom
-                )
+                    .frame(width: W, height: H)
+                    .blur(radius: 30)
+                    .opacity(0.55)
             }
+        }
+        .frame(width: W, height: H)
+    }
 
+    private var gradientOverlay: some View {
+        LinearGradient(
+            stops: [
+                .init(color: .black.opacity(0.15), location: 0),
+                .init(color: .black.opacity(0.10), location: 0.35),
+                .init(color: .black.opacity(0.55), location: 0.60),
+                .init(color: .black.opacity(0.92), location: 1.0),
+            ],
+            startPoint: .top, endPoint: .bottom
+        )
+        .frame(width: W, height: H)
+    }
+
+    private var contentLayer: some View {
+        VStack(spacing: 0) {
+            // Top bar
+            HStack {
+                Text("GRIPPD")
+                    .font(.system(size: 11, weight: .black, design: .rounded))
+                    .tracking(2.5)
+                    .foregroundStyle(accent)
+                Spacer()
+                contentTypeBadge
+            }
+            .padding(.horizontal, 22)
+            .padding(.top, 22)
+
+            Spacer()
+
+            // Poster (centered, floating)
+            posterView
+                .padding(.bottom, 22)
+
+            // Info panel
             VStack(spacing: 0) {
-                // Poster
-                Group {
-                    if let poster = posterImage {
-                        Image(uiImage: poster)
-                            .resizable()
-                            .aspectRatio(2/3, contentMode: .fit)
-                    } else {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.white.opacity(0.06))
-                            .aspectRatio(2/3, contentMode: .fit)
-                            .overlay(
-                                Image(systemName: "film")
-                                    .font(.system(size: 32))
-                                    .foregroundStyle(.white.opacity(0.2))
-                            )
-                    }
-                }
-                .frame(width: 160)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .shadow(color: .black.opacity(0.5), radius: 16, y: 8)
-
-                Spacer().frame(height: 18)
-
                 // Title
                 Text(item.contentTitle)
-                    .font(.system(size: 17, weight: .bold, design: .rounded))
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
+                    .minimumScaleFactor(0.8)
                     .padding(.horizontal, 24)
 
-                Spacer().frame(height: 10)
+                Spacer().frame(height: 12)
 
-                // Rating + emoji
-                HStack(spacing: 10) {
-                    if let rating = item.rating, rating > 0 {
-                        HStack(spacing: 4) {
-                            Image(systemName: "star.fill")
-                                .font(.system(size: 12))
-                                .foregroundStyle(.yellow)
-                            Text(String(format: "%.1f", rating))
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(.white)
-                        }
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(.white.opacity(0.1), in: Capsule())
-                    }
-                    if let emoji = item.emoji {
-                        Text(emoji).font(.system(size: 22))
-                    }
-                }
+                // Rating row
+                ratingRow
 
-                Spacer()
+                Spacer().frame(height: 18)
+
+                // Divider
+                Rectangle()
+                    .fill(.white.opacity(0.08))
+                    .frame(height: 1)
+                    .padding(.horizontal, 22)
+
+                Spacer().frame(height: 14)
 
                 // Footer
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(item.isOwnLog ? "izledim" : "\(item.username) izledi")
-                            .font(.system(size: 12))
-                            .foregroundStyle(.white.opacity(0.55))
-                        Text("Grippd")
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
-                            .foregroundStyle(Color(red: 0.47, green: 0.82, blue: 0.64))
-                    }
-                    Spacer()
-                    Image(systemName: "film.stack")
-                        .font(.system(size: 22))
-                        .foregroundStyle(Color(red: 0.47, green: 0.82, blue: 0.64).opacity(0.6))
-                }
-                .padding(.horizontal, 24)
+                footerRow
+                    .padding(.horizontal, 22)
             }
-            .padding(.vertical, 28)
+            .padding(.bottom, 24)
         }
-        .frame(width: 300, height: 450)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+    }
+
+    private var borderOverlay: some View {
+        RoundedRectangle(cornerRadius: 26)
+            .strokeBorder(
+                LinearGradient(
+                    colors: [accent.opacity(0.45), .white.opacity(0.04), accent.opacity(0.10)],
+                    startPoint: .topLeading, endPoint: .bottomTrailing
+                ),
+                lineWidth: 1.2
+            )
+    }
+
+    // MARK: - Sub-views
+
+    private var contentTypeBadge: some View {
+        let (icon, label): (String, String) = switch item.contentType {
+        case .movie:   ("film", "FİLM")
+        case .tv_show: ("tv", "DİZİ")
+        case .book:    ("book.closed", "KİTAP")
+        }
+        return HStack(spacing: 4) {
+            Image(systemName: icon).font(.system(size: 9, weight: .semibold))
+            Text(label).font(.system(size: 9, weight: .bold)).tracking(1.2)
+        }
+        .foregroundStyle(.white.opacity(0.35))
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(.white.opacity(0.07), in: Capsule())
+    }
+
+    private var posterView: some View {
+        ZStack {
+            // Glow halo
+            RoundedRectangle(cornerRadius: 14)
+                .fill(accent.opacity(0.18))
+                .frame(width: 154, height: 230)
+                .blur(radius: 18)
+
+            // Poster image
+            Group {
+                if let poster = posterImage {
+                    Image(uiImage: poster)
+                        .resizable()
+                        .aspectRatio(2/3, contentMode: .fill)
+                } else {
+                    Rectangle()
+                        .fill(Color.white.opacity(0.06))
+                        .overlay(
+                            Image(systemName: "film")
+                                .font(.system(size: 34))
+                                .foregroundStyle(.white.opacity(0.18))
+                        )
+                }
+            }
+            .frame(width: 144, height: 216)
+            .clipShape(RoundedRectangle(cornerRadius: 13))
+            .shadow(color: .black.opacity(0.55), radius: 20, y: 10)
+            .shadow(color: .black.opacity(0.25), radius: 6, y: 3)
+            .overlay(
+                RoundedRectangle(cornerRadius: 13)
+                    .strokeBorder(.white.opacity(0.12), lineWidth: 1)
+            )
+        }
+    }
+
+    private var ratingRow: some View {
+        HStack(spacing: 10) {
+            if let rating = item.rating, rating > 0 {
+                starRow(rating: rating)
+            }
+            if let emoji = item.emoji {
+                Text(emoji)
+                    .font(.system(size: 24))
+                    .shadow(color: .black.opacity(0.4), radius: 4)
+            }
+        }
+    }
+
+    private func starRow(rating: Double) -> some View {
+        let fullStars = Int(rating / 2)
+        let hasHalf = (rating / 2) - Double(fullStars) >= 0.5
+        return HStack(spacing: 0) {
+            HStack(spacing: 3) {
+                ForEach(0..<5, id: \.self) { i in
+                    Image(systemName: i < fullStars ? "star.fill" : (i == fullStars && hasHalf ? "star.leadinghalf.filled" : "star"))
+                        .font(.system(size: 12))
+                        .foregroundStyle(i < fullStars || (i == fullStars && hasHalf) ? Color.yellow : .white.opacity(0.18))
+                }
+            }
+            Spacer().frame(width: 7)
+            Text(String(format: "%.1f", rating))
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(.white.opacity(0.75))
+        }
+    }
+
+    private var footerRow: some View {
+        HStack(alignment: .center) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(item.isOwnLog ? "izledim" : "\(item.username) izledi")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.white.opacity(0.4))
+                Text("grippd.app")
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.25))
+            }
+            Spacer()
+            // Brand pill
+            HStack(spacing: 5) {
+                Image(systemName: "play.square.stack.fill")
+                    .font(.system(size: 13))
+                    .foregroundStyle(accent)
+                Text("Grippd")
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .foregroundStyle(accent)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(accent.opacity(0.12), in: Capsule())
+            .overlay(
+                Capsule().strokeBorder(accent.opacity(0.25), lineWidth: 0.8)
+            )
+        }
     }
 }
