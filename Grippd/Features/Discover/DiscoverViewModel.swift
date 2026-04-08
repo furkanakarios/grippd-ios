@@ -42,6 +42,7 @@ final class DiscoverViewModel {
 
     var recommendedMovies: [TMDBMovie] = []
     var recommendedShows: [TMDBTVShow] = []
+    var recommendedBooks: [GoogleBook] = []
     var isLoadingRecommendations = false
     var hasRecommendations: Bool { !recommendedMovies.isEmpty || !recommendedShows.isEmpty }
 
@@ -99,6 +100,7 @@ final class DiscoverViewModel {
         featuredBooks = []
         recommendedMovies = []
         recommendedShows = []
+        recommendedBooks = []
         await load()
     }
 
@@ -255,6 +257,33 @@ final class DiscoverViewModel {
         recommendedShows = Array(
             filteredShows.sorted { $0.popularity > $1.popularity }.prefix(12)
         )
+
+        // Kitap önerileri: loglanmış kitapların kategorilerinden arama yap
+        let bookLogs = allLogs
+            .filter { $0.contentKey.hasPrefix("book") }
+            .prefix(5)
+
+        if !bookLogs.isEmpty {
+            var categoryCounts: [String: Int] = [:]
+            for log in bookLogs {
+                let bookID = String(log.contentKey.split(separator: "-", maxSplits: 1).last ?? "")
+                guard !bookID.isEmpty,
+                      let detail = try? await GoogleBooksClient.shared.volumeDetail(id: bookID),
+                      let cats = detail.volumeInfo.categories else { continue }
+                for cat in cats {
+                    categoryCounts[cat, default: 0] += 1
+                }
+            }
+            if let topCategory = categoryCounts.max(by: { $0.value < $1.value })?.key {
+                let query = "subject:\(topCategory.lowercased().replacingOccurrences(of: " ", with: "+"))"
+                let response = try? await GoogleBooksClient.shared.search(query: query, maxResults: 20)
+                let loggedBookKeys = Set(allLogs.filter { $0.contentKey.hasPrefix("book") }.map { $0.contentKey })
+                recommendedBooks = (response?.items ?? []).filter {
+                    let key = "book-\($0.id)"
+                    return !loggedBookKeys.contains(key) && $0.volumeInfo.imageLinks?.thumbnailURL != nil
+                }.prefix(12).map { $0 }
+            }
+        }
     }
 
     private func loadFeaturedBooks() async {

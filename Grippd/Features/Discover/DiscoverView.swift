@@ -13,9 +13,10 @@ struct DiscoverView: View {
                     tabFilter
                     tabContent
                 }
+                .padding(.top, 1)
             }
             .navigationTitle("Keşfet")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .navigationDestination(for: DiscoverRoute.self) { route in
@@ -88,14 +89,15 @@ struct DiscoverView: View {
                 }
 
                 // Senin İçin
-                if viewModel.isLoadingRecommendations || viewModel.hasRecommendations {
+                let allRecs = viewModel.recommendedMovies.map { CarouselItem.movie($0) }
+                    + viewModel.recommendedShows.map { CarouselItem.tv($0) }
+                    + viewModel.recommendedBooks.map { CarouselItem.book($0) }
+                if viewModel.isLoadingRecommendations || !allRecs.isEmpty {
                     sectionHeader(title: "Senin İçin", icon: "sparkles", badge: "Öneriler")
                     if viewModel.isLoadingRecommendations {
                         skeletonRow()
                     } else {
-                        let items = viewModel.recommendedMovies.map { CarouselItem.movie($0) }
-                            + viewModel.recommendedShows.map { CarouselItem.tv($0) }
-                        posterCarousel(items)
+                        posterCarousel(allRecs)
                     }
                 }
 
@@ -287,6 +289,17 @@ struct DiscoverView: View {
     private var booksTabContent: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
+                // Senin İçin
+                if viewModel.isLoadingRecommendations || !viewModel.recommendedBooks.isEmpty {
+                    sectionHeader(title: "Senin İçin", icon: "sparkles", badge: "Öneriler")
+                        .padding(.top, GrippdTheme.Spacing.sm)
+                    if viewModel.isLoadingRecommendations {
+                        skeletonRow()
+                    } else {
+                        posterCarousel(viewModel.recommendedBooks.map { .book($0) })
+                    }
+                }
+
                 sectionHeader(title: "Öne Çıkan Kitaplar", icon: "books.vertical.fill")
                     .padding(.top, GrippdTheme.Spacing.sm)
 
