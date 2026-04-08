@@ -87,6 +87,18 @@ struct DiscoverView: View {
                         .padding(.bottom, GrippdTheme.Spacing.lg)
                 }
 
+                // Senin İçin
+                if viewModel.isLoadingRecommendations || viewModel.hasRecommendations {
+                    sectionHeader(title: "Senin İçin", icon: "sparkles", badge: "Öneriler")
+                    if viewModel.isLoadingRecommendations {
+                        skeletonRow()
+                    } else {
+                        let items = viewModel.recommendedMovies.map { CarouselItem.movie($0) }
+                            + viewModel.recommendedShows.map { CarouselItem.tv($0) }
+                        posterCarousel(items)
+                    }
+                }
+
                 // Grippd'de Trend
                 if viewModel.isLoadingGrippedTrending || !viewModel.grippedTrending.isEmpty {
                     sectionHeader(title: "Grippd'de Trend", icon: "chart.line.uptrend.xyaxis", badge: "Bu Hafta")
@@ -163,6 +175,17 @@ struct DiscoverView: View {
     private var moviesTabContent: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
+                // Senin İçin
+                if viewModel.isLoadingRecommendations || !viewModel.recommendedMovies.isEmpty {
+                    sectionHeader(title: "Senin İçin", icon: "sparkles", badge: "Öneriler")
+                        .padding(.top, GrippdTheme.Spacing.sm)
+                    if viewModel.isLoadingRecommendations {
+                        skeletonRow()
+                    } else {
+                        posterCarousel(viewModel.recommendedMovies.map { .movie($0) })
+                    }
+                }
+
                 // Trending grid
                 sectionHeader(title: "Haftalık Trend", icon: "flame.fill")
                     .padding(.top, GrippdTheme.Spacing.sm)
@@ -210,6 +233,17 @@ struct DiscoverView: View {
     private var tvTabContent: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
+                // Senin İçin
+                if viewModel.isLoadingRecommendations || !viewModel.recommendedShows.isEmpty {
+                    sectionHeader(title: "Senin İçin", icon: "sparkles", badge: "Öneriler")
+                        .padding(.top, GrippdTheme.Spacing.sm)
+                    if viewModel.isLoadingRecommendations {
+                        skeletonRow()
+                    } else {
+                        posterCarousel(viewModel.recommendedShows.map { .tv($0) })
+                    }
+                }
+
                 sectionHeader(title: "Haftalık Trend", icon: "flame.fill")
                     .padding(.top, GrippdTheme.Spacing.sm)
 
