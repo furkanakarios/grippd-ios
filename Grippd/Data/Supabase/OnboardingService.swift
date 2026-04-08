@@ -41,8 +41,9 @@ final class OnboardingService {
             let displayName: String
             let avatarUrl: String?
             let onboardingCompleted: Bool
+            let interests: [String]
             enum CodingKeys: String, CodingKey {
-                case username
+                case username, interests
                 case displayName = "display_name"
                 case avatarUrl = "avatar_url"
                 case onboardingCompleted = "onboarding_completed"
@@ -53,7 +54,8 @@ final class OnboardingService {
             username: username,
             displayName: displayName.isEmpty ? username : displayName,
             avatarUrl: avatarURL?.absoluteString,
-            onboardingCompleted: true
+            onboardingCompleted: true,
+            interests: interests.map { $0.rawValue }
         )
 
         let rows: [UserRow] = try await client

@@ -6,7 +6,10 @@ struct ProfileView: View {
     @State private var authVM = AuthViewModel()
     @State private var showSignOutConfirm = false
     @State private var showWrapped = false
+    @State private var showNotifications = false
     @State private var selectedTab: ProfileTab = .logs
+    @State private var followerCount: Int = 0
+    @State private var followingCount: Int = 0
 
     enum ProfileTab: String, CaseIterable {
         case logs = "Loglar"
@@ -49,17 +52,45 @@ struct ProfileView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        router.profilePath.append(ProfileRoute.settings)
-                    } label: {
-                        Image(systemName: "gearshape")
-                            .foregroundStyle(.white.opacity(0.7))
+                    HStack(spacing: 16) {
+                        // Bildirim zili
+                        Button {
+                            showNotifications = true
+                        } label: {
+                            ZStack(alignment: .topTrailing) {
+                                Image(systemName: "bell")
+                                    .foregroundStyle(.white.opacity(0.7))
+                                if appState.unreadNotificationCount > 0 {
+                                    Circle()
+                                        .fill(.red)
+                                        .frame(width: 8, height: 8)
+                                        .offset(x: 4, y: -4)
+                                }
+                            }
+                        }
+                        // Ayarlar
+                        Button {
+                            router.profilePath.append(ProfileRoute.settings)
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .foregroundStyle(.white.opacity(0.7))
+                        }
                     }
                 }
             }
             .fullScreenCover(isPresented: $showWrapped) {
                 if let wrapped = LogService.shared.wrappedStats() {
                     WrappedView(stats: wrapped, isPresented: $showWrapped)
+                }
+            }
+            .sheet(isPresented: $showNotifications) {
+                NotificationsView(onNavigate: { route in
+                    router.profilePath.append(route)
+                })
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+                .onDisappear {
+                    appState.unreadNotificationCount = 0
                 }
             }
             .navigationDestination(for: ProfileRoute.self) { route in
@@ -114,22 +145,42 @@ struct ProfileView: View {
             }
 
             // Stats
-            let stats = LogService.shared.stats()
-            let watchlistCount = WatchlistService.shared.all().count
+            let logCount = LogService.shared.stats().totalLogged
             HStack(spacing: 0) {
-                StatItem(value: "\(stats.totalMovies + stats.totalShows + stats.totalBooks)", label: "Log")
+                StatItem(value: "\(logCount)", label: "Log")
                 Divider().frame(height: 28).background(.white.opacity(0.1))
-                StatItem(value: "\(watchlistCount)", label: "Listede")
-                Divider().frame(height: 28).background(.white.opacity(0.1))
-                if let avg = stats.averageRating {
-                    StatItem(value: String(format: "%.1f", avg), label: "Ort. Puan")
-                } else {
-                    StatItem(value: "—", label: "Ort. Puan")
+                Button {
+                    if let id = appState.currentUser?.id {
+                        router.profilePath.append(ProfileRoute.followers(userID: id))
+                    }
+                } label: {
+                    StatItem(value: "\(followerCount)", label: "Takipçi")
                 }
+                .buttonStyle(.plain)
+                Divider().frame(height: 28).background(.white.opacity(0.1))
+                Button {
+                    if let id = appState.currentUser?.id {
+                        router.profilePath.append(ProfileRoute.following(userID: id))
+                    }
+                } label: {
+                    StatItem(value: "\(followingCount)", label: "Takip")
+                }
+                .buttonStyle(.plain)
             }
             .padding(.vertical, 16)
             .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
             .padding(.top, 8)
+            .task(id: appState.selectedTab) {
+                guard appState.selectedTab == .profile,
+                      let id = appState.currentUser?.id else { return }
+                async let profileData = SocialService.shared.fetchProfile(userID: id)
+                async let count = NotificationService.shared.unreadCount()
+                if let data = try? await profileData {
+                    followerCount = data.followerCount
+                    followingCount = data.followingCount
+                }
+                appState.unreadNotificationCount = await count
+            }
         }
         .padding(.horizontal, GrippdTheme.Spacing.lg)
         .padding(.top, GrippdTheme.Spacing.xl)
@@ -211,16 +262,18 @@ struct ProfileView: View {
         case .bookDetail(let googleBooksID):
             BookDetailView(googleBooksID: googleBooksID)
         case .personDetail: Text("Kişi Detay — Phase 4").foregroundStyle(.white)
-        case .settings: SettingsPlaceholderView()
+        case .settings: SettingsView()
         case .editProfile: Text("Profil Düzenle — Phase 4").foregroundStyle(.white)
-        case .followers: Text("Takipçiler — Phase 4").foregroundStyle(.white)
-        case .following: Text("Takip Edilenler — Phase 4").foregroundStyle(.white)
+        case .followers(let userID): FollowListView(userID: userID, mode: .followers)
+        case .following(let userID): FollowListView(userID: userID, mode: .following)
         case .contentDetail: Text("İçerik Detay").foregroundStyle(.white)
-        case .userProfile: Text("Kullanıcı Profil — Phase 4").foregroundStyle(.white)
+        case .userProfile(let userID): UserProfileView(userID: userID)
         case .customList(let listID):
             if let list = CustomListService.shared.allLists().first(where: { $0.id == listID }) {
                 CustomListDetailView(list: list)
             }
+        case .logComments(let logID):
+            LogCommentsView(logID: logID)
         }
     }
 }
@@ -496,6 +549,7 @@ private struct WatchlistTabView: View {
 private struct LogRowCell: View {
     let log: LogEntry
     let onTap: () -> Void
+    @Environment(AppState.self) private var appState
 
     private var typeIcon: String {
         switch log.contentType {
@@ -544,9 +598,30 @@ private struct LogRowCell: View {
 
                 Spacer()
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.2))
+                HStack(spacing: 12) {
+                    Button {
+                        Task {
+                            await ShareService.shared.present(item: ShareItem(
+                                contentTitle: log.contentTitle,
+                                posterURL: log.posterURL,
+                                rating: log.rating,
+                                emoji: log.emoji,
+                                username: appState.currentUser?.displayName ?? "",
+                                isOwnLog: true,
+                                contentType: log.contentType
+                            ))
+                        }
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                    .buttonStyle(.plain)
+
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.2))
+                }
             }
             .padding(.horizontal, GrippdTheme.Spacing.md)
             .padding(.vertical, 10)
@@ -971,26 +1046,178 @@ private struct StatItem: View {
     }
 }
 
-// MARK: - Settings Placeholder
+// MARK: - Settings View
 
-private struct SettingsPlaceholderView: View {
+private struct SettingsView: View {
+    @Environment(AppState.self) private var appState
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var isPrivate: Bool = false
+    @State private var isSavingPrivacy = false
+    @State private var showSignOutConfirm = false
+    @State private var isSigningOut = false
+
     var body: some View {
         ZStack {
             GrippdBackground()
-            VStack(spacing: GrippdTheme.Spacing.lg) {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 48))
-                    .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.3))
-                Text("Ayarlar")
-                    .font(GrippdTheme.Typography.headline)
-                    .foregroundStyle(.white)
-                Text("Phase 4'te geliyor")
-                    .font(.system(size: 14))
-                    .foregroundStyle(.white.opacity(0.35))
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    accountSection
+                    Divider().background(.white.opacity(0.06)).padding(.vertical, 8)
+                    privacySection
+                    Divider().background(.white.opacity(0.06)).padding(.vertical, 8)
+                    dangerSection
+                }
+                .padding(.top, 12)
+                .padding(.bottom, GrippdTheme.Spacing.xxl)
             }
         }
         .navigationTitle("Ayarlar")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .onAppear { isPrivate = appState.currentUser?.isPrivate ?? false }
+        .confirmationDialog("Çıkış yapmak istediğine emin misin?", isPresented: $showSignOutConfirm, titleVisibility: .visible) {
+            Button("Çıkış Yap", role: .destructive) {
+                Task { await signOut() }
+            }
+            Button("İptal", role: .cancel) {}
+        }
+    }
+
+    // MARK: - Sections
+
+    private var accountSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            sectionHeader("Hesap")
+            if let user = appState.currentUser {
+                settingsRow(icon: "person.fill", title: "Kullanıcı adı", value: "@\(user.username)")
+                settingsRow(icon: "star.fill", title: "Plan", value: user.planType == .premium ? "Premium" : "Ücretsiz")
+            }
+        }
+    }
+
+    private var privacySection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            sectionHeader("Gizlilik")
+            HStack(spacing: 14) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(GrippdTheme.Colors.accent.opacity(0.15))
+                        .frame(width: 36, height: 36)
+                    Image(systemName: isPrivate ? "lock.fill" : "globe")
+                        .font(.system(size: 16))
+                        .foregroundStyle(GrippdTheme.Colors.accent)
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Gizli Profil")
+                        .font(.system(size: 15))
+                        .foregroundStyle(.white)
+                    Text(isPrivate ? "Sadece takipçilerin loglarını görebilir" : "Herkes loglarını görebilir")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.white.opacity(0.4))
+                }
+                Spacer()
+                if isSavingPrivacy {
+                    ProgressView().tint(GrippdTheme.Colors.accent).scaleEffect(0.8)
+                } else {
+                    Toggle("", isOn: $isPrivate)
+                        .labelsHidden()
+                        .tint(GrippdTheme.Colors.accent)
+                        .onChange(of: isPrivate) { _, newValue in
+                            Task { await savePrivacy(newValue) }
+                        }
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, 12)
+        }
+    }
+
+    private var dangerSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            sectionHeader("Oturum")
+            Button {
+                showSignOutConfirm = true
+            } label: {
+                HStack(spacing: 14) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.red.opacity(0.15))
+                            .frame(width: 36, height: 36)
+                        Image(systemName: "arrow.right.square.fill")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.red)
+                    }
+                    Text("Çıkış Yap")
+                        .font(.system(size: 15))
+                        .foregroundStyle(.red)
+                    Spacer()
+                    if isSigningOut {
+                        ProgressView().tint(.red).scaleEffect(0.8)
+                    }
+                }
+                .padding(.horizontal, GrippdTheme.Spacing.md)
+                .padding(.vertical, 12)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func sectionHeader(_ title: String) -> some View {
+        Text(title.uppercased())
+            .font(.system(size: 11, weight: .semibold))
+            .foregroundStyle(.white.opacity(0.35))
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func settingsRow(icon: String, title: String, value: String) -> some View {
+        HStack(spacing: 14) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(GrippdTheme.Colors.accent.opacity(0.15))
+                    .frame(width: 36, height: 36)
+                Image(systemName: icon)
+                    .font(.system(size: 16))
+                    .foregroundStyle(GrippdTheme.Colors.accent)
+            }
+            Text(title)
+                .font(.system(size: 15))
+                .foregroundStyle(.white)
+            Spacer()
+            Text(value)
+                .font(.system(size: 14))
+                .foregroundStyle(.white.opacity(0.4))
+        }
+        .padding(.horizontal, GrippdTheme.Spacing.md)
+        .padding(.vertical, 12)
+    }
+
+    // MARK: - Actions
+
+    private func savePrivacy(_ value: Bool) async {
+        isSavingPrivacy = true
+        do {
+            try await SocialService.shared.updatePrivacy(isPrivate: value)
+            appState.currentUser?.isPrivate = value
+        } catch {
+            isPrivate = !value
+        }
+        isSavingPrivacy = false
+    }
+
+    private func signOut() async {
+        isSigningOut = true
+        try? await AuthService.shared.signOut()
+        await MainActor.run {
+            appState.currentUser = nil
+            appState.isAuthenticated = false
+            appState.needsOnboarding = false
+            appState.unreadNotificationCount = 0
+        }
     }
 }

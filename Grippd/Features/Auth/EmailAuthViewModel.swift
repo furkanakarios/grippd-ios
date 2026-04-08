@@ -60,11 +60,14 @@ final class EmailAuthViewModel {
         do {
             let session = try await client.auth.signIn(email: email, password: password)
             let user = try await fetchProfile(id: session.user.id)
-            let needsOnboarding = (try? await OnboardingService.shared.needsOnboarding(userID: user.id)) ?? false
+            async let needsOnboarding = OnboardingService.shared.needsOnboarding(userID: user.id)
+            async let unreadCount = NotificationService.shared.unreadCount()
+            let (onboarding, count) = await ((try? needsOnboarding) ?? false, unreadCount)
             await MainActor.run {
                 appState.currentUser = user
-                appState.needsOnboarding = needsOnboarding
+                appState.needsOnboarding = onboarding
                 appState.isAuthenticated = true
+                appState.unreadNotificationCount = count
                 isLoading = false
             }
         } catch {
@@ -130,23 +133,6 @@ final class EmailAuthViewModel {
     // MARK: - Profile Fetch
 
     private func fetchProfile(id: UUID) async throws -> User {
-        struct UserRow: Decodable {
-            let id: String
-            let username: String
-            let displayName: String?
-            let avatarUrl: String?
-            let bio: String?
-            let isPrivate: Bool
-            let planType: String
-            enum CodingKeys: String, CodingKey {
-                case id, username, bio
-                case displayName = "display_name"
-                case avatarUrl = "avatar_url"
-                case isPrivate = "is_private"
-                case planType = "plan_type"
-            }
-        }
-
         // DB trigger creates profile; retry once if not yet available
         for attempt in 0...1 {
             if attempt == 1 { try await Task.sleep(for: .milliseconds(600)) }
@@ -158,16 +144,7 @@ final class EmailAuthViewModel {
                 .execute()
                 .value
             if let row = rows.first {
-                return User(
-                    id: UUID(uuidString: row.id) ?? UUID(),
-                    username: row.username,
-                    displayName: row.displayName ?? row.username,
-                    bio: row.bio,
-                    avatarURL: row.avatarUrl.flatMap { URL(string: $0) },
-                    isPrivate: row.isPrivate,
-                    planType: row.planType == "premium" ? .premium : .free,
-                    createdAt: Date()
-                )
+                return row.toDomain()
             }
         }
         throw AuthError.profileCreationFailed
