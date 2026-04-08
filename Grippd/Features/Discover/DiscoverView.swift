@@ -87,8 +87,19 @@ struct DiscoverView: View {
                         .padding(.bottom, GrippdTheme.Spacing.lg)
                 }
 
+                // Grippd'de Trend
+                if viewModel.isLoadingGrippedTrending || !viewModel.grippedTrending.isEmpty {
+                    sectionHeader(title: "Grippd'de Trend", icon: "chart.line.uptrend.xyaxis", badge: "Bu Hafta")
+                    if viewModel.isLoadingGrippedTrending {
+                        skeletonRow()
+                    } else {
+                        grippedTrendingCarousel(viewModel.grippedTrending)
+                    }
+                }
+
                 // Trend Filmler
                 sectionHeader(title: "Trend Filmler", icon: "flame.fill")
+                    .padding(.top, viewModel.grippedTrending.isEmpty && !viewModel.isLoadingGrippedTrending ? 0 : GrippdTheme.Spacing.lg)
                 if viewModel.isLoadingTrending {
                     skeletonRow()
                 } else {
@@ -420,9 +431,43 @@ struct DiscoverView: View {
         }
     }
 
+    // MARK: - Grippd Trending Carousel
+
+    private func grippedTrendingCarousel(_ items: [TrendingItem]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(alignment: .top, spacing: 12) {
+                ForEach(items) { item in
+                    Button { navigateTrending(item) } label: {
+                        GrippedTrendingCard(item: item)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, GrippdTheme.Spacing.sm)
+        }
+    }
+
+    private func navigateTrending(_ item: TrendingItem) {
+        switch item.resolvedContentType {
+        case .movie:
+            if let id = item.tmdbId {
+                router.discoverPath.append(DiscoverRoute.movieDetail(tmdbID: id))
+            }
+        case .tv_show:
+            if let id = item.tmdbId {
+                router.discoverPath.append(DiscoverRoute.tvShowDetail(tmdbID: id))
+            }
+        case .book:
+            if let id = item.googleBooksId {
+                router.discoverPath.append(DiscoverRoute.bookDetail(googleBooksID: id))
+            }
+        }
+    }
+
     // MARK: - Section Header
 
-    private func sectionHeader(title: String, icon: String) -> some View {
+    private func sectionHeader(title: String, icon: String, badge: String? = nil) -> some View {
         HStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.system(size: 13, weight: .semibold))
@@ -430,6 +475,14 @@ struct DiscoverView: View {
             Text(title)
                 .font(.system(size: 17, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
+            if let badge {
+                Text(badge)
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(GrippdTheme.Colors.background)
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 3)
+                    .background(GrippdTheme.Colors.accent, in: Capsule())
+            }
             Spacer()
         }
         .padding(.horizontal, GrippdTheme.Spacing.md)
@@ -535,6 +588,66 @@ struct DiscoverView: View {
             } onTVTap: { tvID in
                 router.discoverPath.append(DiscoverRoute.tvShowDetail(tmdbID: tvID))
             }
+        }
+    }
+}
+
+// MARK: - Grippd Trending Card
+
+struct GrippedTrendingCard: View {
+    let item: TrendingItem
+
+    private var typeIcon: String {
+        switch item.resolvedContentType {
+        case .movie:   return "film"
+        case .tv_show: return "tv"
+        case .book:    return "book.closed"
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            ZStack(alignment: .bottomLeading) {
+                Color.clear
+                    .frame(width: 110, height: 165)
+                    .overlay(
+                        AsyncImage(url: item.posterURL) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image.resizable().scaledToFill()
+                            default:
+                                Rectangle()
+                                    .fill(GrippdTheme.Colors.surface)
+                                    .overlay(
+                                        Image(systemName: typeIcon)
+                                            .font(.system(size: 22))
+                                            .foregroundStyle(.white.opacity(0.15))
+                                    )
+                            }
+                        }
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
+
+                // Log count badge
+                HStack(spacing: 3) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 9))
+                    Text("\(item.logCount)")
+                        .font(.system(size: 10, weight: .bold))
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 3)
+                .background(GrippdTheme.Colors.accent.opacity(0.88), in: RoundedRectangle(cornerRadius: 6))
+                .padding(5)
+            }
+            .frame(width: 110, height: 165)
+
+            Text(item.title)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(.white.opacity(0.75))
+                .lineLimit(2)
+                .frame(width: 110, alignment: .leading)
         }
     }
 }
