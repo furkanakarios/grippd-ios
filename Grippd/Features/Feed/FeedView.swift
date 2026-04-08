@@ -102,6 +102,7 @@ struct FeedView: View {
                 CommentsSheetView(
                     logID: activity.id,
                     contentTitle: activity.contentTitle,
+                    isPremium: appState.currentUser?.planType == .premium,
                     commentCount: commentCountBinding(for: activity.id)
                 )
                 .presentationDetents([.medium, .large])
