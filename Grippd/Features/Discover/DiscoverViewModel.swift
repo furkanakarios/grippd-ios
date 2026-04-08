@@ -1,22 +1,46 @@
 import Foundation
 
+// MARK: - Tab
+
+enum DiscoverTab: String, CaseIterable {
+    case all     = "Tümü"
+    case movies  = "Filmler"
+    case tv      = "Diziler"
+    case books   = "Kitaplar"
+}
+
+// MARK: - ViewModel
+
 @Observable
 final class DiscoverViewModel {
 
-    // MARK: - State
+    // MARK: - Tab State
+
+    var selectedTab: DiscoverTab = .all
+
+    // MARK: - Content
 
     var trendingMovies: [TMDBMovie] = []
     var trendingShows: [TMDBTVShow] = []
+    var popularMovies: [TMDBMovie] = []
+    var popularShows: [TMDBTVShow] = []
     var nowPlayingMovies: [TMDBMovie] = []
     var onTheAirShows: [TMDBTVShow] = []
     var movieGenres: [TMDBGenre] = []
     var tvGenres: [TMDBGenre] = []
     var featuredBooks: [GoogleBook] = []
 
+    // MARK: - Loading
+
     var isLoadingTrending = false
+    var isLoadingPopular = false
     var isLoadingNowPlaying = false
     var isLoadingOnTheAir = false
     var isLoadingBooks = false
+
+    var error: String?
+
+    // MARK: - Static Data
 
     let bookCategories: [(label: String, query: String)] = [
         ("Kurgu", "subject:fiction"),
@@ -31,7 +55,9 @@ final class DiscoverViewModel {
         ("Ekonomi", "subject:economics")
     ]
 
-    var error: String?
+    // Hero: first trending movie or show depending on tab
+    var heroMovie: TMDBMovie? { trendingMovies.first }
+    var heroShow: TMDBTVShow? { trendingShows.first }
 
     private var didLoad = false
 
@@ -47,6 +73,8 @@ final class DiscoverViewModel {
         didLoad = false
         trendingMovies = []
         trendingShows = []
+        popularMovies = []
+        popularShows = []
         nowPlayingMovies = []
         onTheAirShows = []
         movieGenres = []
@@ -57,23 +85,12 @@ final class DiscoverViewModel {
 
     private func load() async {
         async let trending: Void = loadTrending()
+        async let popular: Void = loadPopular()
         async let nowPlaying: Void = loadNowPlaying()
         async let onTheAir: Void = loadOnTheAir()
         async let genres: Void = loadGenres()
         async let books: Void = loadFeaturedBooks()
-        _ = await (trending, nowPlaying, onTheAir, genres, books)
-    }
-
-    private func loadGenres() async {
-        do {
-            async let movieTask = TMDBClient.shared.movieGenres()
-            async let tvTask = TMDBClient.shared.tvGenres()
-            let (movies, tv) = try await (movieTask, tvTask)
-            movieGenres = movies
-            tvGenres = tv
-        } catch {
-            // sessizce geç
-        }
+        _ = await (trending, popular, nowPlaying, onTheAir, genres, books)
     }
 
     private func loadTrending() async {
@@ -90,14 +107,34 @@ final class DiscoverViewModel {
         isLoadingTrending = false
     }
 
+    private func loadPopular() async {
+        isLoadingPopular = true
+        do {
+            async let moviesTask = TMDBClient.shared.popularMovies()
+            async let showsTask = TMDBClient.shared.popularTVShows()
+            let (movies, shows) = try await (moviesTask, showsTask)
+            popularMovies = Array(movies.results.prefix(20))
+            popularShows = Array(shows.results.prefix(20))
+        } catch {}
+        isLoadingPopular = false
+    }
+
+    private func loadGenres() async {
+        do {
+            async let movieTask = TMDBClient.shared.movieGenres()
+            async let tvTask = TMDBClient.shared.tvGenres()
+            let (movies, tv) = try await (movieTask, tvTask)
+            movieGenres = movies
+            tvGenres = tv
+        } catch {}
+    }
+
     private func loadNowPlaying() async {
         isLoadingNowPlaying = true
         do {
             let response = try await TMDBClient.shared.nowPlayingMovies()
             nowPlayingMovies = Array(response.results.prefix(10))
-        } catch {
-            // sessizce geç
-        }
+        } catch {}
         isLoadingNowPlaying = false
     }
 
@@ -106,22 +143,18 @@ final class DiscoverViewModel {
         do {
             let response = try await TMDBClient.shared.onTheAirShows()
             onTheAirShows = Array(response.results.prefix(10))
-        } catch {
-            // sessizce geç
-        }
+        } catch {}
         isLoadingOnTheAir = false
     }
 
     private func loadFeaturedBooks() async {
         isLoadingBooks = true
         do {
-            let response = try await GoogleBooksClient.shared.searchFeatured(maxResults: 15)
+            let response = try await GoogleBooksClient.shared.searchFeatured(maxResults: 20)
             featuredBooks = (response.items ?? []).filter {
                 $0.volumeInfo.imageLinks?.thumbnailURL != nil
             }
-        } catch {
-            // sessizce geç
-        }
+        } catch {}
         isLoadingBooks = false
     }
 }
