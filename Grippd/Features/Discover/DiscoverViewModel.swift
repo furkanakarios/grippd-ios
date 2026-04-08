@@ -258,31 +258,45 @@ final class DiscoverViewModel {
             filteredShows.sorted { $0.popularity > $1.popularity }.prefix(12)
         )
 
-        // Kitap önerileri: loglanmış kitapların kategorilerinden arama yap
+        // Kitap önerileri: loglanmış kitapların başlıklarından arama yap
         let bookLogs = allLogs
             .filter { $0.contentKey.hasPrefix("book") }
-            .prefix(5)
+            .prefix(3)
 
         if !bookLogs.isEmpty {
-            var categoryCounts: [String: Int] = [:]
+            let loggedBookKeys = Set(allLogs.filter { $0.contentKey.hasPrefix("book") }.map { $0.contentKey })
+            var collected: [GoogleBook] = []
+
             for log in bookLogs {
+                // Başlıktan ilk anlamlı kelimeyi al, author veya volume detail'e gerek yok
+                let titleWords = log.contentTitle
+                    .components(separatedBy: .whitespaces)
+                    .filter { $0.count > 3 }
+                    .prefix(2)
+                    .joined(separator: " ")
+                guard !titleWords.isEmpty else { continue }
+
                 let bookID = String(log.contentKey.split(separator: "-", maxSplits: 1).last ?? "")
-                guard !bookID.isEmpty,
-                      let detail = try? await GoogleBooksClient.shared.volumeDetail(id: bookID),
-                      let cats = detail.volumeInfo.categories else { continue }
-                for cat in cats {
-                    categoryCounts[cat, default: 0] += 1
+                // volumeDetail'den yazar varsa kullan, yoksa başlık keyword ile ara
+                var query = "intitle:\(titleWords)"
+                if !bookID.isEmpty,
+                   let detail = try? await GoogleBooksClient.shared.volumeDetail(id: bookID),
+                   let author = detail.volumeInfo.authors?.first {
+                    query = "inauthor:\(author)"
                 }
-            }
-            if let topCategory = categoryCounts.max(by: { $0.value < $1.value })?.key {
-                let query = "subject:\(topCategory.lowercased().replacingOccurrences(of: " ", with: "+"))"
-                let response = try? await GoogleBooksClient.shared.search(query: query, maxResults: 20)
-                let loggedBookKeys = Set(allLogs.filter { $0.contentKey.hasPrefix("book") }.map { $0.contentKey })
-                recommendedBooks = (response?.items ?? []).filter {
+
+                let response = try? await GoogleBooksClient.shared.search(
+                    query: query, maxResults: 10
+                )
+                let filtered = (response?.items ?? []).filter {
                     let key = "book-\($0.id)"
                     return !loggedBookKeys.contains(key) && $0.volumeInfo.imageLinks?.thumbnailURL != nil
-                }.prefix(12).map { $0 }
+                }
+                collected.append(contentsOf: filtered)
             }
+
+            var seenIDs = Set<String>()
+            recommendedBooks = collected.filter { seenIDs.insert($0.id).inserted }.prefix(12).map { $0 }
         }
     }
 
