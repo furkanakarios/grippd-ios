@@ -144,7 +144,7 @@ struct UserProfileView: View {
                     bannerPlaceholder.frame(height: 120)
                 }
 
-                avatarView(url: data.user.avatarURL)
+                avatarView(url: data.user.avatarURL, isPremium: data.user.planType == .premium)
                     .offset(y: 45)
             }
             .frame(height: 120)
@@ -170,31 +170,12 @@ struct UserProfileView: View {
         )
     }
 
-    private func avatarView(url: URL?) -> some View {
-        ZStack {
-            Circle()
-                .fill(GrippdTheme.Colors.background)
-                .frame(width: 90, height: 90)
-
-            if let url {
-                AsyncImage(url: url) { phase in
-                    if case .success(let image) = phase {
-                        image.resizable().scaledToFill()
-                    } else {
-                        defaultAvatar
-                    }
-                }
-                .frame(width: 84, height: 84)
-                .clipShape(Circle())
-            } else {
-                defaultAvatar
-                    .frame(width: 84, height: 84)
-            }
-
-            Circle()
-                .strokeBorder(GrippdTheme.Colors.accent.opacity(0.3), lineWidth: 1.5)
-                .frame(width: 84, height: 84)
-        }
+    private func avatarView(url: URL?, isPremium: Bool = false) -> some View {
+        UserAvatarView(
+            url: url,
+            size: 90,
+            isPremium: isPremium
+        )
     }
 
     private var defaultAvatar: some View {
@@ -445,19 +426,11 @@ struct UserRowCell: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            AsyncImage(url: user.avatarURL) { phase in
-                if case .success(let image) = phase {
-                    image.resizable().scaledToFill()
-                } else {
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 18))
-                        .foregroundStyle(.white.opacity(0.3))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(GrippdTheme.Colors.accent.opacity(0.1))
-                }
-            }
-            .frame(width: 44, height: 44)
-            .clipShape(Circle())
+            UserAvatarView(
+                url: user.avatarURL,
+                size: 44,
+                isPremium: user.planType == .premium
+            )
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(user.displayName)

@@ -41,6 +41,7 @@
 		69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5C708F8C6739EFC5B9592C /* LogRepository.swift */; };
 		6D0B5CBD770B3C4A62ECCF52 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B216F04C46ADC79E57A7119 /* ContentView.swift */; };
 		6F576865DF159AF3AA3D1835 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B050D81F62141DC420327F /* BookDetailView.swift */; };
+		7042D5568E83835E22B4EB8F /* UserAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F98D27BD64B548E6FB11D4C /* UserAvatarView.swift */; };
 		70F36D8C1AF671C3C1F109C6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC76940C4F0862F2C919C69 /* AppState.swift */; };
 		7175571387E911F418554E20 /* BooksMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97FFEA9C96CC1AC1A471163 /* BooksMapper.swift */; };
 		74D2AB9F7C6335F4FD342E19 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F3842F44C6E0E3A2A569E5 /* SignInView.swift */; };
@@ -83,11 +84,13 @@
 		C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF9D2C89BA6439699CACDD /* ContentRepository.swift */; };
 		C87C4DF764520526F7883CD0 /* SeasonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9386362D9CDAFB90B965DB67 /* SeasonDetailView.swift */; };
 		C8D1634FF6561B1063EDEAD0 /* LogHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE16FCC0B3168E7240C80361 /* LogHistorySection.swift */; };
+		CD6B7AA81BCABBC29DC23522 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = E8E9D1F0BDC2AECB6257D7A9 /* RevenueCatUI */; };
 		D5069B2BAF67E1D72A438ACC /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C60BB8993AE3B0492233474 /* EpisodeDetailView.swift */; };
 		D570736E6DA1BAF17027981D /* CustomListFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDCAA1FEF511B2E9AC2C74F /* CustomListFormSheet.swift */; };
 		D979ADA3E66692E1B635A865 /* CuratedListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5AA54A0FEE7C613B91626E /* CuratedListService.swift */; };
 		DEDEE8BE2C747DC52F43C09C /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260B3CDE2227DB3566791581 /* StarRatingView.swift */; };
 		E0143E850210E440D62D37EB /* GoogleBooksClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */; };
+		E38E1D6B4392D277DBC214FA /* GlowBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318C111BB01F7ACE63E16F3C /* GlowBorderButton.swift */; };
 		E4A2AD4006928763D27846B2 /* GrippdComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2D418182291CD3ED6B16F /* GrippdComponents.swift */; };
 		E7DB6C37E249BE05C40526D4 /* TrendingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6ED2BF31A5FD3A067A8394 /* TrendingService.swift */; };
 		E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 57B8F951E1296882A2860113 /* Supabase */; };
@@ -140,6 +143,7 @@
 		284EEEB5FBB2470FF1914E70 /* Grippd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grippd.entitlements; sourceTree = "<group>"; };
 		2A185B94F12DE3C66D96ABD6 /* LogEntrySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntrySheet.swift; sourceTree = "<group>"; };
 		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		318C111BB01F7ACE63E16F3C /* GlowBorderButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowBorderButton.swift; sourceTree = "<group>"; };
 		344DCE7D1A69AD1E653EAFA4 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		3B216F04C46ADC79E57A7119 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3B6ED2BF31A5FD3A067A8394 /* TrendingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingService.swift; sourceTree = "<group>"; };
@@ -175,6 +179,7 @@
 		7429358E149CF11211D8CAD8 /* DiscoverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewModel.swift; sourceTree = "<group>"; };
 		787BEEC8FC34DAB5B9253370 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7E3AE1E48CCA53EA2148EAF3 /* SwiftDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModels.swift; sourceTree = "<group>"; };
+		7F98D27BD64B548E6FB11D4C /* UserAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarView.swift; sourceTree = "<group>"; };
 		82B5CDB9F6AEBBAC65EB7A8E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		85F3842F44C6E0E3A2A569E5 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksClient.swift; sourceTree = "<group>"; };
@@ -228,6 +233,7 @@
 			files = (
 				E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */,
 				48C6A65E15A7B3E632F20DF3 /* RevenueCat in Frameworks */,
+				CD6B7AA81BCABBC29DC23522 /* RevenueCatUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,9 +504,11 @@
 			isa = PBXGroup;
 			children = (
 				B825B9774BCD522A61D8DEB8 /* CommunityStatsView.swift */,
+				318C111BB01F7ACE63E16F3C /* GlowBorderButton.swift */,
 				CE16FCC0B3168E7240C80361 /* LogHistorySection.swift */,
 				3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */,
 				260B3CDE2227DB3566791581 /* StarRatingView.swift */,
+				7F98D27BD64B548E6FB11D4C /* UserAvatarView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -697,6 +705,7 @@
 			packageProductDependencies = (
 				57B8F951E1296882A2860113 /* Supabase */,
 				1D5083365B4BC5ED233C9C5E /* RevenueCat */,
+				E8E9D1F0BDC2AECB6257D7A9 /* RevenueCatUI */,
 			);
 			productName = Grippd;
 			productReference = 2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */;
@@ -824,6 +833,7 @@
 				A0F6E6591D2079F3C4C97BAA /* FeedView.swift in Sources */,
 				635C7BEE9CA768BE5D1307D6 /* FollowService.swift in Sources */,
 				34220E565919EE80BDE28A1E /* GenreBrowseView.swift in Sources */,
+				E38E1D6B4392D277DBC214FA /* GlowBorderButton.swift in Sources */,
 				E0143E850210E440D62D37EB /* GoogleBooksClient.swift in Sources */,
 				3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */,
 				E4A2AD4006928763D27846B2 /* GrippdComponents.swift in Sources */,
@@ -872,6 +882,7 @@
 				F410313188D2095981C7A154 /* TVShowDetailViewModel.swift in Sources */,
 				E7DB6C37E249BE05C40526D4 /* TrendingService.swift in Sources */,
 				1E497CC5BB09798EA83402F2 /* User.swift in Sources */,
+				7042D5568E83835E22B4EB8F /* UserAvatarView.swift in Sources */,
 				132FDEF360F2544D6B795EEC /* UserContentService.swift in Sources */,
 				75A48A889966C58D0BB08244 /* UserProfileView.swift in Sources */,
 				B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */,
@@ -1149,6 +1160,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		E8E9D1F0BDC2AECB6257D7A9 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 45BCB6C6784622F1389E147C /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

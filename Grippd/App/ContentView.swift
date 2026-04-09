@@ -1,4 +1,5 @@
 import SwiftUI
+import RevenueCatUI
 
 struct ContentView: View {
     @Environment(AppState.self) private var appState
@@ -23,6 +24,22 @@ struct ContentView: View {
         .animation(.easeInOut(duration: 0.3), value: appState.isAuthenticated)
         .animation(.easeInOut(duration: 0.3), value: appState.needsOnboarding)
         .animation(.easeInOut(duration: 0.3), value: appState.pendingDeepLink == nil)
+        .sheet(isPresented: Binding(
+            get: { appState.showPaywall },
+            set: { appState.showPaywall = $0 }
+        )) {
+            PaywallView()
+                .onPurchaseCompleted { _ in
+                    appState.showPaywall = false
+                    appState.isPremium = true
+                    Task { await PurchaseService.shared.syncPremiumStatus() }
+                }
+                .onRestoreCompleted { _ in
+                    appState.showPaywall = false
+                    appState.isPremium = true
+                    Task { await PurchaseService.shared.syncPremiumStatus() }
+                }
+        }
         .task { await checkAuth() }
     }
 

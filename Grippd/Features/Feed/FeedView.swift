@@ -433,21 +433,10 @@ struct FeedActivityCard: View {
             HStack(alignment: .top, spacing: 12) {
                 // Avatar
                 Button(action: onUserTap) {
-                    AsyncImage(url: activity.user.avatarURL) { phase in
-                        if case .success(let image) = phase {
-                            image.resizable().scaledToFill()
-                        } else {
-                            Circle()
-                                .fill(GrippdTheme.Colors.accent.opacity(0.12))
-                                .overlay(
-                                    Image(systemName: "person.fill")
-                                        .font(.system(size: 16))
-                                        .foregroundStyle(.white.opacity(0.3))
-                                )
-                        }
-                    }
-                    .frame(width: 42, height: 42)
-                    .clipShape(Circle())
+                    UserAvatarView(
+                        url: activity.user.avatarURL,
+                        size: 42
+                    )
                 }
                 .buttonStyle(.plain)
 

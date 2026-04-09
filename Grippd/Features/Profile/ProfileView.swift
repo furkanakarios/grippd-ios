@@ -109,31 +109,11 @@ struct ProfileView: View {
 
     private var headerSection: some View {
         VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(GrippdTheme.Colors.accent.opacity(0.1))
-                    .frame(width: 90, height: 90)
-
-                if let url = appState.currentUser?.avatarURL {
-                    AsyncImage(url: url) { image in
-                        image.resizable().scaledToFill()
-                    } placeholder: {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 36))
-                            .foregroundStyle(.white.opacity(0.3))
-                    }
-                    .frame(width: 84, height: 84)
-                    .clipShape(Circle())
-                } else {
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 36))
-                        .foregroundStyle(.white.opacity(0.3))
-                }
-
-                Circle()
-                    .strokeBorder(GrippdTheme.Colors.accent.opacity(0.3), lineWidth: 1.5)
-                    .frame(width: 84, height: 84)
-            }
+            UserAvatarView(
+                url: appState.currentUser?.avatarURL,
+                size: 90,
+                isPremium: appState.isPremium
+            )
 
             VStack(spacing: 4) {
                 Text(appState.currentUser?.displayName ?? "")
@@ -1092,7 +1072,14 @@ private struct SettingsView: View {
             sectionHeader("Hesap")
             if let user = appState.currentUser {
                 settingsRow(icon: "person.fill", title: "Kullanıcı adı", value: "@\(user.username)")
-                settingsRow(icon: "star.fill", title: "Plan", value: user.planType == .premium ? "Premium" : "Ücretsiz")
+                if appState.isPremium {
+                    settingsRow(icon: "crown.fill", title: "Plan", value: "Premium ✓")
+                } else {
+                    Button(action: { appState.showPaywall = true }) {
+                        settingsRow(icon: "crown.fill", title: "Plan", value: "Ücretsiz → Premium'a geç")
+                    }
+                    .buttonStyle(.plain)
+                }
             }
         }
     }

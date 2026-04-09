@@ -251,21 +251,10 @@ private struct CommentRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             // Avatar
-            AsyncImage(url: comment.user.avatarURL) { phase in
-                if case .success(let image) = phase {
-                    image.resizable().scaledToFill()
-                } else {
-                    Circle()
-                        .fill(GrippdTheme.Colors.accent.opacity(0.12))
-                        .overlay(
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 12))
-                                .foregroundStyle(.white.opacity(0.3))
-                        )
-                }
-            }
-            .frame(width: 34, height: 34)
-            .clipShape(Circle())
+            UserAvatarView(
+                url: comment.user.avatarURL,
+                size: 34
+            )
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {

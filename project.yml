@@ -65,6 +65,8 @@ targets:
         product: Supabase
       - package: RevenueCat
         product: RevenueCat
+      - package: RevenueCat
+        product: RevenueCatUI
     entitlements:
       path: Grippd/Resources/Grippd.entitlements
       properties:

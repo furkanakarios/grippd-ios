@@ -64,7 +64,7 @@ struct SignInView: View {
                     GrippdDivider(label: "veya")
 
                     // Email
-                    GrippdSecondaryButton("E-posta ile devam et", icon: "envelope") {
+                    GlowBorderButton(title: "E-posta ile devam et") {
                         showEmailAuth = true
                     }
 

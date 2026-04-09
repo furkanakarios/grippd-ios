@@ -16,12 +16,14 @@ final class AuthViewModel {
         guard let user = try? await authService.restoreSession() else { return }
         async let needsOnboarding = OnboardingService.shared.needsOnboarding(userID: user.id)
         async let unreadCount = NotificationService.shared.unreadCount()
-        let (onboarding, count) = await ((try? needsOnboarding) ?? false, unreadCount)
+        async let premium = PurchaseService.shared.isPremium()
+        let (onboarding, count, isPremium) = await ((try? needsOnboarding) ?? false, unreadCount, premium)
         await MainActor.run {
             appState.currentUser = user
             appState.needsOnboarding = onboarding
             appState.isAuthenticated = true
             appState.unreadNotificationCount = count
+            appState.isPremium = isPremium
             LogService.shared.setOwner(user.id.uuidString)
         }
         Task { await LogSyncService.shared.syncPending() }
@@ -53,12 +55,14 @@ final class AuthViewModel {
                 let user = try await authService.signInWithApple(idToken: idToken, nonce: nonce)
                 async let needsOnboarding = OnboardingService.shared.needsOnboarding(userID: user.id)
                 async let unreadCount = NotificationService.shared.unreadCount()
-                let (onboarding, count) = await ((try? needsOnboarding) ?? false, unreadCount)
+                async let premium = PurchaseService.shared.isPremium()
+                let (onboarding, count, isPremium) = await ((try? needsOnboarding) ?? false, unreadCount, premium)
                 await MainActor.run {
                     appState.currentUser = user
                     appState.needsOnboarding = onboarding
                     appState.isAuthenticated = true
                     appState.unreadNotificationCount = count
+                    appState.isPremium = isPremium
                     isLoading = false
                     LogService.shared.setOwner(user.id.uuidString)
                 }
