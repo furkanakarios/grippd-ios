@@ -90,6 +90,16 @@ final class TMDBClient {
         try await get("search/multi", params: ["query": query, "page": "\(page)"])
     }
 
+    // MARK: - Top Rated
+
+    func topRatedMovies(page: Int = 1) async throws -> TMDBPagedResponse<TMDBMovie> {
+        try await get("movie/top_rated", params: ["page": "\(page)"])
+    }
+
+    func topRatedTVShows(page: Int = 1) async throws -> TMDBPagedResponse<TMDBTVShow> {
+        try await get("tv/top_rated", params: ["page": "\(page)"])
+    }
+
     // MARK: - Similar / Recommendations
 
     func similarMovies(id: Int) async throws -> TMDBPagedResponse<TMDBMovie> {
