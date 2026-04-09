@@ -112,11 +112,12 @@ final class TMDBClient {
 
     // MARK: - Discover by Genre
 
-    func discoverMovies(genreID: Int, page: Int = 1, sortBy: String = "popularity.desc") async throws -> TMDBPagedResponse<TMDBMovie> {
+    func discoverMovies(genreID: Int, page: Int = 1, sortBy: String = "popularity.desc", minVoteCount: Int = 200) async throws -> TMDBPagedResponse<TMDBMovie> {
         try await get("discover/movie", params: [
             "with_genres": "\(genreID)",
             "sort_by": sortBy,
-            "page": "\(page)"
+            "page": "\(page)",
+            "vote_count.gte": "\(minVoteCount)"
         ])
     }
 

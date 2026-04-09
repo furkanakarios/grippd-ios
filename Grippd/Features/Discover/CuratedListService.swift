@@ -68,11 +68,11 @@ extension CuratedList {
     static let all: [CuratedList] = [
         CuratedList(
             id: "oscar-winners",
-            title: "Oscar Kazananları",
-            subtitle: "Akademi'nin seçtikleri",
+            title: "En Beğenilen Filmler",
+            subtitle: "Tüm zamanların favorileri",
             icon: "trophy.fill",
             accentHex: "#F5C518",
-            source: .tmdbDiscover(genreID: 18, contentType: .movie, sortBy: "vote_average.desc")
+            source: .tmdbTopRated(contentType: .movie)
         ),
         CuratedList(
             id: "sci-fi-gems",
@@ -146,9 +146,7 @@ final class CuratedListService {
             switch kind {
             case .movie:
                 let r = try? await TMDBClient.shared.discoverMovies(genreID: genreID, sortBy: sortBy)
-                return (r?.results ?? [])
-                    .filter { $0.voteCount > 100 }
-                    .prefix(20).map { .movie($0) }
+                return (r?.results ?? []).prefix(20).map { .movie($0) }
             case .tv:
                 let r = try? await TMDBClient.shared.discoverTVShows(genreID: genreID, sortBy: sortBy)
                 return (r?.results ?? []).prefix(20).map { .tv($0) }
