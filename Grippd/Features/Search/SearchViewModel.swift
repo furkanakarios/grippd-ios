@@ -30,6 +30,23 @@ enum UnifiedSearchResult: Identifiable {
     }
 }
 
+// MARK: - Advanced Filters
+
+struct SearchFilters: Equatable {
+    var minYear: Int? = nil
+    var maxYear: Int? = nil
+    var minRating: Double? = nil   // 0–10
+    var genreID: Int? = nil
+
+    var isActive: Bool {
+        minYear != nil || maxYear != nil || minRating != nil || genreID != nil
+    }
+
+    mutating func reset() {
+        minYear = nil; maxYear = nil; minRating = nil; genreID = nil
+    }
+}
+
 // MARK: - ViewModel
 
 @Observable
@@ -40,6 +57,8 @@ final class SearchViewModel {
     var results: [UnifiedSearchResult] = []
     var isLoading = false
     var error: String?
+    var advancedFilters = SearchFilters()
+    var showFilterSheet = false
 
     // Empty state
     var searchHistory: [String] = []
@@ -55,7 +74,9 @@ final class SearchViewModel {
     func onQueryChange() {
         searchTask?.cancel()
         let trimmed = query.trimmingCharacters(in: .whitespaces)
-        guard trimmed.count >= 2 else {
+
+        // Filtre aktifse sorgu boş olsa da discover çalıştır
+        if trimmed.count < 2 && !advancedFilters.isActive {
             results = []
             return
         }
@@ -65,6 +86,10 @@ final class SearchViewModel {
             guard !Task.isCancelled else { return }
             await search(query: trimmed)
         }
+    }
+
+    func applyFilters() {
+        onQueryChange()
     }
 
     func loadTrending() async {
@@ -97,6 +122,30 @@ final class SearchViewModel {
         onQueryChange()
     }
 
+    private func discoverMovies(query: String) async throws -> [TMDBMovie] {
+        var params: [String: String] = ["sort_by": "popularity.desc"]
+        if !query.isEmpty { params["with_text_query"] = query }
+        if let y = advancedFilters.minYear { params["primary_release_date.gte"] = "\(y)-01-01" }
+        if let y = advancedFilters.maxYear { params["primary_release_date.lte"] = "\(y)-12-31" }
+        if let r = advancedFilters.minRating { params["vote_average.gte"] = String(format: "%.1f", r) }
+        if let g = advancedFilters.genreID { params["with_genres"] = "\(g)" }
+        if advancedFilters.minRating != nil { params["vote_count.gte"] = "100" }
+        let response: TMDBPagedResponse<TMDBMovie> = try await TMDBClient.shared.discover(path: "movie", params: params)
+        return response.results
+    }
+
+    private func discoverShows(query: String) async throws -> [TMDBTVShow] {
+        var params: [String: String] = ["sort_by": "popularity.desc"]
+        if !query.isEmpty { params["with_text_query"] = query }
+        if let y = advancedFilters.minYear { params["first_air_date.gte"] = "\(y)-01-01" }
+        if let y = advancedFilters.maxYear { params["first_air_date.lte"] = "\(y)-12-31" }
+        if let r = advancedFilters.minRating { params["vote_average.gte"] = String(format: "%.1f", r) }
+        if let g = advancedFilters.genreID { params["with_genres"] = "\(g)" }
+        if advancedFilters.minRating != nil { params["vote_count.gte"] = "100" }
+        let response: TMDBPagedResponse<TMDBTVShow> = try await TMDBClient.shared.discover(path: "tv", params: params)
+        return response.results
+    }
+
     private func search(query: String) async {
         isLoading = true
         error = nil
@@ -123,20 +172,30 @@ final class SearchViewModel {
                 results = userResults + tmdbResults + bookResults
 
             case .movies:
-                let response = try await TMDBClient.shared.searchMovies(query: query)
                 let movieUserResults = userResults.filter {
                     if case .userContent(let c) = $0 { return c.contentType == .movie }
                     return false
                 }
-                results = movieUserResults + response.results.map { .movie($0) }
+                if advancedFilters.isActive {
+                    let movies = try await discoverMovies(query: query)
+                    results = movieUserResults + movies.map { .movie($0) }
+                } else {
+                    let response = try await TMDBClient.shared.searchMovies(query: query)
+                    results = movieUserResults + response.results.map { .movie($0) }
+                }
 
             case .tv:
-                let response = try await TMDBClient.shared.searchTVShows(query: query)
                 let tvUserResults = userResults.filter {
                     if case .userContent(let c) = $0 { return c.contentType == .tv_show }
                     return false
                 }
-                results = tvUserResults + response.results.map { .tv($0) }
+                if advancedFilters.isActive {
+                    let shows = try await discoverShows(query: query)
+                    results = tvUserResults + shows.map { .tv($0) }
+                } else {
+                    let response = try await TMDBClient.shared.searchTVShows(query: query)
+                    results = tvUserResults + response.results.map { .tv($0) }
+                }
 
             case .books:
                 let response = try await GoogleBooksClient.shared.search(query: query, maxResults: 20)

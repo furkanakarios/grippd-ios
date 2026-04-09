@@ -90,13 +90,40 @@ final class TMDBClient {
         try await get("search/multi", params: ["query": query, "page": "\(page)"])
     }
 
+    // MARK: - Top Rated
+
+    func topRatedMovies(page: Int = 1) async throws -> TMDBPagedResponse<TMDBMovie> {
+        try await get("movie/top_rated", params: ["page": "\(page)"])
+    }
+
+    func topRatedTVShows(page: Int = 1) async throws -> TMDBPagedResponse<TMDBTVShow> {
+        try await get("tv/top_rated", params: ["page": "\(page)"])
+    }
+
+    // MARK: - Similar / Recommendations
+
+    func similarMovies(id: Int) async throws -> TMDBPagedResponse<TMDBMovie> {
+        try await get("movie/\(id)/similar")
+    }
+
+    func similarTVShows(id: Int) async throws -> TMDBPagedResponse<TMDBTVShow> {
+        try await get("tv/\(id)/similar")
+    }
+
+    // MARK: - Generic Discover
+
+    func discover<T: Decodable>(path: String, params: [String: String]) async throws -> TMDBPagedResponse<T> {
+        try await get("discover/\(path)", params: params)
+    }
+
     // MARK: - Discover by Genre
 
-    func discoverMovies(genreID: Int, page: Int = 1, sortBy: String = "popularity.desc") async throws -> TMDBPagedResponse<TMDBMovie> {
+    func discoverMovies(genreID: Int, page: Int = 1, sortBy: String = "popularity.desc", minVoteCount: Int = 200) async throws -> TMDBPagedResponse<TMDBMovie> {
         try await get("discover/movie", params: [
             "with_genres": "\(genreID)",
             "sort_by": sortBy,
-            "page": "\(page)"
+            "page": "\(page)",
+            "vote_count.gte": "\(minVoteCount)"
         ])
     }
 

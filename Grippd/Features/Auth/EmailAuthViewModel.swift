@@ -70,6 +70,7 @@ final class EmailAuthViewModel {
                 appState.unreadNotificationCount = count
                 isLoading = false
             }
+            Task { await LogSyncService.shared.syncPending() }
         } catch {
             await MainActor.run {
                 errorMessage = mapError(error)

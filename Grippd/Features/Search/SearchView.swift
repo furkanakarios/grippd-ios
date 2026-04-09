@@ -37,6 +37,11 @@ struct SearchView: View {
                     viewModel.onQueryChange()
                 }
             }
+            .sheet(isPresented: $viewModel.showFilterSheet) {
+                SearchFilterSheet(filters: $viewModel.advancedFilters) {
+                    viewModel.applyFilters()
+                }
+            }
             .navigationDestination(for: SearchRoute.self) { route in
                 searchDestination(route)
             }
@@ -48,35 +53,48 @@ struct SearchView: View {
 
     private var searchBar: some View {
         HStack(spacing: 10) {
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 16))
-                .foregroundStyle(.white.opacity(0.4))
+            HStack(spacing: 10) {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 16))
+                    .foregroundStyle(.white.opacity(0.4))
 
-            TextField("Film, dizi, kitap veya kişi ara...", text: $viewModel.query)
-                .font(.system(size: 16))
-                .foregroundStyle(.white)
-                .tint(GrippdTheme.Colors.accent)
-                .autocorrectionDisabled()
-                .onChange(of: viewModel.query) { viewModel.onQueryChange() }
+                TextField("Film, dizi, kitap veya kişi ara...", text: $viewModel.query)
+                    .font(.system(size: 16))
+                    .foregroundStyle(.white)
+                    .tint(GrippdTheme.Colors.accent)
+                    .autocorrectionDisabled()
+                    .onChange(of: viewModel.query) { viewModel.onQueryChange() }
 
-            if !viewModel.query.isEmpty {
+                if !viewModel.query.isEmpty {
+                    Button {
+                        viewModel.query = ""
+                        viewModel.results = []
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+            }
+            .padding(.horizontal, 14)
+            .frame(height: 46)
+            .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
+            .overlay(
+                RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
+                    .stroke(.white.opacity(0.1), lineWidth: 1)
+            )
+
+            // Filtre butonu — sadece film/dizi sekmesinde
+            if viewModel.filter == .movies || viewModel.filter == .tv {
                 Button {
-                    viewModel.query = ""
-                    viewModel.results = []
+                    viewModel.showFilterSheet = true
                 } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 16))
-                        .foregroundStyle(.white.opacity(0.3))
+                    Image(systemName: viewModel.advancedFilters.isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                        .font(.system(size: 22))
+                        .foregroundStyle(viewModel.advancedFilters.isActive ? GrippdTheme.Colors.accent : .white.opacity(0.5))
                 }
             }
         }
-        .padding(.horizontal, 14)
-        .frame(height: 46)
-        .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
-        .overlay(
-            RoundedRectangle(cornerRadius: GrippdTheme.Radius.md)
-                .stroke(.white.opacity(0.1), lineWidth: 1)
-        )
         .padding(.horizontal, GrippdTheme.Spacing.md)
         .padding(.top, GrippdTheme.Spacing.md)
         .padding(.bottom, GrippdTheme.Spacing.sm)
