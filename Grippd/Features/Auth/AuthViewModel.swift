@@ -25,6 +25,7 @@ final class AuthViewModel {
             LogService.shared.setOwner(user.id.uuidString)
         }
         Task { await LogSyncService.shared.syncPending() }
+        Task { await PurchaseService.shared.login(userID: user.id.uuidString) }
     }
 
     // MARK: - Sign in with Apple
@@ -62,6 +63,7 @@ final class AuthViewModel {
                     LogService.shared.setOwner(user.id.uuidString)
                 }
                 Task { await LogSyncService.shared.syncPending() }
+                Task { await PurchaseService.shared.login(userID: user.id.uuidString) }
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription

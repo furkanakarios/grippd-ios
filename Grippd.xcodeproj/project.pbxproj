@@ -29,6 +29,7 @@
 		394921869634E3227E545C44 /* FeedSuggestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D7B6393B14F99A1DFFE6F0 /* FeedSuggestionService.swift */; };
 		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
 		3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */; };
+		48C6A65E15A7B3E632F20DF3 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 1D5083365B4BC5ED233C9C5E /* RevenueCat */; };
 		4EB4608834FB65DB9FC74693 /* PaywallSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B95425833B012713061BCA /* PaywallSheetView.swift */; };
 		56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28237F388713091CF5B58242 /* EmailAuthViewModel.swift */; };
 		5916D159749A98326791E104 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */; };
@@ -93,6 +94,7 @@
 		E9F116064D6A081F52F0BFE6 /* LocalCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */; };
 		EDC85DE7414B96A31D98DEA3 /* SearchFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC20EF3D14ED4F8926433511 /* SearchFilterSheet.swift */; };
 		EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */; };
+		EEF78830B89AED1C116772C4 /* PurchaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CCFDDBCBF1815F9B4A7B5B /* PurchaseService.swift */; };
 		F2B7CA0B1ACE5586A4D92D85 /* DiscoverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429358E149CF11211D8CAD8 /* DiscoverViewModel.swift */; };
 		F410313188D2095981C7A154 /* TVShowDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FF594E720DEE961452B2EE /* TVShowDetailViewModel.swift */; };
 		F4DA93DFA910E861B146AC2D /* GrippdTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684AA2C0DF8DE655B26C90A0 /* GrippdTheme.swift */; };
@@ -155,6 +157,7 @@
 		51AD3C13B83EB88FD33808D8 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
 		53D1CBC1ABF9BD97FF109E01 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		546931D814CC04087670F6DE /* LikeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeService.swift; sourceTree = "<group>"; };
+		59CCFDDBCBF1815F9B4A7B5B /* PurchaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseService.swift; sourceTree = "<group>"; };
 		5A7745AF7CCCAC6083DB32F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B0E69087D381DFA259CE35C /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		5C60BB8993AE3B0492233474 /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
@@ -224,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */,
+				48C6A65E15A7B3E632F20DF3 /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +420,7 @@
 			children = (
 				5ACBABDC609AC076FE7CCA0C /* Local */,
 				D4E2EB454AF9B57AD5391BB1 /* Network */,
+				B4CEB1F6D1E107122ED33534 /* Purchases */,
 				4DAA1FFC5B34F47AE60596A1 /* Supabase */,
 			);
 			path = Data;
@@ -546,6 +551,14 @@
 				5B0E69087D381DFA259CE35C /* SearchViewModel.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		B4CEB1F6D1E107122ED33534 /* Purchases */ = {
+			isa = PBXGroup;
+			children = (
+				59CCFDDBCBF1815F9B4A7B5B /* PurchaseService.swift */,
+			);
+			path = Purchases;
 			sourceTree = "<group>";
 		};
 		D19A8B8CFC1ADB65BD0FD1D7 /* TMDB */ = {
@@ -683,6 +696,7 @@
 			name = Grippd;
 			packageProductDependencies = (
 				57B8F951E1296882A2860113 /* Supabase */,
+				1D5083365B4BC5ED233C9C5E /* RevenueCat */,
 			);
 			productName = Grippd;
 			productReference = 2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */;
@@ -735,6 +749,7 @@
 			mainGroup = F857DE3C8C86580A3DF98480;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				45BCB6C6784622F1389E147C /* XCRemoteSwiftPackageReference "purchases-ios" */,
 				6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -835,6 +850,7 @@
 				4EB4608834FB65DB9FC74693 /* PaywallSheetView.swift in Sources */,
 				266036DE24F2C42BC3D01F61 /* PlatformAvailabilityView.swift in Sources */,
 				8EA99FD01206A4834FC06D44 /* ProfileView.swift in Sources */,
+				EEF78830B89AED1C116772C4 /* PurchaseService.swift in Sources */,
 				9C205D397566ACA00F458697 /* Review.swift in Sources */,
 				EDC85DE7414B96A31D98DEA3 /* SearchFilterSheet.swift in Sources */,
 				928B78DF03DA910125615ADD /* SearchHistoryService.swift in Sources */,
@@ -1105,6 +1121,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		45BCB6C6784622F1389E147C /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/supabase/supabase-swift";
@@ -1116,6 +1140,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1D5083365B4BC5ED233C9C5E /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 45BCB6C6784622F1389E147C /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
 		57B8F951E1296882A2860113 /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6868FA86B75FAD6BF6E5B0FE /* XCRemoteSwiftPackageReference "supabase-swift" */;

@@ -73,6 +73,7 @@ final class EmailAuthViewModel {
                 LogService.shared.setOwner(user.id.uuidString)
             }
             Task { await LogSyncService.shared.syncPending() }
+            Task { await PurchaseService.shared.login(userID: user.id.uuidString) }
         } catch {
             await MainActor.run {
                 errorMessage = mapError(error)

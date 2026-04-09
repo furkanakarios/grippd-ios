@@ -6,6 +6,10 @@ struct GrippdApp: App {
 
     @State private var appState = AppState()
 
+    init() {
+        PurchaseService.configure()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
