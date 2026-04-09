@@ -27,9 +27,9 @@ struct SearchFilterSheet: View {
                         // Yıl Aralığı
                         filterSection(title: "Yıl Aralığı", icon: "calendar") {
                             HStack(spacing: 12) {
-                                yearPicker(label: "Başlangıç", value: $localFilters.minYear)
+                                yearPicker(label: "Başlangıç", value: $localFilters.minYear, maxYear: localFilters.maxYear)
                                 Text("–").foregroundStyle(.white.opacity(0.4))
-                                yearPicker(label: "Bitiş", value: $localFilters.maxYear)
+                                yearPicker(label: "Bitiş", value: $localFilters.maxYear, minYear: localFilters.minYear)
                             }
                         }
 
@@ -114,15 +114,20 @@ struct SearchFilterSheet: View {
         .background(GrippdTheme.Colors.surface.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
     }
 
-    private func yearPicker(label: String, value: Binding<Int?>) -> some View {
-        Menu {
+    private func yearPicker(label: String, value: Binding<Int?>, minYear: Int? = nil, maxYear: Int? = nil) -> some View {
+        let availableYears = years.prefix(50).filter { year in
+            if let min = minYear, year < min { return false }
+            if let max = maxYear, year > max { return false }
+            return true
+        }
+        return Menu {
             Button("Tümü") { value.wrappedValue = nil }
-            ForEach(years.prefix(50), id: \.self) { year in
-                Button("\(year)") { value.wrappedValue = year }
+            ForEach(availableYears, id: \.self) { year in
+                Button(String(year)) { value.wrappedValue = year }
             }
         } label: {
             HStack(spacing: 4) {
-                Text(value.wrappedValue.map { "\($0)" } ?? label)
+                Text(value.wrappedValue.map { String($0) } ?? label)
                     .font(.system(size: 14))
                     .foregroundStyle(value.wrappedValue != nil ? .white : .white.opacity(0.4))
                 Image(systemName: "chevron.down")
