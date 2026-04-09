@@ -57,6 +57,28 @@ struct TrendingUser: Decodable, Identifiable {
     var userUUID: UUID? { UUID(uuidString: userId) }
 }
 
+// MARK: - Similar User
+
+struct SimilarUser: Decodable, Identifiable {
+    let userId: String
+    let username: String
+    let displayName: String
+    let avatarUrl: String?
+    let commonCount: Int
+
+    enum CodingKeys: String, CodingKey {
+        case userId      = "user_id"
+        case username
+        case displayName = "display_name"
+        case avatarUrl   = "avatar_url"
+        case commonCount = "common_count"
+    }
+
+    var id: String { userId }
+    var avatarURL: URL? { avatarUrl.flatMap { URL(string: $0) } }
+    var userUUID: UUID? { UUID(uuidString: userId) }
+}
+
 // MARK: - Service
 
 @MainActor
@@ -83,6 +105,19 @@ final class TrendingService {
         do {
             let users: [TrendingUser] = try await client
                 .rpc("get_trending_users", params: ["limit_count": limit])
+                .execute()
+                .value
+            return users
+        } catch {
+            return []
+        }
+    }
+
+    /// Ortak log içeriğine göre benzer kullanıcılar
+    func fetchSimilarUsers(limit: Int = 10) async -> [SimilarUser] {
+        do {
+            let users: [SimilarUser] = try await client
+                .rpc("get_similar_users", params: ["limit_count": limit])
                 .execute()
                 .value
             return users
