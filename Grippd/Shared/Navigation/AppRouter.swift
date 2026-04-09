@@ -36,6 +36,7 @@ enum DiscoverRoute: Hashable {
     case episodeDetail(showID: Int, seasonNumber: Int, episodeNumber: Int)
     case bookDetail(googleBooksID: String)
     case personDetail(tmdbID: Int)
+    case curatedList(CuratedList)
 }
 
 enum ProfileRoute: Hashable {

@@ -88,6 +88,10 @@ struct DiscoverView: View {
                         .padding(.bottom, GrippdTheme.Spacing.lg)
                 }
 
+                // Listeler
+                sectionHeader(title: "Listeler", icon: "list.star")
+                curatedListsCarousel
+
                 // Senin İçin
                 let allRecs = viewModel.recommendedMovies.map { CarouselItem.movie($0) }
                     + viewModel.recommendedShows.map { CarouselItem.tv($0) }
@@ -600,6 +604,25 @@ struct DiscoverView: View {
         }
     }
 
+    // MARK: - Curated Lists Carousel
+
+    private var curatedListsCarousel: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(CuratedList.all) { list in
+                    Button {
+                        router.discoverPath.append(DiscoverRoute.curatedList(list))
+                    } label: {
+                        CuratedListCard(list: list)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, GrippdTheme.Spacing.sm)
+        }
+    }
+
     // MARK: - Section Header
 
     private func sectionHeader(title: String, icon: String, badge: String? = nil) -> some View {
@@ -723,6 +746,8 @@ struct DiscoverView: View {
             } onTVTap: { tvID in
                 router.discoverPath.append(DiscoverRoute.tvShowDetail(tmdbID: tvID))
             }
+        case .curatedList(let list):
+            CuratedListDetailView(list: list)
         }
     }
 }
@@ -989,6 +1014,48 @@ struct SimilarUserCard: View {
     }
 }
 
+// MARK: - Curated List Card
+
+struct CuratedListCard: View {
+    let list: CuratedList
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Icon
+            Image(systemName: list.icon)
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(accentColor)
+                .frame(width: 44, height: 44)
+                .background(accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+
+            Spacer()
+
+            // Text
+            VStack(alignment: .leading, spacing: 3) {
+                Text(list.title)
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(.white)
+                    .lineLimit(2)
+                Text(list.subtitle)
+                    .font(.system(size: 11))
+                    .foregroundStyle(.white.opacity(0.45))
+                    .lineLimit(1)
+            }
+        }
+        .padding(14)
+        .frame(width: 140, height: 130)
+        .background(GrippdTheme.Colors.surface.opacity(0.6), in: RoundedRectangle(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .strokeBorder(accentColor.opacity(0.2), lineWidth: 1)
+        )
+    }
+
+    private var accentColor: Color {
+        Color(hex: list.accentHex) ?? GrippdTheme.Colors.accent
+    }
+}
+
 // MARK: - Shimmer
 
 private struct ShimmerView: View {
@@ -1011,4 +1078,17 @@ private struct ShimmerView: View {
 
 private extension View {
     func shimmering() -> some View { self.overlay(ShimmerView()) }
+}
+
+private extension Color {
+    init?(hex: String) {
+        var str = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        if str.hasPrefix("#") { str.removeFirst() }
+        guard str.count == 6, let value = UInt64(str, radix: 16) else { return nil }
+        self.init(
+            red:   Double((value >> 16) & 0xFF) / 255,
+            green: Double((value >>  8) & 0xFF) / 255,
+            blue:  Double( value        & 0xFF) / 255
+        )
+    }
 }
