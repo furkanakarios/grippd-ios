@@ -67,12 +67,12 @@ enum CuratedItem: Identifiable {
 extension CuratedList {
     static let all: [CuratedList] = [
         CuratedList(
-            id: "oscar-winners",
-            title: "En Beğenilen Filmler",
-            subtitle: "Tüm zamanların favorileri",
+            id: "drama-essentials",
+            title: "Dram Şaheserleri",
+            subtitle: "Dokunan hikayeler",
             icon: "trophy.fill",
             accentHex: "#F5C518",
-            source: .tmdbTopRated(contentType: .movie)
+            source: .tmdbDiscover(genreID: 18, contentType: .movie, sortBy: "popularity.desc")
         ),
         CuratedList(
             id: "sci-fi-gems",
