@@ -110,6 +110,12 @@ final class TMDBClient {
         try await get("tv/\(id)/similar")
     }
 
+    // MARK: - Generic Discover
+
+    func discover<T: Decodable>(path: String, params: [String: String]) async throws -> TMDBPagedResponse<T> {
+        try await get("discover/\(path)", params: params)
+    }
+
     // MARK: - Discover by Genre
 
     func discoverMovies(genreID: Int, page: Int = 1, sortBy: String = "popularity.desc", minVoteCount: Int = 200) async throws -> TMDBPagedResponse<TMDBMovie> {
