@@ -26,6 +26,9 @@ final class DiscoverViewModel {
     var trendingUsers: [TrendingUser] = []
     var isLoadingTrendingUsers = false
 
+    var similarUsers: [SimilarUser] = []
+    var isLoadingSimilarUsers = false
+
     // MARK: - Content
 
     var trendingMovies: [TMDBMovie] = []
@@ -101,6 +104,7 @@ final class DiscoverViewModel {
         recommendedMovies = []
         recommendedShows = []
         recommendedBooks = []
+        similarUsers = []
         await load()
     }
 
@@ -114,7 +118,14 @@ final class DiscoverViewModel {
         async let genres: Void     = loadGenres()
         async let books: Void      = loadFeaturedBooks()
         async let recs: Void       = loadRecommendations()
-        _ = await (grippd, users, trending, popular, nowPlaying, onTheAir, genres, books, recs)
+        async let similar: Void    = loadSimilarUsers()
+        _ = await (grippd, users, trending, popular, nowPlaying, onTheAir, genres, books, recs, similar)
+    }
+
+    private func loadSimilarUsers() async {
+        isLoadingSimilarUsers = true
+        similarUsers = await TrendingService.shared.fetchSimilarUsers(limit: 10)
+        isLoadingSimilarUsers = false
     }
 
     private func loadTrendingUsers() async {

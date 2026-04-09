@@ -12,6 +12,17 @@ final class LogSyncService {
 
     // MARK: - Public API
 
+    /// Giriş sonrası remoteID'si olmayan (sync başarısız) logları tekrar dener.
+    func syncPending() async {
+        guard let userID = client.auth.currentUser?.id else { return }
+        let pending = LogService.shared.allLogs().filter {
+            $0.remoteID == nil && $0.ownerID == userID.uuidString
+        }
+        for entry in pending {
+            await sync(entry)
+        }
+    }
+
     /// Yeni log kaydedilince çağrılır. content upsert + log insert.
     func sync(_ entry: LogEntry) async {
         guard !entry.ownerID.isEmpty else { return }
@@ -87,12 +98,22 @@ final class LogSyncService {
         }
         struct Row: Decodable { let id: String }
 
+        // Önce mevcut kaydı ara — upsert UPDATE tetiklediği için RLS'e takılıyor
+        let existing: [Row] = (try? await client
+            .from("content")
+            .select("id")
+            .eq("tmdb_id", value: tmdbID)
+            .eq("content_type", value: contentType)
+            .limit(1)
+            .execute()
+            .value) ?? []
+
+        if let id = existing.first?.id { return id }
+
+        // Yoksa insert et
         let rows: [Row] = try await client
             .from("content")
-            .upsert(
-                Payload(tmdb_id: tmdbID, content_type: contentType, title: title, poster_url: posterURL),
-                onConflict: "tmdb_id,content_type"
-            )
+            .insert(Payload(tmdb_id: tmdbID, content_type: contentType, title: title, poster_url: posterURL))
             .select("id")
             .execute()
             .value

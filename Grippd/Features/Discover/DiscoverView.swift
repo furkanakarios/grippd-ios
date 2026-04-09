@@ -122,6 +122,17 @@ struct DiscoverView: View {
                     }
                 }
 
+                // Benzer Zevkler
+                if viewModel.isLoadingSimilarUsers || !viewModel.similarUsers.isEmpty {
+                    sectionHeader(title: "Benzer Zevkler", icon: "person.2.fill", badge: "Senin Gibi")
+                        .padding(.top, GrippdTheme.Spacing.lg)
+                    if viewModel.isLoadingSimilarUsers {
+                        userCarouselSkeleton
+                    } else {
+                        similarUsersCarousel(viewModel.similarUsers)
+                    }
+                }
+
                 // Trend Filmler
                 sectionHeader(title: "Trend Filmler", icon: "flame.fill")
                     .padding(.top, GrippdTheme.Spacing.lg)
@@ -501,6 +512,25 @@ struct DiscoverView: View {
                         }
                     } label: {
                         TrendingUserCard(user: user)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, GrippdTheme.Spacing.sm)
+        }
+    }
+
+    private func similarUsersCarousel(_ users: [SimilarUser]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(users) { user in
+                    Button {
+                        if let id = user.userUUID {
+                            router.discoverPath.append(DiscoverRoute.userProfile(userID: id))
+                        }
+                    } label: {
+                        SimilarUserCard(user: user)
                     }
                     .buttonStyle(.plain)
                 }
@@ -892,6 +922,59 @@ struct TrendingUserCard: View {
             }
 
             // Name
+            Text(user.displayName)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+
+            Text("@\(user.username)")
+                .font(.system(size: 11))
+                .foregroundStyle(.white.opacity(0.4))
+                .lineLimit(1)
+        }
+        .frame(width: 80)
+    }
+}
+
+// MARK: - Similar User Card
+
+struct SimilarUserCard: View {
+    let user: SimilarUser
+
+    var body: some View {
+        VStack(spacing: 8) {
+            ZStack(alignment: .bottomTrailing) {
+                AsyncImage(url: user.avatarURL) { phase in
+                    if case .success(let image) = phase {
+                        image.resizable().scaledToFill()
+                    } else {
+                        Circle()
+                            .fill(GrippdTheme.Colors.accent.opacity(0.12))
+                            .overlay(
+                                Image(systemName: "person.fill")
+                                    .font(.system(size: 24))
+                                    .foregroundStyle(.white.opacity(0.3))
+                            )
+                    }
+                }
+                .frame(width: 64, height: 64)
+                .clipShape(Circle())
+                .overlay(Circle().strokeBorder(.white.opacity(0.08), lineWidth: 1))
+
+                // Ortak içerik sayısı badge
+                HStack(spacing: 2) {
+                    Image(systemName: "heart.fill")
+                        .font(.system(size: 7, weight: .bold))
+                    Text("\(user.commonCount)")
+                        .font(.system(size: 9, weight: .bold))
+                }
+                .foregroundStyle(GrippdTheme.Colors.background)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 2)
+                .background(GrippdTheme.Colors.accent, in: Capsule())
+                .offset(x: 4, y: 4)
+            }
+
             Text(user.displayName)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(.white)

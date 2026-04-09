@@ -24,6 +24,7 @@ final class AuthViewModel {
             appState.unreadNotificationCount = count
             LogService.shared.setOwner(user.id.uuidString)
         }
+        Task { await LogSyncService.shared.syncPending() }
     }
 
     // MARK: - Sign in with Apple
@@ -60,6 +61,7 @@ final class AuthViewModel {
                     isLoading = false
                     LogService.shared.setOwner(user.id.uuidString)
                 }
+                Task { await LogSyncService.shared.syncPending() }
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription
