@@ -37,6 +37,7 @@ final class DiscoverViewModel {
     var popularShows: [TMDBTVShow] = []
     var nowPlayingMovies: [TMDBMovie] = []
     var onTheAirShows: [TMDBTVShow] = []
+    var upcomingMovies: [TMDBMovie] = []
     var movieGenres: [TMDBGenre] = []
     var tvGenres: [TMDBGenre] = []
     var featuredBooks: [GoogleBook] = []
@@ -55,6 +56,7 @@ final class DiscoverViewModel {
     var isLoadingPopular = false
     var isLoadingNowPlaying = false
     var isLoadingOnTheAir = false
+    var isLoadingUpcoming = false
     var isLoadingBooks = false
 
     var error: String?
@@ -105,6 +107,7 @@ final class DiscoverViewModel {
         recommendedShows = []
         recommendedBooks = []
         similarUsers = []
+        upcomingMovies = []
         await load()
     }
 
@@ -119,7 +122,8 @@ final class DiscoverViewModel {
         async let books: Void      = loadFeaturedBooks()
         async let recs: Void       = loadRecommendations()
         async let similar: Void    = loadSimilarUsers()
-        _ = await (grippd, users, trending, popular, nowPlaying, onTheAir, genres, books, recs, similar)
+        async let upcoming: Void   = loadUpcoming()
+        _ = await (grippd, users, trending, popular, nowPlaying, onTheAir, genres, books, recs, similar, upcoming)
     }
 
     private func loadSimilarUsers() async {
@@ -174,6 +178,19 @@ final class DiscoverViewModel {
             movieGenres = movies
             tvGenres = tv
         } catch {}
+    }
+
+    private func loadUpcoming() async {
+        isLoadingUpcoming = true
+        do {
+            let response = try await TMDBClient.shared.upcomingMovies()
+            upcomingMovies = Array(response.results
+                .filter { $0.releaseDate != nil }
+                .sorted { ($0.releaseDate ?? "") < ($1.releaseDate ?? "") }
+                .prefix(15)
+            )
+        } catch {}
+        isLoadingUpcoming = false
     }
 
     private func loadNowPlaying() async {

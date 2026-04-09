@@ -173,6 +173,17 @@ struct DiscoverView: View {
                     posterCarousel(viewModel.nowPlayingMovies.map { .movie($0) })
                 }
 
+                // Yakında Vizyonda
+                if viewModel.isLoadingUpcoming || !viewModel.upcomingMovies.isEmpty {
+                    sectionHeader(title: "Yakında Vizyonda", icon: "calendar", badge: "Yeni")
+                        .padding(.top, GrippdTheme.Spacing.lg)
+                    if viewModel.isLoadingUpcoming {
+                        skeletonRow()
+                    } else {
+                        upcomingCarousel(viewModel.upcomingMovies)
+                    }
+                }
+
                 // Yayında
                 sectionHeader(title: "Yayında", icon: "antenna.radiowaves.left.and.right")
                     .padding(.top, GrippdTheme.Spacing.lg)
@@ -221,6 +232,13 @@ struct DiscoverView: View {
                     skeletonRow()
                 } else {
                     posterCarousel(viewModel.nowPlayingMovies.map { .movie($0) })
+                }
+
+                // Yakında Vizyonda
+                if !viewModel.upcomingMovies.isEmpty {
+                    sectionHeader(title: "Yakında Vizyonda", icon: "calendar", badge: "Yeni")
+                        .padding(.top, GrippdTheme.Spacing.lg)
+                    upcomingCarousel(viewModel.upcomingMovies)
                 }
 
                 // Popüler grid
@@ -601,6 +619,25 @@ struct DiscoverView: View {
             if let id = item.googleBooksId {
                 router.discoverPath.append(DiscoverRoute.bookDetail(googleBooksID: id))
             }
+        }
+    }
+
+    // MARK: - Upcoming Carousel
+
+    private func upcomingCarousel(_ movies: [TMDBMovie]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(movies) { movie in
+                    Button {
+                        router.discoverPath.append(DiscoverRoute.movieDetail(tmdbID: movie.id))
+                    } label: {
+                        UpcomingMovieCard(movie: movie)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, GrippdTheme.Spacing.md)
+            .padding(.vertical, GrippdTheme.Spacing.sm)
         }
     }
 
@@ -1011,6 +1048,64 @@ struct SimilarUserCard: View {
                 .lineLimit(1)
         }
         .frame(width: 80)
+    }
+}
+
+// MARK: - Upcoming Movie Card
+
+struct UpcomingMovieCard: View {
+    let movie: TMDBMovie
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            // Poster
+            Color.clear
+                .aspectRatio(2/3, contentMode: .fit)
+                .overlay(
+                    AsyncImage(url: movie.posterURL) { phase in
+                        switch phase {
+                        case .success(let image): image.resizable().scaledToFill()
+                        default:
+                            Rectangle()
+                                .fill(GrippdTheme.Colors.surface)
+                                .overlay(Image(systemName: "film").foregroundStyle(.white.opacity(0.2)))
+                        }
+                    }
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .overlay(alignment: .topLeading) {
+                    if let dateLabel = formattedDate {
+                        Text(dateLabel)
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 3)
+                            .background(.ultraThinMaterial, in: Capsule())
+                            .padding(6)
+                    }
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(.white.opacity(0.06), lineWidth: 1)
+                )
+
+            Text(movie.title)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(.white.opacity(0.9))
+                .lineLimit(2)
+        }
+        .frame(width: 110)
+    }
+
+    private var formattedDate: String? {
+        guard let raw = movie.releaseDate else { return nil }
+        let parts = raw.split(separator: "-")
+        guard parts.count == 3,
+              let month = Int(parts[1]),
+              let day = Int(parts[2]) else { return nil }
+        let months = ["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"]
+        guard month >= 1, month <= 12 else { return nil }
+        return "\(day) \(months[month - 1])"
     }
 }
 
