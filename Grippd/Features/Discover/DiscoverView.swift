@@ -2,7 +2,10 @@ import SwiftUI
 
 struct DiscoverView: View {
     @Environment(AppRouter.self) private var router
+    @Environment(AppState.self) private var appState
     @State private var viewModel = DiscoverViewModel()
+
+    private var isPremium: Bool { appState.currentUser?.planType == .premium }
 
     var body: some View {
         @Bindable var router = router
@@ -22,7 +25,7 @@ struct DiscoverView: View {
             .navigationDestination(for: DiscoverRoute.self) { route in
                 discoverDestination(route)
             }
-            .task { await viewModel.loadIfNeeded() }
+            .task { await viewModel.loadIfNeeded(isPremium: isPremium) }
             .refreshable { await viewModel.refresh() }
         }
     }
@@ -97,12 +100,20 @@ struct DiscoverView: View {
                     + viewModel.recommendedShows.map { CarouselItem.tv($0) }
                     + viewModel.recommendedBooks.map { CarouselItem.book($0) }
                 if viewModel.isLoadingRecommendations || !allRecs.isEmpty {
-                    sectionHeader(title: "Senin İçin", icon: "sparkles", badge: "Öneriler")
+                    sectionHeader(title: "Senin İçin", icon: "sparkles",
+                                  badge: isPremium ? "Premium" : "Öneriler")
                     if viewModel.isLoadingRecommendations {
                         skeletonRow()
                     } else {
                         posterCarousel(allRecs)
                     }
+                }
+
+                // Premium upsell — free kullanıcılara
+                if !isPremium {
+                    premiumUpsellBanner
+                        .padding(.horizontal, GrippdTheme.Spacing.md)
+                        .padding(.top, GrippdTheme.Spacing.sm)
                 }
 
                 // Grippd'de Trend
@@ -658,6 +669,46 @@ struct DiscoverView: View {
             .padding(.horizontal, GrippdTheme.Spacing.md)
             .padding(.vertical, GrippdTheme.Spacing.sm)
         }
+    }
+
+    // MARK: - Premium Upsell Banner
+
+    private var premiumUpsellBanner: some View {
+        HStack(spacing: 14) {
+            Image(systemName: "crown.fill")
+                .font(.system(size: 20))
+                .foregroundStyle(.yellow)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Daha fazla öneri için Premium'a geç")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white)
+                Text("Kişiselleştirilmiş öneriler, reklamsız deneyim")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+
+            Spacer()
+
+            Text("Keşfet")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(GrippdTheme.Colors.background)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(GrippdTheme.Colors.accent, in: Capsule())
+        }
+        .padding(14)
+        .background(
+            LinearGradient(
+                colors: [Color.yellow.opacity(0.12), GrippdTheme.Colors.accent.opacity(0.08)],
+                startPoint: .leading, endPoint: .trailing
+            ),
+            in: RoundedRectangle(cornerRadius: 14)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(Color.yellow.opacity(0.2), lineWidth: 1)
+        )
     }
 
     // MARK: - Section Header

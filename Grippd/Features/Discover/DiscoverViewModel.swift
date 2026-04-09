@@ -80,11 +80,13 @@ final class DiscoverViewModel {
     var heroMovie: TMDBMovie? { trendingMovies.first }
     var heroShow: TMDBTVShow? { trendingShows.first }
 
+    var isPremium = false
     private var didLoad = false
 
     // MARK: - Load
 
-    func loadIfNeeded() async {
+    func loadIfNeeded(isPremium: Bool = false) async {
+        self.isPremium = isPremium
         guard !didLoad else { return }
         didLoad = true
         await load()
@@ -279,11 +281,12 @@ final class DiscoverViewModel {
         }
 
         // Popülerliğe göre sırala
+        let limit = isPremium ? 20 : 12
         recommendedMovies = Array(
-            filteredMovies.sorted { $0.popularity > $1.popularity }.prefix(12)
+            filteredMovies.sorted { $0.popularity > $1.popularity }.prefix(limit)
         )
         recommendedShows = Array(
-            filteredShows.sorted { $0.popularity > $1.popularity }.prefix(12)
+            filteredShows.sorted { $0.popularity > $1.popularity }.prefix(limit)
         )
 
         // Kitap önerileri: loglanmış kitapların başlıklarından arama yap
