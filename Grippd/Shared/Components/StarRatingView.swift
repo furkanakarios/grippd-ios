@@ -97,6 +97,9 @@ struct StarRatingView: View {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
                 let newRating = ratingFrom(x: value.location.x)
+                if newRating != dragRating {
+                    HapticManager.selection()
+                }
                 withAnimation(.spring(response: 0.15, dampingFraction: 0.7)) {
                     dragRating = newRating
                 }
@@ -128,6 +131,7 @@ struct StarRatingView: View {
     }
 
     private func commit(_ newRating: Double) {
+        HapticManager.selection()
         let starIndex = Int(ceil(newRating / 2))
         withAnimation(.spring(response: 0.25, dampingFraction: 0.55)) {
             // Aynı puana tekrar basınca sıfırla

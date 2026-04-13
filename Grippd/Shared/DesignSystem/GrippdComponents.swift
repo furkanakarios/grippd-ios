@@ -158,3 +158,20 @@ struct GrippdBackground: View {
         }
     }
 }
+
+// MARK: - Press Button Style
+
+struct PressButtonStyle: ButtonStyle {
+    var scale: CGFloat = 0.95
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? scale : 1.0)
+            .animation(.spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
+    }
+}
+
+extension ButtonStyle where Self == PressButtonStyle {
+    static var press: PressButtonStyle { PressButtonStyle() }
+    static func press(scale: CGFloat) -> PressButtonStyle { PressButtonStyle(scale: scale) }
+}

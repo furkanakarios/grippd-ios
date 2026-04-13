@@ -28,6 +28,7 @@ private final class UserProfileViewModel {
 
     func toggleFollow(targetUserID: UUID) async {
         isFollowLoading = true
+        HapticManager.medium()
         do {
             if isFollowing {
                 try await FollowService.shared.unfollow(targetUserID: targetUserID)
@@ -254,6 +255,7 @@ struct UserProfileView: View {
             )
         }
         .disabled(viewModel.isFollowLoading)
+        .buttonStyle(.press)
         .animation(.spring(response: 0.3), value: viewModel.isFollowing)
     }
 

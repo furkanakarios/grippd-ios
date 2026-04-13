@@ -20,6 +20,7 @@
 		1E497CC5BB09798EA83402F2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1686809CF6AAB5731AA8481 /* User.swift */; };
 		1E50150BD4CADF7E83A4D32E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C3D51F02E1AE282175FA62 /* SearchView.swift */; };
 		2017BAAAE9EB5CDABAD41919 /* LogSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0C5E02F30A4A8F07FC0F8E /* LogSyncService.swift */; };
+		20DCBC72ADBFD46D53395112 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DEA96C54398FF74BF7CBD /* HapticManager.swift */; };
 		24CB916439B123DB568F668D /* EmailAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */; };
 		266036DE24F2C42BC3D01F61 /* PlatformAvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */; };
 		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
@@ -198,6 +199,7 @@
 		9A4CBF9E15999716707334E2 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		9B6CEA8D04D9ED636549509A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		A077D0480CDDF60562399C9D /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
+		A23DEA96C54398FF74BF7CBD /* HapticManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		AC5AA54A0FEE7C613B91626E /* CuratedListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedListService.swift; sourceTree = "<group>"; };
 		ADDCAA1FEF511B2E9AC2C74F /* CustomListFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListFormSheet.swift; sourceTree = "<group>"; };
 		AF6D4B1F1C9B7B46C3DF02AC /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 				9344A381848C54CF5FE99A0D /* DIContainer.swift */,
 				2744F2F2361CF8E774714489 /* ShareService.swift */,
 				0CFF420E2AFB9BE3AA4576AF /* PremiumGate.swift */,
+				A23DEA96C54398FF74BF7CBD /* HapticManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -897,6 +900,7 @@
 				FA6372DFE89AD4C467319576 /* WrappedView.swift in Sources */,
 				49D4405AE65711870AD37616 /* PremiumGate.swift in Sources */,
 				D4D6FC0E73AA8C73D47848E2 /* SubscriptionManagementView.swift in Sources */,
+				20DCBC72ADBFD46D53395112 /* HapticManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

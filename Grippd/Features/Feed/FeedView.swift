@@ -51,9 +51,12 @@ private final class FeedViewModel {
     func toggleLike(activityID: UUID) async {
         guard let idx = activities.firstIndex(where: { $0.id == activityID }) else { return }
         let wasLiked = activities[idx].isLiked
+        HapticManager.light()
         // Optimistic update
-        activities[idx].isLiked = !wasLiked
-        activities[idx].likeCount += wasLiked ? -1 : 1
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+            activities[idx].isLiked = !wasLiked
+            activities[idx].likeCount += wasLiked ? -1 : 1
+        }
         if wasLiked {
             await LikeService.shared.unlike(logID: activityID)
         } else {

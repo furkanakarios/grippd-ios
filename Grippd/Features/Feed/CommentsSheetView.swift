@@ -52,6 +52,7 @@ private final class CommentsViewModel {
     func toggleLike(commentID: UUID) async {
         guard let idx = comments.firstIndex(where: { $0.id == commentID }) else { return }
         let wasLiked = comments[idx].isLiked
+        HapticManager.light()
         comments[idx].isLiked = !wasLiked
         comments[idx].likeCount += wasLiked ? -1 : 1
         do {
