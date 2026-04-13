@@ -203,7 +203,7 @@ struct CommentsSheetView: View {
                 Image(systemName: "lock.fill")
                     .font(.system(size: 13))
                     .foregroundStyle(.orange)
-                Text("Bu ayki yorum hakkını (20) kullandın")
+                Text("Bu ayki yorum hakkını (\(PremiumGate.maxFreeCommentsPerMonth)) kullandın")
                     .font(.system(size: 13))
                     .foregroundStyle(.white.opacity(0.6))
             }
