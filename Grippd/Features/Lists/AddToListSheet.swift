@@ -7,8 +7,20 @@ struct AddToListSheet: View {
     let posterPath: String?
     @Binding var isPresented: Bool
 
+    @Environment(AppState.self) private var appState
     @State private var lists: [CustomList] = []
     @State private var showCreateSheet = false
+    @State private var showPaywall = false
+
+    private static let freeListLimit = 3
+
+    private func tryCreateList() {
+        if !appState.isPremium && lists.count >= Self.freeListLimit {
+            showPaywall = true
+        } else {
+            showCreateSheet = true
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -102,11 +114,14 @@ struct AddToListSheet: View {
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
         }
+        .sheet(isPresented: $showPaywall) {
+            PaywallSheetView()
+        }
     }
 
     private var createButton: some View {
         Button {
-            showCreateSheet = true
+            tryCreateList()
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "plus.circle.fill")

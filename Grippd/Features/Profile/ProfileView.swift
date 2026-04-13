@@ -343,10 +343,22 @@ private struct LogsTabView: View {
 
 private struct WatchlistTabView: View {
     let router: AppRouter
+    @Environment(AppState.self) private var appState
     @State private var entries: [WatchlistEntry] = []
     @State private var customLists: [CustomList] = []
     @State private var filter: Content.ContentType? = nil
     @State private var showCreateList = false
+    @State private var showPaywall = false
+
+    private static let freeListLimit = 3
+
+    private func tryCreateList() {
+        if !appState.isPremium && customLists.count >= Self.freeListLimit {
+            showPaywall = true
+        } else {
+            showCreateList = true
+        }
+    }
 
     private var filtered: [WatchlistEntry] {
         guard let f = filter else { return entries }
@@ -391,7 +403,7 @@ private struct WatchlistTabView: View {
                     // Custom listeler
                     sectionHeader("Özel Listeler") {
                         Button {
-                            showCreateList = true
+                            tryCreateList()
                         } label: {
                             Image(systemName: "plus")
                                 .font(.system(size: 14, weight: .semibold))
@@ -401,7 +413,7 @@ private struct WatchlistTabView: View {
 
                     if customLists.isEmpty {
                         Button {
-                            showCreateList = true
+                            tryCreateList()
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: "plus.circle.fill")
@@ -457,6 +469,9 @@ private struct WatchlistTabView: View {
             }
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallSheetView()
         }
     }
 
