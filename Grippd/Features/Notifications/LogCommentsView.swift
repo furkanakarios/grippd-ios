@@ -12,9 +12,9 @@ struct LogCommentsView: View {
     @State private var monthlyCount = 0
     @FocusState private var isInputFocused: Bool
 
-    private var isPremium: Bool { appState.currentUser?.planType == .premium }
-    private var isLimitReached: Bool { !isPremium && monthlyCount >= CommentService.freeMonthlyLimit }
-    private var remainingComments: Int { max(0, CommentService.freeMonthlyLimit - monthlyCount) }
+    private var isPremium: Bool { appState.isPremium }
+    private var isLimitReached: Bool { !PremiumGate.isAllowed(.postComment(monthlyCount: monthlyCount), isPremium: isPremium) }
+    private var remainingComments: Int { PremiumGate.remaining(.postComment(monthlyCount: monthlyCount), isPremium: isPremium) ?? 0 }
 
     var body: some View {
         ZStack {

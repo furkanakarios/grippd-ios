@@ -12,10 +12,8 @@ struct AddToListSheet: View {
     @State private var showCreateSheet = false
     @State private var showPaywall = false
 
-    private static let freeListLimit = 3
-
     private func tryCreateList() {
-        if !appState.isPremium && lists.count >= Self.freeListLimit {
+        if !PremiumGate.isAllowed(.createList(currentCount: lists.count), isPremium: appState.isPremium) {
             showPaywall = true
         } else {
             showCreateSheet = true

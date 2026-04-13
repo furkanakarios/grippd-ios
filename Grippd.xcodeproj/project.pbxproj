@@ -30,6 +30,7 @@
 		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
 		3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */; };
 		48C6A65E15A7B3E632F20DF3 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 1D5083365B4BC5ED233C9C5E /* RevenueCat */; };
+		49D4405AE65711870AD37616 /* PremiumGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFF420E2AFB9BE3AA4576AF /* PremiumGate.swift */; };
 		4EB4608834FB65DB9FC74693 /* PaywallSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B95425833B012713061BCA /* PaywallSheetView.swift */; };
 		56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28237F388713091CF5B58242 /* EmailAuthViewModel.swift */; };
 		5916D159749A98326791E104 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */; };
@@ -125,6 +126,7 @@
 		07C3D51F02E1AE282175FA62 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		08940053FF164140782E01FB /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		09F4DD0039F13A4706C8805F /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		0CFF420E2AFB9BE3AA4576AF /* PremiumGate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PremiumGate.swift; sourceTree = "<group>"; };
 		0E06319C0D17121AA8C08967 /* SupabaseClientService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClientService.swift; sourceTree = "<group>"; };
 		0E986F724A08DF922E6273FA /* GenreBrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreBrowseView.swift; sourceTree = "<group>"; };
 		10D7B6393B14F99A1DFFE6F0 /* FeedSuggestionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSuggestionService.swift; sourceTree = "<group>"; };
@@ -455,6 +457,7 @@
 			children = (
 				9344A381848C54CF5FE99A0D /* DIContainer.swift */,
 				2744F2F2361CF8E774714489 /* ShareService.swift */,
+				0CFF420E2AFB9BE3AA4576AF /* PremiumGate.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -723,8 +726,6 @@
 				6E797A4DE9749FC484D1FB97 /* PBXTargetDependency */,
 			);
 			name = GrippedTests;
-			packageProductDependencies = (
-			);
 			productName = GrippedTests;
 			productReference = 404A7ECBBB2D16AEDAA19D11 /* GrippedTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -741,10 +742,10 @@
 					0175D501C0CCC8E960FE18CA = {
 						DevelopmentTeam = 86DFRNMKL7;
 						SystemCapabilities = {
-						"com.apple.SignInWithApple" = {
-							enabled = 1;
+							com.apple.SignInWithApple = {
+								enabled = 1;
+							};
 						};
-					};
 					};
 				};
 			};
@@ -891,6 +892,7 @@
 				F5350A4C329474F42D1CB4F7 /* WatchmodeClient.swift in Sources */,
 				B4F17E8BE49889926D3CA44C /* WatchmodeModels.swift in Sources */,
 				FA6372DFE89AD4C467319576 /* WrappedView.swift in Sources */,
+				49D4405AE65711870AD37616 /* PremiumGate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

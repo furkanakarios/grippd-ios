@@ -350,10 +350,8 @@ private struct WatchlistTabView: View {
     @State private var showCreateList = false
     @State private var showPaywall = false
 
-    private static let freeListLimit = 3
-
     private func tryCreateList() {
-        if !appState.isPremium && customLists.count >= Self.freeListLimit {
+        if !PremiumGate.isAllowed(.createList(currentCount: customLists.count), isPremium: appState.isPremium) {
             showPaywall = true
         } else {
             showCreateList = true

@@ -281,7 +281,7 @@ final class DiscoverViewModel {
         }
 
         // Popülerliğe göre sırala
-        let limit = isPremium ? 20 : 12
+        let limit = isPremium ? PremiumGate.premiumDiscoverItemLimit : PremiumGate.freeDiscoverItemLimit
         recommendedMovies = Array(
             filteredMovies.sorted { $0.popularity > $1.popularity }.prefix(limit)
         )
