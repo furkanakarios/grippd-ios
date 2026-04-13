@@ -1,6 +1,6 @@
 # Faz 6 — Monetization & Premium
 
-**Durum:** 🟡 Devam Ediyor  
+**Durum:** ✅ Tamamlandı  
 **Branch base:** `develop`
 
 ---
@@ -25,17 +25,18 @@
 - [x] **Step 6** — Liste limiti (3) enforce: paywall yönlendirme (Phase 3 Step 8'de tamamlandı)  
   Branch: `feature/phase-3-step-8-list-limits` ✅
 
-- [ ] **Step 7** — Custom içerik ekleme kilidi (Premium only)  
-  Branch: `feature/phase-6-step-7-custom-content-gate`
+- [x] **Step 7** — Custom içerik ekleme kilidi (Premium only)  
+  Branch: `feature/phase-6-step-7-custom-content-gate` ✅
 
-- [ ] **Step 8** — Abonelik yönetim ekranı: aktif plan, yenileme, iptal  
-  Branch: `feature/phase-6-step-8-subscription-management`
+- [x] **Step 8** — Abonelik yönetim ekranı: aktif plan, yenileme, iptal  
+  Branch: `feature/phase-6-step-8-subscription-management` ✅
 
-- [ ] **Step 9** — 7 günlük ücretsiz deneme (free trial) akışı  
-  Branch: `feature/phase-6-step-9-free-trial`
+- [x] **Step 9** — 7 günlük ücretsiz deneme (free trial) akışı  
+  Branch: `feature/phase-6-step-9-free-trial` ✅
 
-- [ ] **Step 10** — RevenueCat analytics: MRR, churn rate, conversion  
-  Branch: `feature/phase-6-step-10-revenue-analytics`
+- [ ] **Step 10** — RevenueCat analytics: MRR, churn rate, conversion ⏸ Ertelendi  
+  Branch: `feature/phase-6-step-10-revenue-analytics`  
+  > Kullanıcı tabanı yeterince büyüdüğünde anlamlı olacak. Admin Panel fazına alındı.
 
 ---
 
