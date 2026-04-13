@@ -18,19 +18,51 @@ struct StarRatingView: View {
     // Gösterilecek değer: sürükleme sırasında dragRating, yoksa rating, yoksa 0
     private var displayRating: Double { dragRating ?? rating ?? 0 }
 
+    private var accessibilityRatingValue: String {
+        guard let r = rating else { return "Puanlanmadı" }
+        return r == Double(Int(r)) ? "\(Int(r)) / 10" : String(format: "%.1f / 10", r)
+    }
+
     var body: some View {
         VStack(spacing: 10) {
-            HStack(spacing: spacing) {
-                ForEach(1...starCount, id: \.self) { index in
-                    starView(for: index)
-                        .symbolEffect(.bounce, value: bounceID == index)
-                }
-            }
-            .gesture(readOnly ? nil : dragGesture)
-            .simultaneousGesture(readOnly ? nil : tapGesture)
-
+            starsRow
             ratingLabel
         }
+    }
+
+    private var starsRow: some View {
+        let row = HStack(spacing: spacing) {
+            ForEach(1...starCount, id: \.self) { index in
+                starView(for: index)
+                    .symbolEffect(.bounce, value: bounceID == index)
+            }
+        }
+        .gesture(readOnly ? nil : dragGesture)
+        .simultaneousGesture(readOnly ? nil : tapGesture)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Puan")
+        .accessibilityValue(accessibilityRatingValue)
+        .accessibilityHint(readOnly ? "" : "Puanı ayarlamak için kaydır")
+        .accessibilityAddTraits(readOnly ? .isStaticText : [])
+
+        return row
+            .accessibilityAdjustableAction { direction in
+                guard !readOnly else { return }
+                let current = rating ?? 0
+                switch direction {
+                case .increment:
+                    commit(min(10.0, current + 0.5))
+                case .decrement:
+                    if current <= 0.5 {
+                        rating = nil
+                        dragRating = nil
+                    } else {
+                        commit(max(0.5, current - 0.5))
+                    }
+                @unknown default:
+                    break
+                }
+            }
     }
 
     // MARK: - Star Shape

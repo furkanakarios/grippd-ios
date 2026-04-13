@@ -182,6 +182,7 @@ struct CommentsSheetView: View {
                             )
                     }
                     .disabled(viewModel.draftText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .accessibilityLabel("Yorumu gönder")
                 }
             }
             .padding(.horizontal, GrippdTheme.Spacing.md)
@@ -275,6 +276,8 @@ private struct CommentRow: View {
                         }
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(comment.isLiked ? "Beğeniyi kaldır" : "Beğen")
+                    .accessibilityValue(comment.likeCount > 0 ? "\(comment.likeCount) beğeni" : "")
 
                     // Silme (sadece kendi yorumu)
                     if comment.isOwn {
@@ -284,6 +287,7 @@ private struct CommentRow: View {
                                 .foregroundStyle(.white.opacity(0.25))
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel("Yorumu sil")
                     }
                 }
 

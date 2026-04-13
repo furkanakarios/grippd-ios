@@ -256,6 +256,7 @@ struct UserProfileView: View {
         }
         .disabled(viewModel.isFollowLoading)
         .buttonStyle(.press)
+        .accessibilityLabel(viewModel.isFollowing ? "Takibi bırak" : "Takip et")
         .animation(.spring(response: 0.3), value: viewModel.isFollowing)
     }
 
