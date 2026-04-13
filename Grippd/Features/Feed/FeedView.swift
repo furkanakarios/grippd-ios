@@ -173,10 +173,7 @@ struct FeedView: View {
     // MARK: - States
 
     private var loadingView: some View {
-        VStack(spacing: GrippdTheme.Spacing.md) {
-            ProgressView().scaleEffect(1.3).tint(GrippdTheme.Colors.accent)
-            Text("Yükleniyor...").font(.system(size: 14)).foregroundStyle(.white.opacity(0.4))
-        }
+        GrippdLoadingView(label: "Yükleniyor...")
     }
 
     private func errorView(_ message: String) -> some View {
@@ -194,6 +191,7 @@ struct FeedView: View {
             }
             .font(.system(size: 14, weight: .semibold))
             .foregroundStyle(GrippdTheme.Colors.accent)
+            .buttonStyle(.press)
         }
     }
 

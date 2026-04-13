@@ -285,9 +285,9 @@ private struct LogsTabView: View {
             }
 
             if filtered.isEmpty {
-                emptyState(
+                GrippdEmptyStateView(
                     icon: "checkmark.circle",
-                    message: filter == nil ? "Henüz log yok" : "Bu kategoride log yok"
+                    title: filter == nil ? "Henüz log yok" : "Bu kategoride log yok"
                 )
             } else {
                 LazyVStack(spacing: 0) {
@@ -378,9 +378,9 @@ private struct WatchlistTabView: View {
             }
 
             if filtered.isEmpty && customLists.isEmpty {
-                emptyState(
+                GrippdEmptyStateView(
                     icon: "bookmark",
-                    message: filter == nil ? "Listelenen içerik yok" : "Bu kategoride içerik yok"
+                    title: filter == nil ? "Listelenen içerik yok" : "Bu kategoride içerik yok"
                 )
             } else {
                 LazyVStack(spacing: 0) {
@@ -747,15 +747,17 @@ private struct StatsTabView: View {
         Group {
             if let s = stats {
                 if s.totalLogged == 0 {
-                    emptyState(icon: "chart.bar", message: "Henüz istatistik yok\nBiraz içerik logla!")
-                        .padding(.top, 40)
+                    GrippdEmptyStateView(
+                        icon: "chart.bar",
+                        title: "Henüz istatistik yok",
+                        subtitle: "Biraz içerik logla!"
+                    )
+                    .padding(.top, 40)
                 } else {
                     statsContent(s)
                 }
             } else {
-                ProgressView()
-                    .tint(GrippdTheme.Colors.accent)
-                    .frame(maxWidth: .infinity)
+                GrippdLoadingView()
                     .padding(.top, 80)
             }
         }
@@ -1002,22 +1004,6 @@ private struct PlatformBar: View {
                 .frame(width: 28, alignment: .trailing)
         }
     }
-}
-
-// MARK: - Empty State
-
-private func emptyState(icon: String, message: String) -> some View {
-    VStack(spacing: GrippdTheme.Spacing.md) {
-        Spacer(minLength: 60)
-        Image(systemName: icon)
-            .font(.system(size: 44))
-            .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.2))
-        Text(message)
-            .font(.system(size: 14))
-            .foregroundStyle(.white.opacity(0.35))
-        Spacer(minLength: 60)
-    }
-    .frame(maxWidth: .infinity)
 }
 
 // MARK: - Stat Item
