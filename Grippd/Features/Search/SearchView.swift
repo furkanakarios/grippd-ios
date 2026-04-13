@@ -44,6 +44,8 @@ struct SearchView: View {
                             }
                         }
                     }
+                    .accessibilityLabel("Özel içerik ekle")
+                    .accessibilityHint(appState.isPremium ? "" : "Premium gerektirir")
                 }
             }
             .sheet(isPresented: $showAddContent) {
@@ -91,6 +93,7 @@ struct SearchView: View {
                             .font(.system(size: 16))
                             .foregroundStyle(.white.opacity(0.3))
                     }
+                    .accessibilityLabel("Aramayı temizle")
                 }
             }
             .padding(.horizontal, 14)
@@ -110,6 +113,8 @@ struct SearchView: View {
                         .font(.system(size: 22))
                         .foregroundStyle(viewModel.advancedFilters.isActive ? GrippdTheme.Colors.accent : .white.opacity(0.5))
                 }
+                .accessibilityLabel("Filtrele")
+                .accessibilityHint(viewModel.advancedFilters.isActive ? "Filtreler aktif" : "")
             }
         }
         .padding(.horizontal, GrippdTheme.Spacing.md)
@@ -225,6 +230,7 @@ struct SearchView: View {
                                             .font(.system(size: 12, weight: .medium))
                                             .foregroundStyle(.white.opacity(0.25))
                                     }
+                                    .accessibilityLabel("Geçmişten kaldır")
                                 }
                                 .padding(.vertical, 10)
                                 .contentShape(Rectangle())

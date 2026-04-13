@@ -524,6 +524,8 @@ struct FeedActivityCard: View {
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("Yorumlar")
+                            .accessibilityValue(activity.commentCount > 0 ? "\(activity.commentCount) yorum" : "")
 
                             // Like butonu
                             Button(action: onLike) {
@@ -539,6 +541,8 @@ struct FeedActivityCard: View {
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel(activity.isLiked ? "Beğeniyi kaldır" : "Beğen")
+                            .accessibilityValue(activity.likeCount > 0 ? "\(activity.likeCount) beğeni" : "")
 
                             // Paylaş butonu
                             if let onShare {
@@ -548,6 +552,7 @@ struct FeedActivityCard: View {
                                         .foregroundStyle(.white.opacity(0.35))
                                 }
                                 .buttonStyle(.plain)
+                                .accessibilityLabel("Paylaş")
                             }
                         }
                         .padding(.top, 4)
