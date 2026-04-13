@@ -5,6 +5,8 @@ struct SignInView: View {
     @Environment(AppState.self) private var appState
     @State private var viewModel = AuthViewModel()
     @State private var showEmailAuth = false
+    @State private var showPrivacyPolicy = false
+    @State private var showTermsOfService = false
     @State private var logoScale: CGFloat = 0.8
     @State private var logoOpacity: CGFloat = 0
 
@@ -77,17 +79,28 @@ struct SignInView: View {
                     }
 
                     // Terms
-                    Text("Devam ederek [Kullanım Koşulları](https://grippd.app/terms) ve [Gizlilik Politikası](https://grippd.app/privacy)'nı kabul etmiş olursun.")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.25))
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 8)
-                        .tint(GrippdTheme.Colors.accent)
+                    HStack(spacing: 4) {
+                        Text("Devam ederek")
+                            .foregroundStyle(.white.opacity(0.25))
+                        Button("Kullanım Koşulları") { showTermsOfService = true }
+                            .foregroundStyle(GrippdTheme.Colors.accent)
+                        Text("ve")
+                            .foregroundStyle(.white.opacity(0.25))
+                        Button("Gizlilik Politikası") { showPrivacyPolicy = true }
+                            .foregroundStyle(GrippdTheme.Colors.accent)
+                        Text("'nı kabul edersin.")
+                            .foregroundStyle(.white.opacity(0.25))
+                    }
+                    .font(.system(size: 11))
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 8)
                 }
                 .padding(.horizontal, GrippdTheme.Spacing.xl)
                 .padding(.bottom, GrippdTheme.Spacing.xxl)
             }
         }
+        .sheet(isPresented: $showPrivacyPolicy) { LegalView(mode: .privacyPolicy) }
+        .sheet(isPresented: $showTermsOfService) { LegalView(mode: .termsOfService) }
         .preferredColorScheme(.dark)
         .onAppear {
             withAnimation(.spring(response: 0.8, dampingFraction: 0.7).delay(0.1)) {
