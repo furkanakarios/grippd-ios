@@ -1038,6 +1038,7 @@ private struct SettingsView: View {
     @State private var showSubscription = false
     @State private var showPrivacyPolicy = false
     @State private var showTermsOfService = false
+    @State private var showKVKK = false
 
     var body: some View {
         ZStack {
@@ -1068,6 +1069,9 @@ private struct SettingsView: View {
         }
         .sheet(isPresented: $showTermsOfService) {
             LegalView(mode: .termsOfService)
+        }
+        .sheet(isPresented: $showKVKK) {
+            LegalView(mode: .kvkk)
         }
         .onAppear { isPrivate = appState.currentUser?.isPrivate ?? false }
         .confirmationDialog("Çıkış yapmak istediğine emin misin?", isPresented: $showSignOutConfirm, titleVisibility: .visible) {
@@ -1144,6 +1148,11 @@ private struct SettingsView: View {
             Divider().background(.white.opacity(0.04)).padding(.leading, 66)
             Button { showTermsOfService = true } label: {
                 settingsRow(icon: "doc.text.fill", title: "Kullanım Koşulları", value: "")
+            }
+            .buttonStyle(.plain)
+            Divider().background(.white.opacity(0.04)).padding(.leading, 66)
+            Button { showKVKK = true } label: {
+                settingsRow(icon: "shield.lefthalf.filled", title: "KVKK Aydınlatma Metni", value: "")
             }
             .buttonStyle(.plain)
         }
