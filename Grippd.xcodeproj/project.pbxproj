@@ -50,6 +50,7 @@
 		75130680374B96D6E996FF20 /* OpenLibraryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED09B7FBCDC06B99E2FE6BEA /* OpenLibraryClient.swift */; };
 		75A48A889966C58D0BB08244 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1570C78BCD0DA98101EE10F6 /* UserProfileView.swift */; };
 		763B32A3D5C4361C8A74F5BD /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0434D08DA6A581F7F3B392 /* OnboardingView.swift */; };
+		794E13C5B3A1EE82FFDCDAA4 /* LegalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D9A248816495A82712DB1F /* LegalView.swift */; };
 		7A1D22576554CF56A654231A /* AddToListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D294CAE39853759DC06F575D /* AddToListSheet.swift */; };
 		7D1D93B55A1AFE8CF5677C41 /* LogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209950C1A8FB3E39AD1DD55F /* LogEntry.swift */; };
 		7E659C9D14F677FB61F7A0B3 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E7E8B11C13B7680B8C664 /* NotificationsView.swift */; };
@@ -149,6 +150,7 @@
 		2A185B94F12DE3C66D96ABD6 /* LogEntrySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntrySheet.swift; sourceTree = "<group>"; };
 		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		318C111BB01F7ACE63E16F3C /* GlowBorderButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowBorderButton.swift; sourceTree = "<group>"; };
+		32D9A248816495A82712DB1F /* LegalView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LegalView.swift; sourceTree = "<group>"; };
 		344DCE7D1A69AD1E653EAFA4 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		3B216F04C46ADC79E57A7119 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3B6ED2BF31A5FD3A067A8394 /* TrendingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingService.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				E854957021460A291F7125D5 /* Profile */,
 				B23FB579AB2E063D908E8486 /* Search */,
 				5DF9DEE3016486376D796E5D /* Social */,
+				BAF806DA2688FC4B0740BEBC /* Legal */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -575,6 +578,15 @@
 				59CCFDDBCBF1815F9B4A7B5B /* PurchaseService.swift */,
 			);
 			path = Purchases;
+			sourceTree = "<group>";
+		};
+		BAF806DA2688FC4B0740BEBC /* Legal */ = {
+			isa = PBXGroup;
+			children = (
+				32D9A248816495A82712DB1F /* LegalView.swift */,
+			);
+			name = Legal;
+			path = Legal;
 			sourceTree = "<group>";
 		};
 		D19A8B8CFC1ADB65BD0FD1D7 /* TMDB */ = {
@@ -901,6 +913,7 @@
 				49D4405AE65711870AD37616 /* PremiumGate.swift in Sources */,
 				D4D6FC0E73AA8C73D47848E2 /* SubscriptionManagementView.swift in Sources */,
 				20DCBC72ADBFD46D53395112 /* HapticManager.swift in Sources */,
+				794E13C5B3A1EE82FFDCDAA4 /* LegalView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

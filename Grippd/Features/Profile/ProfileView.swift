@@ -1036,6 +1036,8 @@ private struct SettingsView: View {
     @State private var showSignOutConfirm = false
     @State private var isSigningOut = false
     @State private var showSubscription = false
+    @State private var showPrivacyPolicy = false
+    @State private var showTermsOfService = false
 
     var body: some View {
         ZStack {
@@ -1045,6 +1047,8 @@ private struct SettingsView: View {
                     accountSection
                     Divider().background(.white.opacity(0.06)).padding(.vertical, 8)
                     privacySection
+                    Divider().background(.white.opacity(0.06)).padding(.vertical, 8)
+                    legalSection
                     Divider().background(.white.opacity(0.06)).padding(.vertical, 8)
                     dangerSection
                 }
@@ -1058,6 +1062,12 @@ private struct SettingsView: View {
         .toolbarColorScheme(.dark, for: .navigationBar)
         .navigationDestination(isPresented: $showSubscription) {
             SubscriptionManagementView()
+        }
+        .sheet(isPresented: $showPrivacyPolicy) {
+            LegalView(mode: .privacyPolicy)
+        }
+        .sheet(isPresented: $showTermsOfService) {
+            LegalView(mode: .termsOfService)
         }
         .onAppear { isPrivate = appState.currentUser?.isPrivate ?? false }
         .confirmationDialog("Çıkış yapmak istediğine emin misin?", isPresented: $showSignOutConfirm, titleVisibility: .visible) {
@@ -1121,6 +1131,21 @@ private struct SettingsView: View {
             }
             .padding(.horizontal, GrippdTheme.Spacing.md)
             .padding(.vertical, 12)
+        }
+    }
+
+    private var legalSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            sectionHeader("Yasal")
+            Button { showPrivacyPolicy = true } label: {
+                settingsRow(icon: "hand.raised.fill", title: "Gizlilik Politikası", value: "")
+            }
+            .buttonStyle(.plain)
+            Divider().background(.white.opacity(0.04)).padding(.leading, 66)
+            Button { showTermsOfService = true } label: {
+                settingsRow(icon: "doc.text.fill", title: "Kullanım Koşulları", value: "")
+            }
+            .buttonStyle(.plain)
         }
     }
 
