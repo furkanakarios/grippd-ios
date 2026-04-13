@@ -28,7 +28,7 @@
 - [x] **Step 7** — Custom liste oluşturma: isim, açıklama, public/private  
   Branch: `feature/phase-3-step-7-custom-lists` ✅
 
-- [x] **Step 8** — Liste limiti: Free (3) vs Premium (sınırsız), placeholder gate  
+- [x] **Step 8** — Liste limiti: Free (3) vs Premium (sınırsız), paywall yönlendirme  
   Branch: `feature/phase-3-step-8-list-limits` ✅
 
 - [x] **Step 9** — Profil istatistikleri: toplam izleme, toplam süre, favori genre  

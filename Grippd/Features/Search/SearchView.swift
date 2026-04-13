@@ -2,8 +2,10 @@ import SwiftUI
 
 struct SearchView: View {
     @Environment(AppRouter.self) private var router
+    @Environment(AppState.self) private var appState
     @State private var viewModel = SearchViewModel()
     @State private var showAddContent = false
+    @State private var showPaywall = false
 
     var body: some View {
         @Bindable var router = router
@@ -24,11 +26,23 @@ struct SearchView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        showAddContent = true
+                        if PremiumGate.isAllowed(.addCustomContent, isPremium: appState.isPremium) {
+                            showAddContent = true
+                        } else {
+                            showPaywall = true
+                        }
                     } label: {
-                        Image(systemName: "plus")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.8))
+                        ZStack(alignment: .topTrailing) {
+                            Image(systemName: "plus")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(.white.opacity(0.8))
+                            if !appState.isPremium {
+                                Image(systemName: "crown.fill")
+                                    .font(.system(size: 8))
+                                    .foregroundStyle(GrippdTheme.Colors.accent)
+                                    .offset(x: 6, y: -6)
+                            }
+                        }
                     }
                 }
             }
@@ -36,6 +50,9 @@ struct SearchView: View {
                 AddCustomContentView {
                     viewModel.onQueryChange()
                 }
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallSheetView()
             }
             .sheet(isPresented: $viewModel.showFilterSheet) {
                 SearchFilterSheet(filters: $viewModel.advancedFilters) {
