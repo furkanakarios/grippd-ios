@@ -10,11 +10,12 @@ struct LogCommentsView: View {
     @State private var isSending = false
     @State private var draftText = ""
     @State private var monthlyCount = 0
+    @State private var showPaywall = false
     @FocusState private var isInputFocused: Bool
 
-    private var isPremium: Bool { appState.currentUser?.planType == .premium }
-    private var isLimitReached: Bool { !isPremium && monthlyCount >= CommentService.freeMonthlyLimit }
-    private var remainingComments: Int { max(0, CommentService.freeMonthlyLimit - monthlyCount) }
+    private var isPremium: Bool { appState.isPremium }
+    private var isLimitReached: Bool { !PremiumGate.isAllowed(.postComment(monthlyCount: monthlyCount), isPremium: isPremium) }
+    private var remainingComments: Int { PremiumGate.remaining(.postComment(monthlyCount: monthlyCount), isPremium: isPremium) ?? 0 }
 
     var body: some View {
         ZStack {
@@ -34,6 +35,9 @@ struct LogCommentsView: View {
         .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task { await load() }
+        .sheet(isPresented: $showPaywall) {
+            PaywallSheetView()
+        }
     }
 
     // MARK: - List
@@ -118,15 +122,20 @@ struct LogCommentsView: View {
         VStack(spacing: 10) {
             HStack(spacing: 8) {
                 Image(systemName: "lock.fill").font(.system(size: 13)).foregroundStyle(.orange)
-                Text("Bu ayki yorum hakkını (20) kullandın")
+                Text("Bu ayki yorum hakkını (\(PremiumGate.maxFreeCommentsPerMonth)) kullandın")
                     .font(.system(size: 13)).foregroundStyle(.white.opacity(0.6))
             }
-            Text("Premium'a geç — Sınırsız Yorum")
-                .font(.system(size: 14, weight: .semibold))
+            Button { showPaywall = true } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "crown.fill").font(.system(size: 13))
+                    Text("Premium'a Geç — Sınırsız Yorum")
+                        .font(.system(size: 14, weight: .semibold))
+                }
                 .foregroundStyle(GrippdTheme.Colors.background)
                 .frame(maxWidth: .infinity).frame(height: 44)
                 .background(GrippdTheme.Colors.accent, in: RoundedRectangle(cornerRadius: 12))
                 .padding(.horizontal, GrippdTheme.Spacing.md)
+            }
         }
         .padding(.vertical, 12).padding(.bottom, 4)
     }

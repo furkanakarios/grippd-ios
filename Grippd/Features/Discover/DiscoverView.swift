@@ -5,7 +5,7 @@ struct DiscoverView: View {
     @Environment(AppState.self) private var appState
     @State private var viewModel = DiscoverViewModel()
 
-    private var isPremium: Bool { appState.currentUser?.planType == .premium }
+    private var isPremium: Bool { appState.isPremium }
 
     var body: some View {
         @Bindable var router = router
@@ -674,6 +674,7 @@ struct DiscoverView: View {
     // MARK: - Premium Upsell Banner
 
     private var premiumUpsellBanner: some View {
+        Button(action: { appState.showPaywall = true }) {
         HStack(spacing: 14) {
             Image(systemName: "crown.fill")
                 .font(.system(size: 20))
@@ -709,6 +710,8 @@ struct DiscoverView: View {
             RoundedRectangle(cornerRadius: 14)
                 .strokeBorder(Color.yellow.opacity(0.2), lineWidth: 1)
         )
+        } // Button label
+        .buttonStyle(.plain)
     }
 
     // MARK: - Section Header

@@ -172,7 +172,7 @@ final class CommentService {
 
     // MARK: - Monthly Limit
 
-    static let freeMonthlyLimit = 20
+    static var freeMonthlyLimit: Int { PremiumGate.maxFreeCommentsPerMonth }
 
     /// Kullanıcının bu ay yaptığı yorum sayısını döner.
     func monthlyCommentCount() async -> Int {

@@ -9,11 +9,11 @@
 | Faz | İsim | Durum | Detay |
 |---|---|---|---|
 | 1 | Foundation & Infrastructure | ✅ Tamamlandı | [PHASE-1](phases/PHASE-1-FOUNDATION.md) |
-| 2 | Content Browsing & Detail Screens | 🟡 Devam Ediyor | [PHASE-2](phases/PHASE-2-CONTENT.md) |
-| 3 | Logging & Rating System | 🔴 Başlamadı | [PHASE-3](phases/PHASE-3-LOGGING.md) |
-| 4 | Social Infrastructure | 🔴 Başlamadı | [PHASE-4](phases/PHASE-4-SOCIAL.md) |
-| 5 | Discover & Algorithms | 🔴 Başlamadı | [PHASE-5](phases/PHASE-5-DISCOVER.md) |
-| 6 | Monetization & Premium | 🔴 Başlamadı | [PHASE-6](phases/PHASE-6-MONETIZATION.md) |
+| 2 | Content Browsing & Detail Screens | ✅ Tamamlandı | [PHASE-2](phases/PHASE-2-CONTENT.md) |
+| 3 | Logging & Rating System | ✅ Tamamlandı | [PHASE-3](phases/PHASE-3-LOGGING.md) |
+| 4 | Social Infrastructure | ✅ Tamamlandı | [PHASE-4](phases/PHASE-4-SOCIAL.md) |
+| 5 | Discover & Algorithms | ✅ Tamamlandı | [PHASE-5](phases/PHASE-5-DISCOVER.md) |
+| 6 | Monetization & Premium | ✅ Tamamlandı | [PHASE-6](phases/PHASE-6-MONETIZATION.md) |
 | 7 | Polish & App Store Launch | 🔴 Başlamadı | [PHASE-7](phases/PHASE-7-LAUNCH.md) |
 
 ---
@@ -76,10 +76,17 @@ git checkout -b feature/phase-X-step-Y-aciklama
 # geliştir
 git add . && git commit -m "feat(phase-X): step Y - aciklama"
 git push origin feature/phase-X-step-Y-aciklama
+git checkout develop && git merge feature/phase-X-step-Y-aciklama
+git push origin develop   # ← her step sonrası develop remote'a push edilir
 ```
 
-**Faz bitince:** feature → develop merge  
-**Milestone (Faz 2, 4, 7):** develop → main merge + tag
+**Her faz tamamlanınca (kullanıcı onayı alındıktan sonra):**
+```bash
+git checkout main && git merge develop
+git push origin main
+git tag phase-X-complete
+git push origin --tags
+```
 
 **Commit formatı:** `feat|fix|refactor(phase-X): step Y - açıklama`
 

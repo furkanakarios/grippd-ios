@@ -19,6 +19,9 @@ packages:
   Supabase:
     url: https://github.com/supabase/supabase-swift
     from: "2.0.0"
+  RevenueCat:
+    url: https://github.com/RevenueCat/purchases-ios
+    from: "5.0.0"
 
 schemes:
   Grippd:
@@ -60,6 +63,10 @@ targets:
     dependencies:
       - package: Supabase
         product: Supabase
+      - package: RevenueCat
+        product: RevenueCat
+      - package: RevenueCat
+        product: RevenueCatUI
     entitlements:
       path: Grippd/Resources/Grippd.entitlements
       properties:

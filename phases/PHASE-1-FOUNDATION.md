@@ -47,6 +47,8 @@ Her step'in kodu tamamlandıktan sonra, **git commit/push'tan ÖNCE**:
 2. Xcode Simulator'da nasıl görüleceği / test edileceği açıklanır
 3. Kullanıcı test edip onay verir
 4. Onay sonrası commit + push yapılır
+5. Feature branch develop'a merge edilir, develop remote'a push edilir
+6. Faz tamamlandığında develop → main merge + push yapılır
 
 ---
 

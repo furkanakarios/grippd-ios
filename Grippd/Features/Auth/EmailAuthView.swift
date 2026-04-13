@@ -137,10 +137,16 @@ struct EmailAuthView: View {
                         .padding(.horizontal, GrippdTheme.Spacing.lg)
 
                         // Primary CTA
-                        GrippdPrimaryButton(primaryLabel, isLoading: viewModel.isLoading) {
-                            Task { await primaryAction() }
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .tint(GrippdTheme.Colors.accent)
+                                .frame(height: 54)
+                        } else {
+                            GlowBorderButton(title: primaryLabel) {
+                                Task { await primaryAction() }
+                            }
+                            .padding(.horizontal, GrippdTheme.Spacing.lg)
                         }
-                        .padding(.horizontal, GrippdTheme.Spacing.lg)
 
                         // Secondary links
                         VStack(spacing: 16) {

@@ -62,15 +62,18 @@ final class EmailAuthViewModel {
             let user = try await fetchProfile(id: session.user.id)
             async let needsOnboarding = OnboardingService.shared.needsOnboarding(userID: user.id)
             async let unreadCount = NotificationService.shared.unreadCount()
-            let (onboarding, count) = await ((try? needsOnboarding) ?? false, unreadCount)
+            async let premium = PurchaseService.shared.isPremium()
+            let (onboarding, count, isPremium) = await ((try? needsOnboarding) ?? false, unreadCount, premium)
             await MainActor.run {
                 appState.currentUser = user
                 appState.needsOnboarding = onboarding
                 appState.isAuthenticated = true
                 appState.unreadNotificationCount = count
+                appState.isPremium = isPremium
                 isLoading = false
             }
             Task { await LogSyncService.shared.syncPending() }
+            Task { await PurchaseService.shared.login(userID: user.id.uuidString) }
         } catch {
             await MainActor.run {
                 errorMessage = mapError(error)

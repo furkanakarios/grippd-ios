@@ -176,21 +176,10 @@ private struct NotificationRow: View {
             HStack(spacing: 12) {
                 // Avatar + icon badge
                 ZStack(alignment: .bottomTrailing) {
-                    AsyncImage(url: notification.actor.avatarURL) { phase in
-                        if case .success(let image) = phase {
-                            image.resizable().scaledToFill()
-                        } else {
-                            Circle()
-                                .fill(GrippdTheme.Colors.accent.opacity(0.12))
-                                .overlay(
-                                    Image(systemName: "person.fill")
-                                        .font(.system(size: 16))
-                                        .foregroundStyle(.white.opacity(0.3))
-                                )
-                        }
-                    }
-                    .frame(width: 46, height: 46)
-                    .clipShape(Circle())
+                    UserAvatarView(
+                        url: notification.actor.avatarURL,
+                        size: 46
+                    )
 
                     Circle()
                         .fill(GrippdTheme.Colors.background)

@@ -109,31 +109,11 @@ struct ProfileView: View {
 
     private var headerSection: some View {
         VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(GrippdTheme.Colors.accent.opacity(0.1))
-                    .frame(width: 90, height: 90)
-
-                if let url = appState.currentUser?.avatarURL {
-                    AsyncImage(url: url) { image in
-                        image.resizable().scaledToFill()
-                    } placeholder: {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 36))
-                            .foregroundStyle(.white.opacity(0.3))
-                    }
-                    .frame(width: 84, height: 84)
-                    .clipShape(Circle())
-                } else {
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 36))
-                        .foregroundStyle(.white.opacity(0.3))
-                }
-
-                Circle()
-                    .strokeBorder(GrippdTheme.Colors.accent.opacity(0.3), lineWidth: 1.5)
-                    .frame(width: 84, height: 84)
-            }
+            UserAvatarView(
+                url: appState.currentUser?.avatarURL,
+                size: 90,
+                isPremium: appState.isPremium
+            )
 
             VStack(spacing: 4) {
                 Text(appState.currentUser?.displayName ?? "")
@@ -363,10 +343,20 @@ private struct LogsTabView: View {
 
 private struct WatchlistTabView: View {
     let router: AppRouter
+    @Environment(AppState.self) private var appState
     @State private var entries: [WatchlistEntry] = []
     @State private var customLists: [CustomList] = []
     @State private var filter: Content.ContentType? = nil
     @State private var showCreateList = false
+    @State private var showPaywall = false
+
+    private func tryCreateList() {
+        if !PremiumGate.isAllowed(.createList(currentCount: customLists.count), isPremium: appState.isPremium) {
+            showPaywall = true
+        } else {
+            showCreateList = true
+        }
+    }
 
     private var filtered: [WatchlistEntry] {
         guard let f = filter else { return entries }
@@ -411,7 +401,7 @@ private struct WatchlistTabView: View {
                     // Custom listeler
                     sectionHeader("Özel Listeler") {
                         Button {
-                            showCreateList = true
+                            tryCreateList()
                         } label: {
                             Image(systemName: "plus")
                                 .font(.system(size: 14, weight: .semibold))
@@ -421,7 +411,7 @@ private struct WatchlistTabView: View {
 
                     if customLists.isEmpty {
                         Button {
-                            showCreateList = true
+                            tryCreateList()
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: "plus.circle.fill")
@@ -477,6 +467,9 @@ private struct WatchlistTabView: View {
             }
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallSheetView()
         }
     }
 
@@ -1056,6 +1049,7 @@ private struct SettingsView: View {
     @State private var isSavingPrivacy = false
     @State private var showSignOutConfirm = false
     @State private var isSigningOut = false
+    @State private var showSubscription = false
 
     var body: some View {
         ZStack {
@@ -1076,6 +1070,9 @@ private struct SettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .navigationDestination(isPresented: $showSubscription) {
+            SubscriptionManagementView()
+        }
         .onAppear { isPrivate = appState.currentUser?.isPrivate ?? false }
         .confirmationDialog("Çıkış yapmak istediğine emin misin?", isPresented: $showSignOutConfirm, titleVisibility: .visible) {
             Button("Çıkış Yap", role: .destructive) {
@@ -1092,7 +1089,14 @@ private struct SettingsView: View {
             sectionHeader("Hesap")
             if let user = appState.currentUser {
                 settingsRow(icon: "person.fill", title: "Kullanıcı adı", value: "@\(user.username)")
-                settingsRow(icon: "star.fill", title: "Plan", value: user.planType == .premium ? "Premium" : "Ücretsiz")
+                Button { showSubscription = true } label: {
+                    settingsRow(
+                        icon: "crown.fill",
+                        title: "Abonelik",
+                        value: appState.isPremium ? "Premium ✓" : "Ücretsiz → Yükselt"
+                    )
+                }
+                .buttonStyle(.plain)
             }
         }
     }

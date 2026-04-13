@@ -9,6 +9,8 @@ final class AppState {
     var selectedTab: AppTab = .feed
     var pendingDeepLink: DeepLink?
     var unreadNotificationCount: Int = 0
+    var showPaywall: Bool = false
+    var isPremium: Bool = false
 
     enum AppTab {
         case feed, search, discover, profile
