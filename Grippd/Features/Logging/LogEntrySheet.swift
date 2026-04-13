@@ -318,6 +318,7 @@ struct LogEntrySheet: View {
                 .frame(height: 52)
                 .background(GrippdTheme.Colors.accent, in: RoundedRectangle(cornerRadius: 14))
         }
+        .buttonStyle(.press)
         .padding(.top, 4)
     }
 
@@ -347,6 +348,7 @@ struct LogEntrySheet: View {
             note: trimmedNote.isEmpty ? nil : trimmedNote
         )
         LogService.shared.save(entry)
+        HapticManager.success()
         onSaved?()
         isPresented = false
     }
