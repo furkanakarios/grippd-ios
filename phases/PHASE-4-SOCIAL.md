@@ -1,41 +1,41 @@
 # Faz 4 — Social Infrastructure
 
-**Durum:** 🔴 Başlamadı  
+**Durum:** ✅ Tamamlandı  
 **Branch base:** `develop`
 
 ---
 
 ## Adımlar
 
-- [ ] **Step 1** — Kullanıcı profil ekranı: avatar, banner, bio, aktivite grid  
-  Branch: `feature/phase-4-step-1-profile-screen`
+- [x] **Step 1** — Kullanıcı profil ekranı: avatar, banner, bio, aktivite grid  
+  Branch: `feature/phase-4-step-1-profile-screen` ✅
 
-- [ ] **Step 2** — Follow/Unfollow sistemi: Supabase, RLS gizlilik kontrolü  
-  Branch: `feature/phase-4-step-2-follow-system`
+- [x] **Step 2** — Follow/Unfollow sistemi: Supabase, RLS gizlilik kontrolü  
+  Branch: `feature/phase-4-step-2-follow-system` ✅
 
-- [ ] **Step 3** — Ana feed (Home): takip ettiğin kişilerin aktiviteleri  
-  Branch: `feature/phase-4-step-3-home-feed`
+- [x] **Step 3** — Ana feed (Home): takip ettiğin kişilerin aktiviteleri  
+  Branch: `feature/phase-4-step-3-home-feed` ✅
 
-- [ ] **Step 4** — Empty state feed: kimse takip yoksa ilgi alanına göre öneri  
-  Branch: `feature/phase-4-step-4-empty-feed`
+- [x] **Step 4** — Empty state feed: kimse takip yoksa ilgi alanına göre öneri  
+  Branch: `feature/phase-4-step-4-empty-feed` ✅
 
-- [ ] **Step 5** — Beğeni sistemi: log ve yorumlara like  
-  Branch: `feature/phase-4-step-5-likes`
+- [x] **Step 5** — Beğeni sistemi: log ve yorumlara like  
+  Branch: `feature/phase-4-step-5-likes` ✅
 
-- [ ] **Step 6** — Yorum sistemi: içerik ve aktivite altına yorum, yorum beğenme  
-  Branch: `feature/phase-4-step-6-comments`
+- [x] **Step 6** — Yorum sistemi: içerik ve aktivite altına yorum, yorum beğenme  
+  Branch: `feature/phase-4-step-6-comments` ✅
 
-- [ ] **Step 7** — Yorum limiti: Free (20/ay) vs Premium (sınırsız), paywall yönlendirme  
-  Branch: `feature/phase-4-step-7-comment-limits`
+- [x] **Step 7** — Yorum limiti: Free (20/ay) vs Premium (sınırsız), paywall yönlendirme  
+  Branch: `feature/phase-4-step-7-comment-limits` ✅
 
-- [ ] **Step 8** — Bildirim sistemi: takipçi, yorum, beğeni, Supabase Realtime  
-  Branch: `feature/phase-4-step-8-notifications`
+- [x] **Step 8** — Bildirim sistemi: takipçi, yorum, beğeni, Supabase Realtime  
+  Branch: `feature/phase-4-step-8-notifications` ✅
 
-- [ ] **Step 9** — Public/Private profil toggle: RLS + ayarlar ekranı  
-  Branch: `feature/phase-4-step-9-privacy-settings`
+- [x] **Step 9** — Public/Private profil toggle: RLS + ayarlar ekranı  
+  Branch: `feature/phase-4-step-9-privacy-settings` ✅
 
-- [ ] **Step 10** — Dışa paylaşım: Instagram Stories, share sheet  
-  Branch: `feature/phase-4-step-10-share`
+- [x] **Step 10** — Dışa paylaşım: Instagram Stories, share sheet  
+  Branch: `feature/phase-4-step-10-share` ✅
 
 ---
 
@@ -46,6 +46,8 @@ Her step'in kodu tamamlandıktan sonra, **git commit/push'tan ÖNCE**:
 2. Xcode Simulator'da nasıl görüleceği / test edileceği açıklanır
 3. Kullanıcı test edip onay verir
 4. Onay sonrası commit + push yapılır
+5. Feature branch develop'a merge edilir, develop remote'a push edilir
+6. Faz tamamlandığında develop → main merge + push yapılır
 
 ---
 

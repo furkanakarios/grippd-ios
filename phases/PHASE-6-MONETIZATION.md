@@ -1,17 +1,17 @@
 # Faz 6 — Monetization & Premium
 
-**Durum:** 🔴 Başlamadı  
+**Durum:** 🟡 Devam Ediyor  
 **Branch base:** `develop`
 
 ---
 
 ## Adımlar
 
-- [ ] **Step 1** — RevenueCat SDK kurulum, Supabase subscription sync  
-  Branch: `feature/phase-6-step-1-revenuecat-setup`
+- [x] **Step 1** — RevenueCat SDK kurulum, Supabase subscription sync  
+  Branch: `feature/phase-6-step-1-revenuecat-setup` ✅
 
-- [ ] **Step 2** — StoreKit 2: App Store Connect ürün tanımı, sandbox test  
-  Branch: `feature/phase-6-step-2-storekit-products`
+- [x] **Step 2** — Paywall ekranı UI & premium visual indicators  
+  Branch: `feature/phase-6-step-2-paywall-ui` ✅
 
 - [ ] **Step 3** — Paywall ekranı UI: özellik karşılaştırması, animasyonlar  
   Branch: `feature/phase-6-step-3-paywall-ui`
@@ -46,6 +46,8 @@ Her step'in kodu tamamlandıktan sonra, **git commit/push'tan ÖNCE**:
 2. Xcode Simulator'da nasıl görüleceği / test edileceği açıklanır
 3. Kullanıcı test edip onay verir
 4. Onay sonrası commit + push yapılır
+5. Feature branch develop'a merge edilir, develop remote'a push edilir
+6. Faz tamamlandığında develop → main merge + push yapılır
 
 ---
 

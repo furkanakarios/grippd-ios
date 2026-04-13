@@ -31,7 +31,7 @@
 - [x] **Step 8** — Trending & New Releases: TMDB trending, yeni çıkanlar  
   Branch: `feature/phase-2-step-8-trending` ✅
 
-- [ ] **Step 9** — Genre & kategori browsing: türe göre filtreleme  
+- [x] **Step 9** — Genre & kategori browsing: türe göre filtreleme  
   Branch: `feature/phase-2-step-9-genre-browse` ✅
 
 - [x] **Step 10** — Community verisi detay ekranlarına: ortalama puan, yorum sayısı  
@@ -46,6 +46,8 @@ Her step'in kodu tamamlandıktan sonra, **git commit/push'tan ÖNCE**:
 2. Xcode Simulator'da nasıl görüleceği / test edileceği açıklanır
 3. Kullanıcı test edip onay verir
 4. Onay sonrası commit + push yapılır
+5. Feature branch develop'a merge edilir, develop remote'a push edilir
+6. Faz tamamlandığında develop → main merge + push yapılır
 
 ---
 
