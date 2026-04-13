@@ -15,6 +15,8 @@
 | 5 | Discover & Algorithms | ✅ Tamamlandı | [PHASE-5](phases/PHASE-5-DISCOVER.md) |
 | 6 | Monetization & Premium | ✅ Tamamlandı | [PHASE-6](phases/PHASE-6-MONETIZATION.md) |
 | 7 | Polish & App Store Launch | 🔴 Başlamadı | [PHASE-7](phases/PHASE-7-LAUNCH.md) |
+| 8 | Admin Panel (Mobile) | 🔴 Başlamadı | [PHASE-8](phases/PHASE-8-ADMIN.md) |
+| 9 | Bugfix, Security & Final QA | 🔴 Başlamadı | [PHASE-9](phases/PHASE-9-BUGFIX.md) |
 
 ---
 
@@ -43,6 +45,16 @@
 
 - **Free:** Sınırsız log/puan, 20 yorum/ay, 3 liste, custom içerik yok
 - **Premium ($9.99/ay):** Sınırsız her şey + detaylı stats + öncelikli keşfet
+
+---
+
+## Launch Stratejisi
+
+1. **Phase 7** Steps 1-7, 9 tamamlanır (polish, accessibility, görseller, listing, legal, performans)
+2. **Phase 8** Admin Panel (mobile) tamamlanır
+3. **Phase 7 Step 8** — TestFlight beta başlatılır, uzun süreli test dönemi
+4. **Phase 9** — Test döneminde çıkan bugfix'ler + güvenlik iyileştirmeleri
+5. **Phase 7 Step 10** — App Store'a gönderim
 
 ---
 
