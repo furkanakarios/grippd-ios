@@ -289,11 +289,8 @@ struct UserProfileView: View {
             .padding(.horizontal, GrippdTheme.Spacing.md)
 
             if logs.isEmpty {
-                Text("Henüz log yok")
-                    .font(.system(size: 14))
-                    .foregroundStyle(.white.opacity(0.35))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, GrippdTheme.Spacing.lg)
+                GrippdEmptyStateView(icon: "checkmark.circle", title: "Henüz log yok")
+                    .padding(.vertical, GrippdTheme.Spacing.sm)
             } else {
                 LazyVGrid(
                     columns: [
@@ -380,16 +377,12 @@ struct FollowListView: View {
             GrippdBackground()
 
             if isLoading {
-                ProgressView().tint(GrippdTheme.Colors.accent)
+                GrippdLoadingView()
             } else if users.isEmpty {
-                VStack(spacing: GrippdTheme.Spacing.md) {
-                    Image(systemName: "person.2")
-                        .font(.system(size: 44))
-                        .foregroundStyle(.white.opacity(0.2))
-                    Text(mode == .followers ? "Henüz takipçi yok" : "Henüz kimseyi takip etmiyor")
-                        .font(.system(size: 14))
-                        .foregroundStyle(.white.opacity(0.4))
-                }
+                GrippdEmptyStateView(
+                    icon: "person.2",
+                    title: mode == .followers ? "Henüz takipçi yok" : "Henüz kimseyi takip etmiyor"
+                )
             } else {
                 List {
                     ForEach(users) { user in

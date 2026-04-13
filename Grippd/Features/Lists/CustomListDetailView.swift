@@ -12,17 +12,11 @@ struct CustomListDetailView: View {
             GrippdBackground()
 
             if items.isEmpty {
-                VStack(spacing: GrippdTheme.Spacing.md) {
-                    Text(list.emoji).font(.system(size: 48))
-                    Text("Liste boş")
-                        .font(GrippdTheme.Typography.title)
-                        .foregroundStyle(.white.opacity(0.6))
-                    Text("İçerik detay sayfalarından bu listeye ekleyebilirsin")
-                        .font(.system(size: 13))
-                        .foregroundStyle(.white.opacity(0.35))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, GrippdTheme.Spacing.xl)
-                }
+                GrippdEmptyStateView(
+                    icon: "list.bullet",
+                    title: "Liste boş",
+                    subtitle: "İçerik detay sayfalarından bu listeye ekleyebilirsin"
+                )
             } else {
                 List {
                     ForEach(items) { item in

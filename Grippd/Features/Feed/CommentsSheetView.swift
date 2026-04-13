@@ -114,21 +114,15 @@ struct CommentsSheetView: View {
         Group {
             if viewModel.isLoading {
                 Spacer()
-                ProgressView().tint(GrippdTheme.Colors.accent)
+                GrippdLoadingView()
                 Spacer()
             } else if viewModel.comments.isEmpty {
                 Spacer()
-                VStack(spacing: 8) {
-                    Image(systemName: "bubble.left")
-                        .font(.system(size: 36))
-                        .foregroundStyle(.white.opacity(0.15))
-                    Text("Henüz yorum yok")
-                        .font(.system(size: 14))
-                        .foregroundStyle(.white.opacity(0.35))
-                    Text("İlk yorumu sen yap!")
-                        .font(.system(size: 13))
-                        .foregroundStyle(.white.opacity(0.2))
-                }
+                GrippdEmptyStateView(
+                    icon: "bubble.left",
+                    title: "Henüz yorum yok",
+                    subtitle: "İlk yorumu sen yap!"
+                )
                 Spacer()
             } else {
                 ScrollView(showsIndicators: false) {
