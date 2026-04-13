@@ -1049,6 +1049,7 @@ private struct SettingsView: View {
     @State private var isSavingPrivacy = false
     @State private var showSignOutConfirm = false
     @State private var isSigningOut = false
+    @State private var showSubscription = false
 
     var body: some View {
         ZStack {
@@ -1069,6 +1070,9 @@ private struct SettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .navigationDestination(isPresented: $showSubscription) {
+            SubscriptionManagementView()
+        }
         .onAppear { isPrivate = appState.currentUser?.isPrivate ?? false }
         .confirmationDialog("Çıkış yapmak istediğine emin misin?", isPresented: $showSignOutConfirm, titleVisibility: .visible) {
             Button("Çıkış Yap", role: .destructive) {
@@ -1085,14 +1089,14 @@ private struct SettingsView: View {
             sectionHeader("Hesap")
             if let user = appState.currentUser {
                 settingsRow(icon: "person.fill", title: "Kullanıcı adı", value: "@\(user.username)")
-                if appState.isPremium {
-                    settingsRow(icon: "crown.fill", title: "Plan", value: "Premium ✓")
-                } else {
-                    Button(action: { appState.showPaywall = true }) {
-                        settingsRow(icon: "crown.fill", title: "Plan", value: "Ücretsiz → Premium'a geç")
-                    }
-                    .buttonStyle(.plain)
+                Button { showSubscription = true } label: {
+                    settingsRow(
+                        icon: "crown.fill",
+                        title: "Abonelik",
+                        value: appState.isPremium ? "Premium ✓" : "Ücretsiz → Yükselt"
+                    )
                 }
+                .buttonStyle(.plain)
             }
         }
     }
