@@ -7,6 +7,7 @@ struct ProfileView: View {
     @State private var showSignOutConfirm = false
     @State private var showWrapped = false
     @State private var showNotifications = false
+    @State private var showAdminPanel = false
     @State private var selectedTab: ProfileTab = .logs
     @State private var followerCount: Int = 0
     @State private var followingCount: Int = 0
@@ -38,16 +39,30 @@ struct ProfileView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    if LogService.shared.wrappedStats() != nil {
-                        Button {
-                            showWrapped = true
-                        } label: {
-                            HStack(spacing: 4) {
-                                Image(systemName: "sparkles")
-                                Text(verbatim: "\(Calendar.current.component(.year, from: Date()))")
-                                    .font(.system(size: 13, weight: .semibold))
+                    VStack(alignment: .leading, spacing: 4) {
+                        if LogService.shared.wrappedStats() != nil {
+                            Button {
+                                showWrapped = true
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "sparkles")
+                                    Text(verbatim: "\(Calendar.current.component(.year, from: Date()))")
+                                        .font(.system(size: 13, weight: .semibold))
+                                }
+                                .foregroundStyle(GrippdTheme.Colors.accent)
                             }
-                            .foregroundStyle(GrippdTheme.Colors.accent)
+                        }
+                        if appState.isAdmin {
+                            Button {
+                                showAdminPanel = true
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "shield.fill")
+                                    Text("Admin")
+                                        .font(.system(size: 13, weight: .semibold))
+                                }
+                                .foregroundStyle(.red.opacity(0.85))
+                            }
                         }
                     }
                 }
@@ -82,6 +97,10 @@ struct ProfileView: View {
                 if let wrapped = LogService.shared.wrappedStats() {
                     WrappedView(stats: wrapped, isPresented: $showWrapped)
                 }
+            }
+            .fullScreenCover(isPresented: $showAdminPanel) {
+                AdminPanelView()
+                    .environment(appState)
             }
             .sheet(isPresented: $showNotifications) {
                 NotificationsView(onNavigate: { route in

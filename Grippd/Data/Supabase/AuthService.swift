@@ -99,6 +99,7 @@ struct UserRow: Decodable {
     let isPrivate: Bool
     let planType: String
     let interests: [String]?
+    let isAdmin: Bool?
     let createdAt: String?
 
     enum CodingKeys: String, CodingKey {
@@ -108,6 +109,7 @@ struct UserRow: Decodable {
         case bannerUrl = "banner_url"
         case isPrivate = "is_private"
         case planType = "plan_type"
+        case isAdmin = "is_admin"
         case createdAt = "created_at"
     }
 
@@ -125,6 +127,7 @@ struct UserRow: Decodable {
             isPrivate: isPrivate,
             planType: planType == "premium" ? .premium : .free,
             interests: interests ?? [],
+            isAdmin: isAdmin ?? false,
             createdAt: date
         )
     }

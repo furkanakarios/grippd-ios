@@ -19,6 +19,7 @@
 		1AABA80722445F66E018A6AA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D1CBC1ABF9BD97FF109E01 /* Content.swift */; };
 		1E497CC5BB09798EA83402F2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1686809CF6AAB5731AA8481 /* User.swift */; };
 		1E50150BD4CADF7E83A4D32E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C3D51F02E1AE282175FA62 /* SearchView.swift */; };
+		1E679D95D69DAB5F5D46E843 /* AdminPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE442293D4CCB1E587BD3E /* AdminPanelView.swift */; };
 		2017BAAAE9EB5CDABAD41919 /* LogSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0C5E02F30A4A8F07FC0F8E /* LogSyncService.swift */; };
 		20DCBC72ADBFD46D53395112 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DEA96C54398FF74BF7CBD /* HapticManager.swift */; };
 		220B4AA5CE8BE8585F7D27B1 /* CachedAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981F67CCE1CF235AE73EFDA6 /* CachedAsyncImage.swift */; };
@@ -235,6 +236,7 @@
 		F12A925BB62BED5A878937FD /* Grippd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grippd.entitlements; sourceTree = "<group>"; };
 		F163E79088ACED45114CDFF8 /* UserContentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContentService.swift; sourceTree = "<group>"; };
 		F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCacheService.swift; sourceTree = "<group>"; };
+		FEBE442293D4CCB1E587BD3E /* AdminPanelView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminPanelView.swift; sourceTree = "<group>"; };
 		FF053B89084A730815FE5768 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -326,6 +328,7 @@
 				B23FB579AB2E063D908E8486 /* Search */,
 				5DF9DEE3016486376D796E5D /* Social */,
 				BAF806DA2688FC4B0740BEBC /* Legal */,
+				4728B98308DD1E3635C9A9B9 /* Admin */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -335,6 +338,15 @@
 			children = (
 			);
 			path = ContentDetail;
+			sourceTree = "<group>";
+		};
+		4728B98308DD1E3635C9A9B9 /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				FEBE442293D4CCB1E587BD3E /* AdminPanelView.swift */,
+			);
+			name = Admin;
+			path = Admin;
 			sourceTree = "<group>";
 		};
 		47F07DEF8E354B5D16A03A36 /* UseCases */ = {
@@ -922,6 +934,7 @@
 				794E13C5B3A1EE82FFDCDAA4 /* LegalView.swift in Sources */,
 				63991DB81D6B750617AE1C0D /* ImageCache.swift in Sources */,
 				220B4AA5CE8BE8585F7D27B1 /* CachedAsyncImage.swift in Sources */,
+				1E679D95D69DAB5F5D46E843 /* AdminPanelView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
