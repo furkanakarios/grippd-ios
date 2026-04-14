@@ -112,7 +112,7 @@ struct AdminPanelView: View {
                 title: "Push Bildirim Gönder",
                 subtitle: "Tüm kullanıcılara veya segmente duyuru",
                 color: .yellow,
-                destination: AnyView(AdminComingSoonView(title: "Push Bildirim"))
+                destination: AnyView(AdminPushNotificationView())
             )
 
             // Step 7 — A/B Test

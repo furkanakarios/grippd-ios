@@ -41,6 +41,7 @@
 		53848E1A8559A61DF8BEA2A5 /* AdminUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6E41941F8827536C15CCB5 /* AdminUserService.swift */; };
 		56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28237F388713091CF5B58242 /* EmailAuthViewModel.swift */; };
 		5916D159749A98326791E104 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */; };
+		5993587F8C42F2C728F3E412 /* PushTokenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F59D33398A7D048392CDCB8 /* PushTokenService.swift */; };
 		5A24E7CAE74A1399FA266C18 /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EFFCE43DC001079408FF4D /* PasswordResetView.swift */; };
 		5CA5C1830E798FC7A9448941 /* CustomListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5A03EE59D3B53971C017E1 /* CustomListService.swift */; };
 		635C7BEE9CA768BE5D1307D6 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA22D60136CCDF96EE731F80 /* FollowService.swift */; };
@@ -101,6 +102,7 @@
 		D4D6FC0E73AA8C73D47848E2 /* SubscriptionManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DD03CECDDBB92923EC6925 /* SubscriptionManagementView.swift */; };
 		D5069B2BAF67E1D72A438ACC /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C60BB8993AE3B0492233474 /* EpisodeDetailView.swift */; };
 		D570736E6DA1BAF17027981D /* CustomListFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDCAA1FEF511B2E9AC2C74F /* CustomListFormSheet.swift */; };
+		D914C5D0342BC1F6C3FBFE3F /* AdminPushNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4407015C2FE652CEACB967 /* AdminPushNotificationView.swift */; };
 		D979ADA3E66692E1B635A865 /* CuratedListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5AA54A0FEE7C613B91626E /* CuratedListService.swift */; };
 		DBA0EC40B69D8248FE9F25B8 /* AdminCuratedListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FE3994B3A0402BEFAF1818 /* AdminCuratedListsView.swift */; };
 		DEDEE8BE2C747DC52F43C09C /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260B3CDE2227DB3566791581 /* StarRatingView.swift */; };
@@ -109,6 +111,7 @@
 		E4A2AD4006928763D27846B2 /* GrippdComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2D418182291CD3ED6B16F /* GrippdComponents.swift */; };
 		E7DB6C37E249BE05C40526D4 /* TrendingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6ED2BF31A5FD3A067A8394 /* TrendingService.swift */; };
 		E9226130BC7FB4B7DB699B8B /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 57B8F951E1296882A2860113 /* Supabase */; };
+		E9BBED75909EAD87659738FB /* AdminPushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648978ECC85E39009435E9A8 /* AdminPushService.swift */; };
 		E9F116064D6A081F52F0BFE6 /* LocalCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E85B45CDCCE7D4709849EC /* LocalCacheService.swift */; };
 		EDC85DE7414B96A31D98DEA3 /* SearchFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC20EF3D14ED4F8926433511 /* SearchFilterSheet.swift */; };
 		EEEC2B24E1491F214CA069DA /* SupabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */; };
@@ -191,11 +194,13 @@
 		5C6E41941F8827536C15CCB5 /* AdminUserService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminUserService.swift; sourceTree = "<group>"; };
 		5F0B71C07C22EA30AD53A869 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		61B050D81F62141DC420327F /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
+		648978ECC85E39009435E9A8 /* AdminPushService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminPushService.swift; sourceTree = "<group>"; };
 		663C6763C4EFA4AB0A3C25DF /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
 		67EFFCE43DC001079408FF4D /* PasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetView.swift; sourceTree = "<group>"; };
 		684AA2C0DF8DE655B26C90A0 /* GrippdTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippdTheme.swift; sourceTree = "<group>"; };
 		6B95A5DB33DF5A3679378204 /* ContentInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInterest.swift; sourceTree = "<group>"; };
 		6C4484469717B6BA93F8EA14 /* LogCommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCommentsView.swift; sourceTree = "<group>"; };
+		6F59D33398A7D048392CDCB8 /* PushTokenService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PushTokenService.swift; sourceTree = "<group>"; };
 		70DF9D2C89BA6439699CACDD /* ContentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentRepository.swift; sourceTree = "<group>"; };
 		716223D0F3F953803EDB8F89 /* SupabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConstants.swift; sourceTree = "<group>"; };
 		71CB1664F19BA9AEB53A4B6C /* TVShowDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetailView.swift; sourceTree = "<group>"; };
@@ -223,6 +228,7 @@
 		A077D0480CDDF60562399C9D /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		A23DEA96C54398FF74BF7CBD /* HapticManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		AC5AA54A0FEE7C613B91626E /* CuratedListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedListService.swift; sourceTree = "<group>"; };
+		AD4407015C2FE652CEACB967 /* AdminPushNotificationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminPushNotificationView.swift; sourceTree = "<group>"; };
 		ADDCAA1FEF511B2E9AC2C74F /* CustomListFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListFormSheet.swift; sourceTree = "<group>"; };
 		AF6D4B1F1C9B7B46C3DF02AC /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		AFAC745E0243E9C6FBACB313 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -364,6 +370,7 @@
 				8BC3A6D90147571E6DD8F840 /* AdminContentModerationView.swift */,
 				30FE3994B3A0402BEFAF1818 /* AdminCuratedListsView.swift */,
 				1C25A14D7F90A8FEF0795099 /* AdminStatsView.swift */,
+				AD4407015C2FE652CEACB967 /* AdminPushNotificationView.swift */,
 			);
 			name = Admin;
 			path = Admin;
@@ -395,6 +402,8 @@
 				9F6C3B2652F98119F9535282 /* AdminModerationService.swift */,
 				DDE21F4C004578E87396F7B9 /* AdminCuratedListsService.swift */,
 				21D2FDAC655325DFC51D136A /* AdminStatsService.swift */,
+				648978ECC85E39009435E9A8 /* AdminPushService.swift */,
+				6F59D33398A7D048392CDCB8 /* PushTokenService.swift */,
 			);
 			path = Supabase;
 			sourceTree = "<group>";
@@ -967,6 +976,9 @@
 				486FC0833BD5EF9429730D2F /* AdminCuratedListsService.swift in Sources */,
 				B220FE64CFE675A2AE3D2F5F /* AdminStatsView.swift in Sources */,
 				5045C76B0514447ED4C754CD /* AdminStatsService.swift in Sources */,
+				D914C5D0342BC1F6C3FBFE3F /* AdminPushNotificationView.swift in Sources */,
+				E9BBED75909EAD87659738FB /* AdminPushService.swift in Sources */,
+				5993587F8C42F2C728F3E412 /* PushTokenService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
