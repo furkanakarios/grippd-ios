@@ -76,7 +76,7 @@ struct AdminPanelView: View {
                 title: "Kullanıcı Yönetimi",
                 subtitle: "Listele, ara, ban/unban, plan değiştir",
                 color: .blue,
-                destination: AnyView(AdminComingSoonView(title: "Kullanıcı Yönetimi"))
+                destination: AnyView(AdminUserManagementView())
             )
 
             // Step 3 — İçerik Moderasyonu
@@ -85,7 +85,7 @@ struct AdminPanelView: View {
                 title: "İçerik Moderasyonu",
                 subtitle: "Raporlanan yorumlar, içerik kaldırma",
                 color: .orange,
-                destination: AnyView(AdminComingSoonView(title: "İçerik Moderasyonu"))
+                destination: AnyView(AdminContentModerationView())
             )
 
             // Step 4 — Curated Listeler
