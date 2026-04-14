@@ -28,7 +28,9 @@ struct MainTabView: View {
         .environment(router)
         .task {
             guard let userID = appState.currentUser?.id else { return }
-            await PushTokenService.shared.registerIfNeeded(userID: userID)
+            async let push: Void  = PushTokenService.shared.registerIfNeeded(userID: userID)
+            async let flags: Void = FeatureFlagService.shared.fetchAll()
+            _ = await (push, flags)
         }
         .onReceive(NotificationCenter.default.publisher(for: .didReceiveAPNSToken)) { note in
             guard let data = note.object as? Data,

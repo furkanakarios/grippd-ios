@@ -130,7 +130,7 @@ struct AdminPanelView: View {
                 title: "Feature Flags",
                 subtitle: "Özellikleri canlıda açıp kapat",
                 color: .mint,
-                destination: AnyView(AdminComingSoonView(title: "Feature Flags"))
+                destination: AnyView(AdminFeatureFlagsView())
             )
         }
     }

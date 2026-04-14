@@ -31,6 +31,7 @@
 		34220E565919EE80BDE28A1E /* GenreBrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E986F724A08DF922E6273FA /* GenreBrowseView.swift */; };
 		37C40D608EBD26718A8C72B0 /* SocialService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E896A0A7D86B89FC9DA417F4 /* SocialService.swift */; };
 		394921869634E3227E545C44 /* FeedSuggestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D7B6393B14F99A1DFFE6F0 /* FeedSuggestionService.swift */; };
+		39B7F63BD56A88CB14352403 /* FeatureFlagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD30EC30C75D74A24D02AE1 /* FeatureFlagService.swift */; };
 		3D62AB2F6A8DC6BAB729D898 /* GrippdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACF533FF6FEC8CB2DA90F5 /* GrippdApp.swift */; };
 		3E99E68B469B08A6CB763150 /* TMDBMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */; };
 		486FC0833BD5EF9429730D2F /* AdminCuratedListsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE21F4C004578E87396F7B9 /* AdminCuratedListsService.swift */; };
@@ -83,6 +84,7 @@
 		A88BA4107619CA7035BC7D64 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4CBF9E15999716707334E2 /* AuthViewModel.swift */; };
 		A9A7BF0B5C5FF78AA70FA8B0 /* CommunityStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B825B9774BCD522A61D8DEB8 /* CommunityStatsView.swift */; };
 		AB348E2AD89E0C69B659169A /* MovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2668DA17FC96ADAC0503CB5B /* MovieDetailView.swift */; };
+		AF02B3C4BEC87F265F17ABB8 /* AdminFeatureFlagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CAFCCAAED5CE72352992E3 /* AdminFeatureFlagsView.swift */; };
 		B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905FA566B07407F50510D020 /* UserRepository.swift */; };
 		B20440F672729AB2CEDF7FDE /* CuratedListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4108A626C99AF617AE6E9E5 /* CuratedListDetailView.swift */; };
 		B220FE64CFE675A2AE3D2F5F /* AdminStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C25A14D7F90A8FEF0795099 /* AdminStatsView.swift */; };
@@ -242,8 +244,10 @@
 		BB083A0116AE18C3A22F7710 /* SearchHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryService.swift; sourceTree = "<group>"; };
 		BC0C5E02F30A4A8F07FC0F8E /* LogSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogSyncService.swift; sourceTree = "<group>"; };
 		BC20EF3D14ED4F8926433511 /* SearchFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilterSheet.swift; sourceTree = "<group>"; };
+		BDD30EC30C75D74A24D02AE1 /* FeatureFlagService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FeatureFlagService.swift; sourceTree = "<group>"; };
 		BF95542CD4B341C9D05419B7 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		BFC76940C4F0862F2C919C69 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		C0CAFCCAAED5CE72352992E3 /* AdminFeatureFlagsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminFeatureFlagsView.swift; sourceTree = "<group>"; };
 		C2A97B4BE3E149D2FBD25979 /* MovieDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewModel.swift; sourceTree = "<group>"; };
 		CA5A03EE59D3B53971C017E1 /* CustomListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListService.swift; sourceTree = "<group>"; };
 		CE16FCC0B3168E7240C80361 /* LogHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogHistorySection.swift; sourceTree = "<group>"; };
@@ -378,6 +382,7 @@
 				1C25A14D7F90A8FEF0795099 /* AdminStatsView.swift */,
 				AD4407015C2FE652CEACB967 /* AdminPushNotificationView.swift */,
 				5C3DDCE4C8C71D8947E5A4C5 /* AdminABTestView.swift */,
+				C0CAFCCAAED5CE72352992E3 /* AdminFeatureFlagsView.swift */,
 			);
 			name = Admin;
 			path = Admin;
@@ -413,6 +418,7 @@
 				6F59D33398A7D048392CDCB8 /* PushTokenService.swift */,
 				DA9924489389238080463E89 /* ABTestService.swift */,
 				0B64082065B034848E577962 /* AdminABTestService.swift */,
+				BDD30EC30C75D74A24D02AE1 /* FeatureFlagService.swift */,
 			);
 			path = Supabase;
 			sourceTree = "<group>";
@@ -991,6 +997,8 @@
 				F409831AC99121674398DF8E /* AdminABTestView.swift in Sources */,
 				6370AA01FF1EE47887305E1D /* ABTestService.swift in Sources */,
 				77E24BE2B4A0F03D99C15E90 /* AdminABTestService.swift in Sources */,
+				AF02B3C4BEC87F265F17ABB8 /* AdminFeatureFlagsView.swift in Sources */,
+				39B7F63BD56A88CB14352403 /* FeatureFlagService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
