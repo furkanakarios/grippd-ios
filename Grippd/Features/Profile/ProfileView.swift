@@ -39,32 +39,37 @@ struct ProfileView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 3) {
                         if LogService.shared.wrappedStats() != nil {
-                            Button {
-                                showWrapped = true
-                            } label: {
-                                HStack(spacing: 4) {
+                            Button { showWrapped = true } label: {
+                                HStack(spacing: 3) {
                                     Image(systemName: "sparkles")
+                                        .font(.system(size: 10, weight: .bold))
                                     Text(verbatim: "\(Calendar.current.component(.year, from: Date()))")
-                                        .font(.system(size: 13, weight: .semibold))
+                                        .font(.system(size: 11, weight: .bold))
                                 }
                                 .foregroundStyle(GrippdTheme.Colors.accent)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(GrippdTheme.Colors.accent.opacity(0.12), in: Capsule())
                             }
                         }
                         if appState.isAdmin {
-                            Button {
-                                showAdminPanel = true
-                            } label: {
-                                HStack(spacing: 4) {
+                            Button { showAdminPanel = true } label: {
+                                HStack(spacing: 3) {
                                     Image(systemName: "shield.fill")
+                                        .font(.system(size: 10, weight: .bold))
                                     Text("Admin")
-                                        .font(.system(size: 13, weight: .semibold))
+                                        .font(.system(size: 11, weight: .bold))
                                 }
-                                .foregroundStyle(.red.opacity(0.85))
+                                .foregroundStyle(.red.opacity(0.9))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.red.opacity(0.12), in: Capsule())
                             }
                         }
                     }
+                    .frame(maxHeight: 44)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
