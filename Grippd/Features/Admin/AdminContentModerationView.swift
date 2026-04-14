@@ -10,7 +10,7 @@ private final class AdminModerationViewModel {
     var showResolved = false
 
     var filtered: [ReportedComment] {
-        showResolved ? reports : reports.filter { !$0.isResolved }
+        reports.filter { showResolved ? $0.isResolved : !$0.isResolved }
     }
 
     func load() async {
