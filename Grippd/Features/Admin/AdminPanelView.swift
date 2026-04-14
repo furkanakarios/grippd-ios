@@ -121,7 +121,7 @@ struct AdminPanelView: View {
                 title: "A/B Test",
                 subtitle: "Kullanıcı gruplama, varyant atama",
                 color: .cyan,
-                destination: AnyView(AdminComingSoonView(title: "A/B Test"))
+                destination: AnyView(AdminABTestView())
             )
 
             // Step 8 — Feature Flags
