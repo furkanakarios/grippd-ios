@@ -160,6 +160,7 @@ final class CuratedListService {
         guard let rows = try? await client
             .from("curated_collections")
             .select("id, title, subtitle, icon, accent_hex, sort_order")
+            .eq("is_active", value: true)
             .order("sort_order")
             .execute()
             .value as [Row]
