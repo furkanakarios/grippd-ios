@@ -39,37 +39,36 @@ struct ProfileView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    VStack(alignment: .leading, spacing: 3) {
-                        if LogService.shared.wrappedStats() != nil {
-                            Button { showWrapped = true } label: {
-                                HStack(spacing: 3) {
-                                    Image(systemName: "sparkles")
-                                        .font(.system(size: 10, weight: .bold))
-                                    Text(verbatim: "\(Calendar.current.component(.year, from: Date()))")
-                                        .font(.system(size: 11, weight: .bold))
-                                }
-                                .foregroundStyle(GrippdTheme.Colors.accent)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(GrippdTheme.Colors.accent.opacity(0.12), in: Capsule())
+                    if LogService.shared.wrappedStats() != nil {
+                        Button { showWrapped = true } label: {
+                            HStack(spacing: 3) {
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 11, weight: .bold))
+                                Text(verbatim: "\(Calendar.current.component(.year, from: Date()))")
+                                    .font(.system(size: 12, weight: .bold))
                             }
-                        }
-                        if appState.isAdmin {
-                            Button { showAdminPanel = true } label: {
-                                HStack(spacing: 3) {
-                                    Image(systemName: "shield.fill")
-                                        .font(.system(size: 10, weight: .bold))
-                                    Text("Admin")
-                                        .font(.system(size: 11, weight: .bold))
-                                }
-                                .foregroundStyle(.red.opacity(0.9))
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.red.opacity(0.12), in: Capsule())
-                            }
+                            .foregroundStyle(GrippdTheme.Colors.accent)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
+                            .background(GrippdTheme.Colors.accent.opacity(0.12), in: Capsule())
                         }
                     }
-                    .frame(maxHeight: 44)
+                }
+                if appState.isAdmin {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button { showAdminPanel = true } label: {
+                            HStack(spacing: 3) {
+                                Image(systemName: "shield.fill")
+                                    .font(.system(size: 11, weight: .bold))
+                                Text("Admin")
+                                    .font(.system(size: 12, weight: .bold))
+                            }
+                            .foregroundStyle(.red.opacity(0.9))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
+                            .background(Color.red.opacity(0.12), in: Capsule())
+                        }
+                    }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
