@@ -132,7 +132,7 @@ struct UserProfileView: View {
             // Banner + avatar
             ZStack(alignment: .bottom) {
                 if let bannerURL = data.user.bannerURL {
-                    AsyncImage(url: bannerURL) { phase in
+                    CachedAsyncImage(url: bannerURL) { phase in
                         if case .success(let image) = phase {
                             image.resizable().aspectRatio(contentMode: .fill)
                         } else {
@@ -328,7 +328,7 @@ private struct PublicLogCell: View {
         Color.clear
             .aspectRatio(2/3, contentMode: .fit)
             .overlay(
-                AsyncImage(url: log.posterURL) { phase in
+                CachedAsyncImage(url: log.posterURL) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)

@@ -369,7 +369,7 @@ struct DiscoverView: View {
         Button(action: onTap) {
             ZStack(alignment: .bottomLeading) {
                 // Backdrop
-                AsyncImage(url: backdropURL) { phase in
+                CachedAsyncImage(url: backdropURL) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
@@ -862,7 +862,7 @@ struct GrippedTrendingCard: View {
                 Color.clear
                     .frame(width: 110, height: 165)
                     .overlay(
-                        AsyncImage(url: item.posterURL) { phase in
+                        CachedAsyncImage(url: item.posterURL) { phase in
                             switch phase {
                             case .success(let image):
                                 image.resizable().scaledToFill()
@@ -917,7 +917,7 @@ struct GridPosterCard: View {
                 Color.clear
                     .aspectRatio(2/3, contentMode: .fit)
                     .overlay(
-                        AsyncImage(url: posterURL) { phase in
+                        CachedAsyncImage(url: posterURL) { phase in
                             switch phase {
                             case .success(let image):
                                 image.resizable().scaledToFill()
@@ -964,7 +964,7 @@ struct DiscoverPosterCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             ZStack(alignment: .bottomTrailing) {
-                AsyncImage(url: posterURL) { phase in
+                CachedAsyncImage(url: posterURL) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
@@ -1010,7 +1010,7 @@ struct TrendingUserCard: View {
         VStack(spacing: 8) {
             // Avatar
             ZStack(alignment: .bottomTrailing) {
-                AsyncImage(url: user.avatarURL) { phase in
+                CachedAsyncImage(url: user.avatarURL) { phase in
                     if case .success(let image) = phase {
                         image.resizable().scaledToFill()
                     } else {
@@ -1060,7 +1060,7 @@ struct SimilarUserCard: View {
     var body: some View {
         VStack(spacing: 8) {
             ZStack(alignment: .bottomTrailing) {
-                AsyncImage(url: user.avatarURL) { phase in
+                CachedAsyncImage(url: user.avatarURL) { phase in
                     if case .success(let image) = phase {
                         image.resizable().scaledToFill()
                     } else {
@@ -1116,7 +1116,7 @@ struct UpcomingMovieCard: View {
             Color.clear
                 .aspectRatio(2/3, contentMode: .fit)
                 .overlay(
-                    AsyncImage(url: movie.posterURL) { phase in
+                    CachedAsyncImage(url: movie.posterURL) { phase in
                         switch phase {
                         case .success(let image): image.resizable().scaledToFill()
                         default:

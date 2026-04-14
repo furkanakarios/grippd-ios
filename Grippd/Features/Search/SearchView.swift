@@ -438,7 +438,7 @@ struct PersonResultCell: View {
 
     var body: some View {
         HStack(spacing: GrippdTheme.Spacing.md) {
-            AsyncImage(url: person.profileURL) { phase in
+            CachedAsyncImage(url: person.profileURL) { phase in
                 switch phase {
                 case .success(let image):
                     image.resizable().aspectRatio(contentMode: .fill)
@@ -490,7 +490,7 @@ struct SearchResultCell: View {
 
     var body: some View {
         HStack(spacing: GrippdTheme.Spacing.md) {
-            AsyncImage(url: posterURL) { phase in
+            CachedAsyncImage(url: posterURL) { phase in
                 switch phase {
                 case .success(let image):
                     image.resizable().aspectRatio(contentMode: .fill)
@@ -565,7 +565,7 @@ struct UserContentResultCell: View {
 
     var body: some View {
         HStack(spacing: GrippdTheme.Spacing.md) {
-            AsyncImage(url: content.posterURL) { phase in
+            CachedAsyncImage(url: content.posterURL) { phase in
                 switch phase {
                 case .success(let image):
                     image.resizable().aspectRatio(contentMode: .fill)

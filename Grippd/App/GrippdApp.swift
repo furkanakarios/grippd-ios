@@ -8,6 +8,16 @@ struct GrippdApp: App {
 
     init() {
         PurchaseService.configure()
+        configureURLCache()
+    }
+
+    private func configureURLCache() {
+        // 50 MB memory + 200 MB disk — helps CachedAsyncImage HTTP requests
+        // and any other URLSession calls avoid redundant re-downloads.
+        URLCache.shared = URLCache(
+            memoryCapacity: 50 * 1024 * 1024,
+            diskCapacity: 200 * 1024 * 1024
+        )
     }
 
     var body: some Scene {

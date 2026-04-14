@@ -21,6 +21,7 @@
 		1E50150BD4CADF7E83A4D32E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C3D51F02E1AE282175FA62 /* SearchView.swift */; };
 		2017BAAAE9EB5CDABAD41919 /* LogSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0C5E02F30A4A8F07FC0F8E /* LogSyncService.swift */; };
 		20DCBC72ADBFD46D53395112 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DEA96C54398FF74BF7CBD /* HapticManager.swift */; };
+		220B4AA5CE8BE8585F7D27B1 /* CachedAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981F67CCE1CF235AE73EFDA6 /* CachedAsyncImage.swift */; };
 		24CB916439B123DB568F668D /* EmailAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */; };
 		266036DE24F2C42BC3D01F61 /* PlatformAvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */; };
 		2DE3076A9C740F885368A39D /* xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 8B5609258A962BEB0EF594A6 /* xcconfig.template */; };
@@ -38,6 +39,7 @@
 		5A24E7CAE74A1399FA266C18 /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EFFCE43DC001079408FF4D /* PasswordResetView.swift */; };
 		5CA5C1830E798FC7A9448941 /* CustomListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5A03EE59D3B53971C017E1 /* CustomListService.swift */; };
 		635C7BEE9CA768BE5D1307D6 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA22D60136CCDF96EE731F80 /* FollowService.swift */; };
+		63991DB81D6B750617AE1C0D /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF58978658D26FF7F5D9BFB /* ImageCache.swift */; };
 		675DB57853A36CA1014D54E1 /* LikeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546931D814CC04087670F6DE /* LikeService.swift */; };
 		69A65BDB896A23B02E0AD6AE /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344DCE7D1A69AD1E653EAFA4 /* FeedService.swift */; };
 		69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5C708F8C6739EFC5B9592C /* LogRepository.swift */; };
@@ -138,6 +140,7 @@
 		1570C78BCD0DA98101EE10F6 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		17DD03CECDDBB92923EC6925 /* SubscriptionManagementView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SubscriptionManagementView.swift; sourceTree = "<group>"; };
 		18B95425833B012713061BCA /* PaywallSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallSheetView.swift; sourceTree = "<group>"; };
+		1CF58978658D26FF7F5D9BFB /* ImageCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		209950C1A8FB3E39AD1DD55F /* LogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntry.swift; sourceTree = "<group>"; };
 		21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippedTests.swift; sourceTree = "<group>"; };
 		239A6D139A5EACE55C933112 /* WatchmodeClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchmodeClient.swift; sourceTree = "<group>"; };
@@ -198,6 +201,7 @@
 		905FA566B07407F50510D020 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		9344A381848C54CF5FE99A0D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		9386362D9CDAFB90B965DB67 /* SeasonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonDetailView.swift; sourceTree = "<group>"; };
+		981F67CCE1CF235AE73EFDA6 /* CachedAsyncImage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CachedAsyncImage.swift; sourceTree = "<group>"; };
 		9A4CBF9E15999716707334E2 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		9B6CEA8D04D9ED636549509A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		A077D0480CDDF60562399C9D /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
@@ -466,6 +470,7 @@
 				2744F2F2361CF8E774714489 /* ShareService.swift */,
 				0CFF420E2AFB9BE3AA4576AF /* PremiumGate.swift */,
 				A23DEA96C54398FF74BF7CBD /* HapticManager.swift */,
+				1CF58978658D26FF7F5D9BFB /* ImageCache.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -520,6 +525,7 @@
 				3DF271AC579C24494F39B3C1 /* PlatformAvailabilityView.swift */,
 				260B3CDE2227DB3566791581 /* StarRatingView.swift */,
 				7F98D27BD64B548E6FB11D4C /* UserAvatarView.swift */,
+				981F67CCE1CF235AE73EFDA6 /* CachedAsyncImage.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -914,6 +920,8 @@
 				D4D6FC0E73AA8C73D47848E2 /* SubscriptionManagementView.swift in Sources */,
 				20DCBC72ADBFD46D53395112 /* HapticManager.swift in Sources */,
 				794E13C5B3A1EE82FFDCDAA4 /* LegalView.swift in Sources */,
+				63991DB81D6B750617AE1C0D /* ImageCache.swift in Sources */,
+				220B4AA5CE8BE8585F7D27B1 /* CachedAsyncImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

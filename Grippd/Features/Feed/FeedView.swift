@@ -353,7 +353,7 @@ private struct SuggestionCard: View {
                 .overlay(
                     Group {
                         if let url = content.posterURL {
-                            AsyncImage(url: url) { phase in
+                            CachedAsyncImage(url: url) { phase in
                                 switch phase {
                                 case .success(let image):
                                     image.resizable().aspectRatio(contentMode: .fill)
@@ -463,7 +463,7 @@ struct FeedActivityCard: View {
                             .aspectRatio(2/3, contentMode: .fit)
                             .frame(width: 52)
                             .overlay(
-                                AsyncImage(url: activity.posterURL) { phase in
+                                CachedAsyncImage(url: activity.posterURL) { phase in
                                     switch phase {
                                     case .success(let image):
                                         image.resizable().aspectRatio(contentMode: .fill)

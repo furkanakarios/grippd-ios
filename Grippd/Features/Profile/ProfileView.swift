@@ -555,7 +555,7 @@ private struct LogRowCell: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
-                AsyncImage(url: log.posterURL) { phase in
+                CachedAsyncImage(url: log.posterURL) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
@@ -651,7 +651,7 @@ private struct WatchlistRowCell: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
-                AsyncImage(url: entry.posterURL) { phase in
+                CachedAsyncImage(url: entry.posterURL) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)

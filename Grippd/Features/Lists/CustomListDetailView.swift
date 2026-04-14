@@ -99,7 +99,7 @@ private struct CustomListItemRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            AsyncImage(url: item.posterURL) { phase in
+            CachedAsyncImage(url: item.posterURL) { phase in
                 switch phase {
                 case .success(let image):
                     image.resizable().aspectRatio(contentMode: .fill)

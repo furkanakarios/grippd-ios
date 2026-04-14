@@ -3,7 +3,7 @@ import Supabase
 
 // MARK: - Feed Activity
 
-struct FeedActivity: Identifiable {
+struct FeedActivity: Identifiable, Equatable {
     let id: UUID
     let user: FeedUser
     let contentTitle: String
@@ -19,7 +19,7 @@ struct FeedActivity: Identifiable {
     var commentCount: Int
 }
 
-struct FeedUser: Identifiable {
+struct FeedUser: Identifiable, Equatable {
     let id: UUID
     let username: String
     let displayName: String
