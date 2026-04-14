@@ -37,6 +37,7 @@
 		48C6A65E15A7B3E632F20DF3 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 1D5083365B4BC5ED233C9C5E /* RevenueCat */; };
 		49D4405AE65711870AD37616 /* PremiumGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFF420E2AFB9BE3AA4576AF /* PremiumGate.swift */; };
 		4EB4608834FB65DB9FC74693 /* PaywallSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B95425833B012713061BCA /* PaywallSheetView.swift */; };
+		5045C76B0514447ED4C754CD /* AdminStatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D2FDAC655325DFC51D136A /* AdminStatsService.swift */; };
 		53848E1A8559A61DF8BEA2A5 /* AdminUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6E41941F8827536C15CCB5 /* AdminUserService.swift */; };
 		56F6E143D79523D21D5C5A54 /* EmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28237F388713091CF5B58242 /* EmailAuthViewModel.swift */; };
 		5916D159749A98326791E104 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437C3C726E578C91DE3E6E8A /* OnboardingViewModel.swift */; };
@@ -81,6 +82,7 @@
 		AB348E2AD89E0C69B659169A /* MovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2668DA17FC96ADAC0503CB5B /* MovieDetailView.swift */; };
 		B0A6C506521FE9B55355F77D /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905FA566B07407F50510D020 /* UserRepository.swift */; };
 		B20440F672729AB2CEDF7FDE /* CuratedListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4108A626C99AF617AE6E9E5 /* CuratedListDetailView.swift */; };
+		B220FE64CFE675A2AE3D2F5F /* AdminStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C25A14D7F90A8FEF0795099 /* AdminStatsView.swift */; };
 		B493C5FA697B4E379C049D11 /* GrippedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */; };
 		B4F17E8BE49889926D3CA44C /* WatchmodeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129A8909CB0762820FDF5E1 /* WatchmodeModels.swift */; };
 		B629EABC406B87DE84F7A3BC /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAC745E0243E9C6FBACB313 /* SplashView.swift */; };
@@ -147,9 +149,11 @@
 		1570C78BCD0DA98101EE10F6 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		17DD03CECDDBB92923EC6925 /* SubscriptionManagementView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SubscriptionManagementView.swift; sourceTree = "<group>"; };
 		18B95425833B012713061BCA /* PaywallSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallSheetView.swift; sourceTree = "<group>"; };
+		1C25A14D7F90A8FEF0795099 /* AdminStatsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminStatsView.swift; sourceTree = "<group>"; };
 		1CF58978658D26FF7F5D9BFB /* ImageCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		209950C1A8FB3E39AD1DD55F /* LogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntry.swift; sourceTree = "<group>"; };
 		21036BCA9BF6EB178C1EC4C4 /* GrippedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrippedTests.swift; sourceTree = "<group>"; };
+		21D2FDAC655325DFC51D136A /* AdminStatsService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminStatsService.swift; sourceTree = "<group>"; };
 		233C139BA2C4994F6242E7BA /* AdminUserManagementView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminUserManagementView.swift; sourceTree = "<group>"; };
 		239A6D139A5EACE55C933112 /* WatchmodeClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchmodeClient.swift; sourceTree = "<group>"; };
 		260B3CDE2227DB3566791581 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
@@ -359,6 +363,7 @@
 				233C139BA2C4994F6242E7BA /* AdminUserManagementView.swift */,
 				8BC3A6D90147571E6DD8F840 /* AdminContentModerationView.swift */,
 				30FE3994B3A0402BEFAF1818 /* AdminCuratedListsView.swift */,
+				1C25A14D7F90A8FEF0795099 /* AdminStatsView.swift */,
 			);
 			name = Admin;
 			path = Admin;
@@ -389,6 +394,7 @@
 				5C6E41941F8827536C15CCB5 /* AdminUserService.swift */,
 				9F6C3B2652F98119F9535282 /* AdminModerationService.swift */,
 				DDE21F4C004578E87396F7B9 /* AdminCuratedListsService.swift */,
+				21D2FDAC655325DFC51D136A /* AdminStatsService.swift */,
 			);
 			path = Supabase;
 			sourceTree = "<group>";
@@ -959,6 +965,8 @@
 				21697D9AAF267107DF6B5231 /* AdminModerationService.swift in Sources */,
 				DBA0EC40B69D8248FE9F25B8 /* AdminCuratedListsView.swift in Sources */,
 				486FC0833BD5EF9429730D2F /* AdminCuratedListsService.swift in Sources */,
+				B220FE64CFE675A2AE3D2F5F /* AdminStatsView.swift in Sources */,
+				5045C76B0514447ED4C754CD /* AdminStatsService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -103,7 +103,7 @@ struct AdminPanelView: View {
                 title: "Uygulama İstatistikleri",
                 subtitle: "Kullanıcı, log, aktif oturum sayıları",
                 color: .green,
-                destination: AnyView(AdminComingSoonView(title: "Uygulama İstatistikleri"))
+                destination: AnyView(AdminStatsView())
             )
 
             // Step 6 — Push Bildirim
