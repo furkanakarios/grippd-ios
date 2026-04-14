@@ -94,7 +94,7 @@ struct AdminPanelView: View {
                 title: "Küratör Listeler",
                 subtitle: "Discover'daki koleksiyonları yönet",
                 color: .purple,
-                destination: AnyView(AdminComingSoonView(title: "Küratör Listeler"))
+                destination: AnyView(AdminCuratedListsView())
             )
 
             // Step 5 — Uygulama İstatistikleri

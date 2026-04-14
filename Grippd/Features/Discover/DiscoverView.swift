@@ -657,7 +657,7 @@ struct DiscoverView: View {
     private var curatedListsCarousel: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
-                ForEach(CuratedList.all) { list in
+                ForEach(viewModel.curatedLists) { list in
                     Button {
                         router.discoverPath.append(DiscoverRoute.curatedList(list))
                     } label: {
