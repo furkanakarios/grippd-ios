@@ -71,7 +71,7 @@ struct CuratedItemCard: View {
             Color.clear
                 .aspectRatio(2/3, contentMode: .fit)
                 .overlay(
-                    AsyncImage(url: item.posterURL) { phase in
+                    CachedAsyncImage(url: item.posterURL) { phase in
                         switch phase {
                         case .success(let image):
                             image.resizable().scaledToFill()

@@ -52,6 +52,7 @@ private final class CommentsViewModel {
     func toggleLike(commentID: UUID) async {
         guard let idx = comments.firstIndex(where: { $0.id == commentID }) else { return }
         let wasLiked = comments[idx].isLiked
+        HapticManager.light()
         comments[idx].isLiked = !wasLiked
         comments[idx].likeCount += wasLiked ? -1 : 1
         do {
@@ -113,21 +114,15 @@ struct CommentsSheetView: View {
         Group {
             if viewModel.isLoading {
                 Spacer()
-                ProgressView().tint(GrippdTheme.Colors.accent)
+                GrippdLoadingView()
                 Spacer()
             } else if viewModel.comments.isEmpty {
                 Spacer()
-                VStack(spacing: 8) {
-                    Image(systemName: "bubble.left")
-                        .font(.system(size: 36))
-                        .foregroundStyle(.white.opacity(0.15))
-                    Text("Henüz yorum yok")
-                        .font(.system(size: 14))
-                        .foregroundStyle(.white.opacity(0.35))
-                    Text("İlk yorumu sen yap!")
-                        .font(.system(size: 13))
-                        .foregroundStyle(.white.opacity(0.2))
-                }
+                GrippdEmptyStateView(
+                    icon: "bubble.left",
+                    title: "Henüz yorum yok",
+                    subtitle: "İlk yorumu sen yap!"
+                )
                 Spacer()
             } else {
                 ScrollView(showsIndicators: false) {
@@ -187,6 +182,7 @@ struct CommentsSheetView: View {
                             )
                     }
                     .disabled(viewModel.draftText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .accessibilityLabel("Yorumu gönder")
                 }
             }
             .padding(.horizontal, GrippdTheme.Spacing.md)
@@ -280,6 +276,8 @@ private struct CommentRow: View {
                         }
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(comment.isLiked ? "Beğeniyi kaldır" : "Beğen")
+                    .accessibilityValue(comment.likeCount > 0 ? "\(comment.likeCount) beğeni" : "")
 
                     // Silme (sadece kendi yorumu)
                     if comment.isOwn {
@@ -289,6 +287,7 @@ private struct CommentRow: View {
                                 .foregroundStyle(.white.opacity(0.25))
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel("Yorumu sil")
                     }
                 }
 

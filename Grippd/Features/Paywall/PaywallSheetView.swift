@@ -136,6 +136,7 @@ struct PaywallSheetView: View {
                 .background(GrippdTheme.Colors.accent, in: RoundedRectangle(cornerRadius: 14))
             }
             .disabled(isPurchasing || isLoadingOfferings)
+            .buttonStyle(.press)
             .padding(.horizontal, 24)
 
             if hasTrial {

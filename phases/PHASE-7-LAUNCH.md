@@ -28,14 +28,16 @@
 - [ ] **Step 7** — Privacy Policy & Terms of Service  
   Branch: `feature/phase-7-step-7-legal`
 
-- [ ] **Step 8** — TestFlight beta: iç test, harici beta, crash raporları  
-  Branch: `feature/phase-7-step-8-testflight`
+- [ ] **Step 8** — TestFlight beta: iç test, harici beta, crash raporları ⏸ Ertelendi  
+  Branch: `feature/phase-7-step-8-testflight`  
+  > Phase 8 (Admin Panel) tamamlandıktan sonra devreye alınacak. Uzun süreli test dönemi planlanıyor.
 
 - [ ] **Step 9** — Performans optimizasyonu: Instruments profiling, memory leak  
   Branch: `feature/phase-7-step-9-performance`
 
-- [ ] **Step 10** — App Store submission: review notları, age rating, gönder  
-  Branch: `feature/phase-7-step-10-submission`
+- [ ] **Step 10** — App Store submission: review notları, age rating, gönder ⏸ Ertelendi  
+  Branch: `feature/phase-7-step-10-submission`  
+  > TestFlight test dönemi + Phase 9 (Bugfix & Security) tamamlandıktan sonra yapılacak son adım.
 
 ---
 

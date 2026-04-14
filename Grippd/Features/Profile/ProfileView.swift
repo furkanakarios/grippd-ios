@@ -285,9 +285,9 @@ private struct LogsTabView: View {
             }
 
             if filtered.isEmpty {
-                emptyState(
+                GrippdEmptyStateView(
                     icon: "checkmark.circle",
-                    message: filter == nil ? "Henüz log yok" : "Bu kategoride log yok"
+                    title: filter == nil ? "Henüz log yok" : "Bu kategoride log yok"
                 )
             } else {
                 LazyVStack(spacing: 0) {
@@ -378,9 +378,9 @@ private struct WatchlistTabView: View {
             }
 
             if filtered.isEmpty && customLists.isEmpty {
-                emptyState(
+                GrippdEmptyStateView(
                     icon: "bookmark",
-                    message: filter == nil ? "Listelenen içerik yok" : "Bu kategoride içerik yok"
+                    title: filter == nil ? "Listelenen içerik yok" : "Bu kategoride içerik yok"
                 )
             } else {
                 LazyVStack(spacing: 0) {
@@ -555,7 +555,7 @@ private struct LogRowCell: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
-                AsyncImage(url: log.posterURL) { phase in
+                CachedAsyncImage(url: log.posterURL) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
@@ -651,7 +651,7 @@ private struct WatchlistRowCell: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
-                AsyncImage(url: entry.posterURL) { phase in
+                CachedAsyncImage(url: entry.posterURL) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
@@ -747,15 +747,17 @@ private struct StatsTabView: View {
         Group {
             if let s = stats {
                 if s.totalLogged == 0 {
-                    emptyState(icon: "chart.bar", message: "Henüz istatistik yok\nBiraz içerik logla!")
-                        .padding(.top, 40)
+                    GrippdEmptyStateView(
+                        icon: "chart.bar",
+                        title: "Henüz istatistik yok",
+                        subtitle: "Biraz içerik logla!"
+                    )
+                    .padding(.top, 40)
                 } else {
                     statsContent(s)
                 }
             } else {
-                ProgressView()
-                    .tint(GrippdTheme.Colors.accent)
-                    .frame(maxWidth: .infinity)
+                GrippdLoadingView()
                     .padding(.top, 80)
             }
         }
@@ -1004,22 +1006,6 @@ private struct PlatformBar: View {
     }
 }
 
-// MARK: - Empty State
-
-private func emptyState(icon: String, message: String) -> some View {
-    VStack(spacing: GrippdTheme.Spacing.md) {
-        Spacer(minLength: 60)
-        Image(systemName: icon)
-            .font(.system(size: 44))
-            .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.2))
-        Text(message)
-            .font(.system(size: 14))
-            .foregroundStyle(.white.opacity(0.35))
-        Spacer(minLength: 60)
-    }
-    .frame(maxWidth: .infinity)
-}
-
 // MARK: - Stat Item
 
 private struct StatItem: View {
@@ -1050,6 +1036,9 @@ private struct SettingsView: View {
     @State private var showSignOutConfirm = false
     @State private var isSigningOut = false
     @State private var showSubscription = false
+    @State private var showPrivacyPolicy = false
+    @State private var showTermsOfService = false
+    @State private var showKVKK = false
 
     var body: some View {
         ZStack {
@@ -1059,6 +1048,8 @@ private struct SettingsView: View {
                     accountSection
                     Divider().background(.white.opacity(0.06)).padding(.vertical, 8)
                     privacySection
+                    Divider().background(.white.opacity(0.06)).padding(.vertical, 8)
+                    legalSection
                     Divider().background(.white.opacity(0.06)).padding(.vertical, 8)
                     dangerSection
                 }
@@ -1072,6 +1063,15 @@ private struct SettingsView: View {
         .toolbarColorScheme(.dark, for: .navigationBar)
         .navigationDestination(isPresented: $showSubscription) {
             SubscriptionManagementView()
+        }
+        .sheet(isPresented: $showPrivacyPolicy) {
+            LegalView(mode: .privacyPolicy)
+        }
+        .sheet(isPresented: $showTermsOfService) {
+            LegalView(mode: .termsOfService)
+        }
+        .sheet(isPresented: $showKVKK) {
+            LegalView(mode: .kvkk)
         }
         .onAppear { isPrivate = appState.currentUser?.isPrivate ?? false }
         .confirmationDialog("Çıkış yapmak istediğine emin misin?", isPresented: $showSignOutConfirm, titleVisibility: .visible) {
@@ -1135,6 +1135,26 @@ private struct SettingsView: View {
             }
             .padding(.horizontal, GrippdTheme.Spacing.md)
             .padding(.vertical, 12)
+        }
+    }
+
+    private var legalSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            sectionHeader("Yasal")
+            Button { showPrivacyPolicy = true } label: {
+                settingsRow(icon: "hand.raised.fill", title: "Gizlilik Politikası", value: "")
+            }
+            .buttonStyle(.plain)
+            Divider().background(.white.opacity(0.04)).padding(.leading, 66)
+            Button { showTermsOfService = true } label: {
+                settingsRow(icon: "doc.text.fill", title: "Kullanım Koşulları", value: "")
+            }
+            .buttonStyle(.plain)
+            Divider().background(.white.opacity(0.04)).padding(.leading, 66)
+            Button { showKVKK = true } label: {
+                settingsRow(icon: "shield.lefthalf.filled", title: "KVKK Aydınlatma Metni", value: "")
+            }
+            .buttonStyle(.plain)
         }
     }
 

@@ -28,6 +28,7 @@ private final class UserProfileViewModel {
 
     func toggleFollow(targetUserID: UUID) async {
         isFollowLoading = true
+        HapticManager.medium()
         do {
             if isFollowing {
                 try await FollowService.shared.unfollow(targetUserID: targetUserID)
@@ -131,7 +132,7 @@ struct UserProfileView: View {
             // Banner + avatar
             ZStack(alignment: .bottom) {
                 if let bannerURL = data.user.bannerURL {
-                    AsyncImage(url: bannerURL) { phase in
+                    CachedAsyncImage(url: bannerURL) { phase in
                         if case .success(let image) = phase {
                             image.resizable().aspectRatio(contentMode: .fill)
                         } else {
@@ -254,6 +255,8 @@ struct UserProfileView: View {
             )
         }
         .disabled(viewModel.isFollowLoading)
+        .buttonStyle(.press)
+        .accessibilityLabel(viewModel.isFollowing ? "Takibi bırak" : "Takip et")
         .animation(.spring(response: 0.3), value: viewModel.isFollowing)
     }
 
@@ -287,11 +290,8 @@ struct UserProfileView: View {
             .padding(.horizontal, GrippdTheme.Spacing.md)
 
             if logs.isEmpty {
-                Text("Henüz log yok")
-                    .font(.system(size: 14))
-                    .foregroundStyle(.white.opacity(0.35))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, GrippdTheme.Spacing.lg)
+                GrippdEmptyStateView(icon: "checkmark.circle", title: "Henüz log yok")
+                    .padding(.vertical, GrippdTheme.Spacing.sm)
             } else {
                 LazyVGrid(
                     columns: [
@@ -328,7 +328,7 @@ private struct PublicLogCell: View {
         Color.clear
             .aspectRatio(2/3, contentMode: .fit)
             .overlay(
-                AsyncImage(url: log.posterURL) { phase in
+                CachedAsyncImage(url: log.posterURL) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
@@ -378,16 +378,12 @@ struct FollowListView: View {
             GrippdBackground()
 
             if isLoading {
-                ProgressView().tint(GrippdTheme.Colors.accent)
+                GrippdLoadingView()
             } else if users.isEmpty {
-                VStack(spacing: GrippdTheme.Spacing.md) {
-                    Image(systemName: "person.2")
-                        .font(.system(size: 44))
-                        .foregroundStyle(.white.opacity(0.2))
-                    Text(mode == .followers ? "Henüz takipçi yok" : "Henüz kimseyi takip etmiyor")
-                        .font(.system(size: 14))
-                        .foregroundStyle(.white.opacity(0.4))
-                }
+                GrippdEmptyStateView(
+                    icon: "person.2",
+                    title: mode == .followers ? "Henüz takipçi yok" : "Henüz kimseyi takip etmiyor"
+                )
             } else {
                 List {
                     ForEach(users) { user in

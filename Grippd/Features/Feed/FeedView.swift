@@ -51,9 +51,12 @@ private final class FeedViewModel {
     func toggleLike(activityID: UUID) async {
         guard let idx = activities.firstIndex(where: { $0.id == activityID }) else { return }
         let wasLiked = activities[idx].isLiked
+        HapticManager.light()
         // Optimistic update
-        activities[idx].isLiked = !wasLiked
-        activities[idx].likeCount += wasLiked ? -1 : 1
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+            activities[idx].isLiked = !wasLiked
+            activities[idx].likeCount += wasLiked ? -1 : 1
+        }
         if wasLiked {
             await LikeService.shared.unlike(logID: activityID)
         } else {
@@ -170,10 +173,7 @@ struct FeedView: View {
     // MARK: - States
 
     private var loadingView: some View {
-        VStack(spacing: GrippdTheme.Spacing.md) {
-            ProgressView().scaleEffect(1.3).tint(GrippdTheme.Colors.accent)
-            Text("Yükleniyor...").font(.system(size: 14)).foregroundStyle(.white.opacity(0.4))
-        }
+        GrippdLoadingView(label: "Yükleniyor...")
     }
 
     private func errorView(_ message: String) -> some View {
@@ -191,6 +191,7 @@ struct FeedView: View {
             }
             .font(.system(size: 14, weight: .semibold))
             .foregroundStyle(GrippdTheme.Colors.accent)
+            .buttonStyle(.press)
         }
     }
 
@@ -352,7 +353,7 @@ private struct SuggestionCard: View {
                 .overlay(
                     Group {
                         if let url = content.posterURL {
-                            AsyncImage(url: url) { phase in
+                            CachedAsyncImage(url: url) { phase in
                                 switch phase {
                                 case .success(let image):
                                     image.resizable().aspectRatio(contentMode: .fill)
@@ -462,7 +463,7 @@ struct FeedActivityCard: View {
                             .aspectRatio(2/3, contentMode: .fit)
                             .frame(width: 52)
                             .overlay(
-                                AsyncImage(url: activity.posterURL) { phase in
+                                CachedAsyncImage(url: activity.posterURL) { phase in
                                     switch phase {
                                     case .success(let image):
                                         image.resizable().aspectRatio(contentMode: .fill)
@@ -523,6 +524,8 @@ struct FeedActivityCard: View {
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("Yorumlar")
+                            .accessibilityValue(activity.commentCount > 0 ? "\(activity.commentCount) yorum" : "")
 
                             // Like butonu
                             Button(action: onLike) {
@@ -538,6 +541,8 @@ struct FeedActivityCard: View {
                                 }
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel(activity.isLiked ? "Beğeniyi kaldır" : "Beğen")
+                            .accessibilityValue(activity.likeCount > 0 ? "\(activity.likeCount) beğeni" : "")
 
                             // Paylaş butonu
                             if let onShare {
@@ -547,6 +552,7 @@ struct FeedActivityCard: View {
                                         .foregroundStyle(.white.opacity(0.35))
                                 }
                                 .buttonStyle(.plain)
+                                .accessibilityLabel("Paylaş")
                             }
                         }
                         .padding(.top, 4)

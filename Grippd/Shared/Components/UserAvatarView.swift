@@ -76,7 +76,7 @@ struct UserAvatarView: View {
                 .frame(width: size, height: size)
 
             if let url {
-                AsyncImage(url: url) { phase in
+                CachedAsyncImage(url: url) { phase in
                     if case .success(let image) = phase {
                         image.resizable().scaledToFill()
                     } else {

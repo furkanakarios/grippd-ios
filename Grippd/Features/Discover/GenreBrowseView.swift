@@ -349,7 +349,7 @@ struct GenrePosterCell: View {
             Color.clear
                 .aspectRatio(2/3, contentMode: .fit)
                 .overlay(
-                    AsyncImage(url: posterURL) { phase in
+                    CachedAsyncImage(url: posterURL) { phase in
                         switch phase {
                         case .success(let image):
                             image.resizable().aspectRatio(contentMode: .fill)

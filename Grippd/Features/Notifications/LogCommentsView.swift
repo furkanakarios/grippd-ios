@@ -212,7 +212,7 @@ private struct LogCommentRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            AsyncImage(url: comment.user.avatarURL) { phase in
+            CachedAsyncImage(url: comment.user.avatarURL) { phase in
                 if case .success(let image) = phase { image.resizable().scaledToFill() }
                 else {
                     Circle().fill(GrippdTheme.Colors.accent.opacity(0.12))
