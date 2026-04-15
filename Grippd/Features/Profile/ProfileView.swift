@@ -288,7 +288,6 @@ private struct LogsTabView: View {
     @State private var logs: [LogEntry] = []
     @State private var filter: Content.ContentType? = nil
     @State private var editingLog: LogEntry? = nil
-    @State private var showEditSheet = false
 
     private var filtered: [LogEntry] {
         guard let f = filter else { return logs }
@@ -323,7 +322,6 @@ private struct LogsTabView: View {
                         .contextMenu {
                             Button {
                                 editingLog = log
-                                showEditSheet = true
                             } label: {
                                 Label("Düzenle", systemImage: "pencil")
                             }
@@ -335,20 +333,9 @@ private struct LogsTabView: View {
             }
         }
         .onAppear { logs = LogService.shared.allLogs() }
-        .sheet(isPresented: $showEditSheet) {
-            if let log = editingLog {
-                LogEntrySheet(
-                    contentKey: log.contentKey,
-                    contentType: log.contentType,
-                    contentTitle: log.contentTitle,
-                    posterPath: log.posterPath,
-                    isPresented: $showEditSheet,
-                    editingEntry: log
-                ) {
-                    logs = LogService.shared.allLogs()
-                }
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
+        .sheet(item: $editingLog) { log in
+            EditLogSheet(log: log) {
+                logs = LogService.shared.allLogs()
             }
         }
     }
@@ -385,6 +372,28 @@ private struct LogsTabView: View {
         case .book:
             router.profilePath.append(ProfileRoute.bookDetail(googleBooksID: idStr))
         }
+    }
+}
+
+// MARK: - EditLogSheet wrapper (.sheet(item:) ile kullanım için)
+
+private struct EditLogSheet: View {
+    let log: LogEntry
+    let onSaved: () -> Void
+    @State private var isPresented = true
+
+    var body: some View {
+        LogEntrySheet(
+            contentKey: log.contentKey,
+            contentType: log.contentType,
+            contentTitle: log.contentTitle,
+            posterPath: log.posterPath,
+            isPresented: $isPresented,
+            editingEntry: log,
+            onSaved: onSaved
+        )
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
     }
 }
 
