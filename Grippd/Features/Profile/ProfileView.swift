@@ -381,6 +381,7 @@ private struct EditLogSheet: View {
     let log: LogEntry
     let onSaved: () -> Void
     @State private var isPresented = true
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         LogEntrySheet(
@@ -394,6 +395,9 @@ private struct EditLogSheet: View {
         )
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
+        .onChange(of: isPresented) { _, newValue in
+            if !newValue { dismiss() }
+        }
     }
 }
 
