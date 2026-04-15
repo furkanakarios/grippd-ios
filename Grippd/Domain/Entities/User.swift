@@ -10,6 +10,7 @@ struct User: Identifiable, Codable, Equatable {
     var isPrivate: Bool
     var planType: PlanType
     var interests: [String]
+    var isAdmin: Bool
     let createdAt: Date
 
     enum PlanType: String, Codable {

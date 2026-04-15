@@ -1,9 +1,32 @@
 import SwiftUI
 import Auth
+import UIKit
+
+// MARK: - AppDelegate (APNs token callback)
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // Token'ı hex string olarak sakla; login sonrası PushTokenService upload eder
+        let hex = deviceToken.map { String(format: "%02x", $0) }.joined()
+        UserDefaults.standard.set(hex, forKey: "apns_device_token")
+        NotificationCenter.default.post(name: .didReceiveAPNSToken, object: deviceToken)
+    }
+
+    func application(_ application: UIApplication,
+                     didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // Simulator'da beklenen hata — ignore
+    }
+}
+
+extension Notification.Name {
+    static let didReceiveAPNSToken = Notification.Name("didReceiveAPNSToken")
+}
 
 @main
 struct GrippdApp: App {
 
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State private var appState = AppState()
 
     init() {

@@ -7,6 +7,7 @@ struct ProfileView: View {
     @State private var showSignOutConfirm = false
     @State private var showWrapped = false
     @State private var showNotifications = false
+    @State private var showAdminPanel = false
     @State private var selectedTab: ProfileTab = .logs
     @State private var followerCount: Int = 0
     @State private var followingCount: Int = 0
@@ -39,15 +40,33 @@ struct ProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if LogService.shared.wrappedStats() != nil {
-                        Button {
-                            showWrapped = true
-                        } label: {
-                            HStack(spacing: 4) {
+                        Button { showWrapped = true } label: {
+                            HStack(spacing: 3) {
                                 Image(systemName: "sparkles")
+                                    .font(.system(size: 11, weight: .bold))
                                 Text(verbatim: "\(Calendar.current.component(.year, from: Date()))")
-                                    .font(.system(size: 13, weight: .semibold))
+                                    .font(.system(size: 12, weight: .bold))
                             }
                             .foregroundStyle(GrippdTheme.Colors.accent)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
+                            .background(GrippdTheme.Colors.accent.opacity(0.12), in: Capsule())
+                        }
+                    }
+                }
+                if appState.isAdmin {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button { showAdminPanel = true } label: {
+                            HStack(spacing: 3) {
+                                Image(systemName: "shield.fill")
+                                    .font(.system(size: 11, weight: .bold))
+                                Text("Admin")
+                                    .font(.system(size: 12, weight: .bold))
+                            }
+                            .foregroundStyle(.red.opacity(0.9))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
+                            .background(Color.red.opacity(0.12), in: Capsule())
                         }
                     }
                 }
@@ -82,6 +101,10 @@ struct ProfileView: View {
                 if let wrapped = LogService.shared.wrappedStats() {
                     WrappedView(stats: wrapped, isPresented: $showWrapped)
                 }
+            }
+            .fullScreenCover(isPresented: $showAdminPanel) {
+                AdminPanelView()
+                    .environment(appState)
             }
             .sheet(isPresented: $showNotifications) {
                 NotificationsView(onNavigate: { route in
@@ -264,6 +287,7 @@ private struct LogsTabView: View {
     let router: AppRouter
     @State private var logs: [LogEntry] = []
     @State private var filter: Content.ContentType? = nil
+    @State private var editingLog: LogEntry? = nil
 
     private var filtered: [LogEntry] {
         guard let f = filter else { return logs }
@@ -295,6 +319,13 @@ private struct LogsTabView: View {
                         LogRowCell(log: log) {
                             navigate(log: log)
                         }
+                        .contextMenu {
+                            Button {
+                                editingLog = log
+                            } label: {
+                                Label("Düzenle", systemImage: "pencil")
+                            }
+                        }
                         Divider().background(.white.opacity(0.06)).padding(.leading, 80)
                     }
                 }
@@ -302,6 +333,11 @@ private struct LogsTabView: View {
             }
         }
         .onAppear { logs = LogService.shared.allLogs() }
+        .sheet(item: $editingLog) { log in
+            EditLogSheet(log: log) {
+                logs = LogService.shared.allLogs()
+            }
+        }
     }
 
     private func filterChip(label: String, type: Content.ContentType?) -> some View {
@@ -335,6 +371,32 @@ private struct LogsTabView: View {
             }
         case .book:
             router.profilePath.append(ProfileRoute.bookDetail(googleBooksID: idStr))
+        }
+    }
+}
+
+// MARK: - EditLogSheet wrapper (.sheet(item:) ile kullanım için)
+
+private struct EditLogSheet: View {
+    let log: LogEntry
+    let onSaved: () -> Void
+    @State private var isPresented = true
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        LogEntrySheet(
+            contentKey: log.contentKey,
+            contentType: log.contentType,
+            contentTitle: log.contentTitle,
+            posterPath: log.posterPath,
+            isPresented: $isPresented,
+            editingEntry: log,
+            onSaved: onSaved
+        )
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
+        .onChange(of: isPresented) { _, newValue in
+            if !newValue { dismiss() }
         }
     }
 }

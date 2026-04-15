@@ -80,6 +80,7 @@ final class DiscoverViewModel {
     var heroMovie: TMDBMovie? { trendingMovies.first }
     var heroShow: TMDBTVShow? { trendingShows.first }
 
+    var curatedLists: [CuratedList] = CuratedList.all   // DB yüklenince override edilir
     var isPremium = false
     private var didLoad = false
 
@@ -94,6 +95,7 @@ final class DiscoverViewModel {
 
     func refresh() async {
         didLoad = false
+        curatedLists = CuratedList.all
         grippedTrending = []
         trendingUsers = []
         trendingMovies = []
@@ -114,6 +116,7 @@ final class DiscoverViewModel {
     }
 
     private func load() async {
+        async let curated: Void    = loadCuratedLists()
         async let grippd: Void     = loadGrippedTrending()
         async let users: Void      = loadTrendingUsers()
         async let trending: Void   = loadTrending()
@@ -125,7 +128,11 @@ final class DiscoverViewModel {
         async let recs: Void       = loadRecommendations()
         async let similar: Void    = loadSimilarUsers()
         async let upcoming: Void   = loadUpcoming()
-        _ = await (grippd, users, trending, popular, nowPlaying, onTheAir, genres, books, recs, similar, upcoming)
+        _ = await (curated, grippd, users, trending, popular, nowPlaying, onTheAir, genres, books, recs, similar, upcoming)
+    }
+
+    private func loadCuratedLists() async {
+        curatedLists = await CuratedListService.shared.activeLists()
     }
 
     private func loadSimilarUsers() async {

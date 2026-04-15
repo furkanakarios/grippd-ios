@@ -1,0 +1,121 @@
+========================================
+GRIPPD — APP STORE LISTING
+========================================
+
+APP ADI / APP NAME
+------------------
+Grippd
+
+ALT BAŞLIK / SUBTITLE
+---------------------
+Film, Dizi & Kitap Günlüğün
+
+
+========================================
+AÇIKLAMA (TR)
+========================================
+
+Grippd, izlediğin filmleri, dizileri ve okuduğun kitapları takip ettiğin sosyal bir günlük uygulamasıdır.
+
+🎬 NE İZLEDİN?
+Film ve dizileri kaydet, puanla, emoji tepkin ekle. Sezon ve bölüm bazında takip et.
+
+📚 NE OKUDUN?
+Kitaplarını da aynı kolaylıkla logla. Google Books entegrasyonu ile milyonlarca kitap arasından seç.
+
+🌟 ARKADAŞLARINI TAKİP ET
+Takip ettiğin kişilerin aktivitelerini Feed'de gör. Beğen, yorum yap, paylaş.
+
+🔍 KEŞFET
+Haftalık trendler, küratörlenmiş listeler ve kişiselleştirilmiş önerilerle yeni favorilerini bul.
+
+⭐ PUAN VER
+0,5 adımlı yıldız sistemiyle içeriklere 1-10 arası puan ver. Renk kodlu gösterim ile puanlarını kolayca takip et.
+
+📊 İSTATİSTİKLER
+Yıllık Wrapped, tür dağılımı, en aktif aylar — içerik alışkanlıklarını analiz et.
+
+👑 GRIPPD PREMIUM
+Gelişmiş filtreler, öncelikli öneriler, özel içerik ekleme ve daha fazlası.
+
+Grippd ile film, dizi ve kitap dünyanda kaybolmaya hazır mısın?
+
+
+========================================
+AÇIKLAMA (EN)
+========================================
+
+Grippd is your social journal for movies, TV shows, and books. Track what you watch and read, share with friends, and discover what's next.
+
+🎬 TRACK EVERYTHING
+Log movies, TV shows (season & episode level), and books. Rate them on a 0.5-step star system.
+
+📚 BOOKS TOO
+Powered by Google Books — search millions of titles and add them to your log in seconds.
+
+🌟 SOCIAL FEED
+Follow friends and see their activity. Like, comment, and share logs.
+
+🔍 DISCOVER
+Weekly trends, curated lists, and personalized recommendations based on your taste.
+
+📊 YEAR IN REVIEW
+Annual Wrapped stats, genre breakdowns, and monthly activity charts.
+
+👑 GRIPPD PREMIUM
+Advanced filters, priority recommendations, custom content, and more.
+
+Your next favorite is one tap away.
+
+
+========================================
+KEYWORDS (maks. 100 karakter)
+========================================
+film,dizi,kitap,günlük,watchlist,log,izle,oku,keşfet,puan,sosyal,takip,sinema,dizi takip,bookshelf
+
+
+========================================
+KATEGORİ / CATEGORY
+========================================
+Birincil (Primary)  : Entertainment
+İkincil (Secondary) : Social Networking
+
+
+========================================
+YAŞ SINIRI / AGE RATING
+========================================
+12+
+Sebep: Kullanıcı tarafından oluşturulan içerik (yorumlar, loglar)
+
+
+========================================
+SCREENSHOTS
+========================================
+Klasör: ~/Desktop/GrippdScreenshots/6.9inch/
+
+01_signin.jpg   → Giriş ekranı
+02_feed.png     → Sosyal Feed
+03_discover.png → Keşfet
+04_detail.png   → Film/Dizi Detay
+05_profile.png  → Profil
+
+App Store Connect'te "6.9-inch Display" bölümüne bu 5 görseli sürükle/bırak.
+Not: 6.5" boyut da destekleniyor; aynı görseller kabul edilir.
+
+
+========================================
+GEREKLİ URL'LER (App Store Connect'te zorunlu)
+========================================
+Privacy Policy URL  : Uygulamadaki Gizlilik Politikası metnini bir URL'e taşı.
+                      Örnek: GitHub Pages, Notion public page veya Supabase storage.
+Support URL         : Destek e-postası veya sayfası (örn. mailto:destek@grippd.com)
+Marketing URL       : İsteğe bağlı
+
+
+========================================
+NOTLAR
+========================================
+- "What's New" alanı (release notes) ilk sürümde boş bırakılabilir.
+- TestFlight ile önce internal test yapılması önerilir.
+- App Review için demo hesap bilgisi gerekebilir; hazır bir test hesabı oluştur.
+========================================

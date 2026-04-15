@@ -55,6 +55,18 @@ final class LogService {
         try? context.save()
     }
 
+    func update(_ entry: LogEntry, watchedAt: Date, platform: LogPlatform?,
+                isRewatch: Bool, rating: Double?, emoji: String?, note: String?) {
+        entry.watchedAt = watchedAt
+        entry.platformRaw = platform?.rawValue
+        entry.isRewatch = isRewatch
+        entry.rating = rating
+        entry.emoji = emoji
+        entry.note = note
+        try? context.save()
+        Task { await LogSyncService.shared.update(entry) }
+    }
+
     func delete(_ entry: LogEntry) {
         context.delete(entry)
         try? context.save()

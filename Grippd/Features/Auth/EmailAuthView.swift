@@ -140,6 +140,7 @@ struct EmailAuthView: View {
                         if viewModel.isLoading {
                             ProgressView()
                                 .tint(GrippdTheme.Colors.accent)
+                                .frame(maxWidth: .infinity)
                                 .frame(height: 54)
                         } else {
                             GlowBorderButton(title: primaryLabel) {

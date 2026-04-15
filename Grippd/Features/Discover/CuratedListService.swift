@@ -138,7 +138,46 @@ extension CuratedList {
 @MainActor
 final class CuratedListService {
     static let shared = CuratedListService()
+    private let client = SupabaseClientService.shared.client
     private init() {}
+
+    /// Supabase'deki is_active ve sıralamayı göz önüne alarak aktif listeyi döner.
+    /// DB'ye erişilemezse statik listeyi olduğu gibi kullanır.
+    func activeLists() async -> [CuratedList] {
+        struct Row: Decodable {
+            let id: String
+            let title: String
+            let subtitle: String
+            let icon: String
+            let accentHex: String
+            let sortOrder: Int
+            enum CodingKeys: String, CodingKey {
+                case id, title, subtitle, icon
+                case accentHex = "accent_hex"
+                case sortOrder = "sort_order"
+            }
+        }
+        guard let rows = try? await client
+            .from("curated_collections")
+            .select("id, title, subtitle, icon, accent_hex, sort_order")
+            .eq("is_active", value: true)
+            .order("sort_order")
+            .execute()
+            .value as [Row]
+        else { return CuratedList.all }
+
+        return rows.compactMap { row in
+            guard let base = CuratedList.all.first(where: { $0.id == row.id }) else { return nil }
+            return CuratedList(
+                id: base.id,
+                title: row.title,
+                subtitle: row.subtitle,
+                icon: row.icon,
+                accentHex: row.accentHex,
+                source: base.source
+            )
+        }
+    }
 
     func fetchItems(for list: CuratedList) async -> [CuratedItem] {
         switch list.source {

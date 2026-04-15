@@ -12,6 +12,8 @@ final class AppState {
     var showPaywall: Bool = false
     var isPremium: Bool = false
 
+    var isAdmin: Bool { currentUser?.isAdmin ?? false }
+
     enum AppTab {
         case feed, search, discover, profile
     }
