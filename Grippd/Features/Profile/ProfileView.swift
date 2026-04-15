@@ -315,27 +315,23 @@ private struct LogsTabView: View {
                     title: filter == nil ? "Henüz log yok" : "Bu kategoride log yok"
                 )
             } else {
-                List {
+                LazyVStack(spacing: 0) {
                     ForEach(filtered) { log in
                         LogRowCell(log: log) {
                             navigate(log: log)
                         }
-                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                        .contextMenu {
                             Button {
                                 editingLog = log
                                 showEditSheet = true
                             } label: {
                                 Label("Düzenle", systemImage: "pencil")
                             }
-                            .tint(.blue)
                         }
-                        .listRowBackground(Color.clear)
-                        .listRowSeparatorTint(.white.opacity(0.06))
-                        .listRowInsets(EdgeInsets())
+                        Divider().background(.white.opacity(0.06)).padding(.leading, 80)
                     }
                 }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
+                .padding(.bottom, GrippdTheme.Spacing.xl)
             }
         }
         .onAppear { logs = LogService.shared.allLogs() }
