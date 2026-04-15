@@ -315,7 +315,7 @@ private struct LogsTabView: View {
                     title: filter == nil ? "Henüz log yok" : "Bu kategoride log yok"
                 )
             } else {
-                LazyVStack(spacing: 0) {
+                List {
                     ForEach(filtered) { log in
                         LogRowCell(log: log) {
                             navigate(log: log)
@@ -329,10 +329,13 @@ private struct LogsTabView: View {
                             }
                             .tint(.blue)
                         }
-                        Divider().background(.white.opacity(0.06)).padding(.leading, 80)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparatorTint(.white.opacity(0.06))
+                        .listRowInsets(EdgeInsets())
                     }
                 }
-                .padding(.bottom, GrippdTheme.Spacing.xl)
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
             }
         }
         .onAppear { logs = LogService.shared.allLogs() }
