@@ -287,6 +287,8 @@ private struct LogsTabView: View {
     let router: AppRouter
     @State private var logs: [LogEntry] = []
     @State private var filter: Content.ContentType? = nil
+    @State private var editingLog: LogEntry? = nil
+    @State private var showEditSheet = false
 
     private var filtered: [LogEntry] {
         guard let f = filter else { return logs }
@@ -318,6 +320,15 @@ private struct LogsTabView: View {
                         LogRowCell(log: log) {
                             navigate(log: log)
                         }
+                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                            Button {
+                                editingLog = log
+                                showEditSheet = true
+                            } label: {
+                                Label("Düzenle", systemImage: "pencil")
+                            }
+                            .tint(.blue)
+                        }
                         Divider().background(.white.opacity(0.06)).padding(.leading, 80)
                     }
                 }
@@ -325,6 +336,22 @@ private struct LogsTabView: View {
             }
         }
         .onAppear { logs = LogService.shared.allLogs() }
+        .sheet(isPresented: $showEditSheet) {
+            if let log = editingLog {
+                LogEntrySheet(
+                    contentKey: log.contentKey,
+                    contentType: log.contentType,
+                    contentTitle: log.contentTitle,
+                    posterPath: log.posterPath,
+                    isPresented: $showEditSheet,
+                    editingEntry: log
+                ) {
+                    logs = LogService.shared.allLogs()
+                }
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+            }
+        }
     }
 
     private func filterChip(label: String, type: Content.ContentType?) -> some View {

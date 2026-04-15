@@ -37,6 +37,40 @@ final class LogSyncService {
         }
     }
 
+    /// Log güncellenince çağrılır.
+    func update(_ entry: LogEntry) async {
+        guard let remoteID = entry.remoteID else {
+            // Remote kaydı yoksa yeniden sync et
+            await sync(entry)
+            return
+        }
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        struct Payload: Encodable {
+            let watched_at: String
+            let rating: Double?
+            let emoji_reaction: String?
+            let is_rewatch: Bool
+            let notes: String?
+        }
+        do {
+            try await client
+                .from("logs")
+                .update(Payload(
+                    watched_at: formatter.string(from: entry.watchedAt),
+                    rating: entry.rating,
+                    emoji_reaction: entry.emoji,
+                    is_rewatch: entry.isRewatch,
+                    notes: entry.note
+                ))
+                .eq("id", value: remoteID)
+                .execute()
+        } catch {
+            print("[LogSync] update error: \(error)")
+        }
+    }
+
     /// Log silinince çağrılır.
     func delete(_ entry: LogEntry) async {
         guard let remoteID = entry.remoteID else { return }

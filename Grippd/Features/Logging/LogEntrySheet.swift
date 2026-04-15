@@ -9,16 +9,19 @@ struct LogEntrySheet: View {
     let posterPath: String?
     @Binding var isPresented: Bool
     var defaultIsRewatch: Bool = false
+    var editingEntry: LogEntry? = nil
     var onSaved: (() -> Void)?
 
-    @State private var watchedAt: Date = Date()
+    @State private var watchedAt: Date
     @State private var selectedPlatform: LogPlatform?
     @State private var isRewatch: Bool
-    @State private var rating: Double? = nil
-    @State private var selectedEmoji: String? = nil
+    @State private var rating: Double?
+    @State private var selectedEmoji: String?
     @State private var customEmoji: String = ""
     @State private var showCustomEmojiInput: Bool = false
-    @State private var note: String = ""
+    @State private var note: String
+
+    private var isEditMode: Bool { editingEntry != nil }
 
     init(
         contentKey: String,
@@ -27,6 +30,7 @@ struct LogEntrySheet: View {
         posterPath: String?,
         isPresented: Binding<Bool>,
         defaultIsRewatch: Bool = false,
+        editingEntry: LogEntry? = nil,
         onSaved: (() -> Void)? = nil
     ) {
         self.contentKey = contentKey
@@ -35,8 +39,25 @@ struct LogEntrySheet: View {
         self.posterPath = posterPath
         self._isPresented = isPresented
         self.defaultIsRewatch = defaultIsRewatch
+        self.editingEntry = editingEntry
         self.onSaved = onSaved
-        self._isRewatch = State(initialValue: defaultIsRewatch)
+
+        // Düzenleme modunda mevcut değerleri pre-fill et
+        if let entry = editingEntry {
+            self._watchedAt = State(initialValue: entry.watchedAt)
+            self._selectedPlatform = State(initialValue: entry.platform)
+            self._isRewatch = State(initialValue: entry.isRewatch)
+            self._rating = State(initialValue: entry.rating)
+            self._selectedEmoji = State(initialValue: entry.emoji)
+            self._note = State(initialValue: entry.note ?? "")
+        } else {
+            self._watchedAt = State(initialValue: Date())
+            self._selectedPlatform = State(initialValue: nil)
+            self._isRewatch = State(initialValue: defaultIsRewatch)
+            self._rating = State(initialValue: nil)
+            self._selectedEmoji = State(initialValue: nil)
+            self._note = State(initialValue: "")
+        }
     }
 
     private var presetEmojis: [String] {
@@ -84,7 +105,7 @@ struct LogEntrySheet: View {
                     .padding(.bottom, 32)
                 }
             }
-            .navigationTitle(actionLabel)
+            .navigationTitle(isEditMode ? "Logu Düzenle" : actionLabel)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -311,7 +332,7 @@ struct LogEntrySheet: View {
 
     private var saveButton: some View {
         Button(action: save) {
-            Text("Kaydet")
+            Text(isEditMode ? "Güncelle" : "Kaydet")
                 .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(GrippdTheme.Colors.background)
                 .frame(maxWidth: .infinity)
@@ -334,20 +355,34 @@ struct LogEntrySheet: View {
 
     private func save() {
         let trimmedNote = note.trimmingCharacters(in: .whitespacesAndNewlines)
-        let entry = LogEntry(
-            ownerID: LogService.shared.currentOwnerID,
-            contentKey: contentKey,
-            contentType: contentType,
-            contentTitle: contentTitle,
-            posterPath: posterPath,
-            watchedAt: watchedAt,
-            platform: selectedPlatform,
-            isRewatch: isRewatch,
-            rating: rating,
-            emoji: selectedEmoji,
-            note: trimmedNote.isEmpty ? nil : trimmedNote
-        )
-        LogService.shared.save(entry)
+        let finalNote = trimmedNote.isEmpty ? nil : trimmedNote
+
+        if let existing = editingEntry {
+            LogService.shared.update(
+                existing,
+                watchedAt: watchedAt,
+                platform: selectedPlatform,
+                isRewatch: isRewatch,
+                rating: rating,
+                emoji: selectedEmoji,
+                note: finalNote
+            )
+        } else {
+            let entry = LogEntry(
+                ownerID: LogService.shared.currentOwnerID,
+                contentKey: contentKey,
+                contentType: contentType,
+                contentTitle: contentTitle,
+                posterPath: posterPath,
+                watchedAt: watchedAt,
+                platform: selectedPlatform,
+                isRewatch: isRewatch,
+                rating: rating,
+                emoji: selectedEmoji,
+                note: finalNote
+            )
+            LogService.shared.save(entry)
+        }
         HapticManager.success()
         onSaved?()
         isPresented = false
