@@ -98,6 +98,7 @@
 		BD8723107387C9BB7CAC1D14 /* BooksModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03449CA286DD3544FE53B7B2 /* BooksModels.swift */; };
 		BE354E405E6C8340D52D240E /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF21B1AD09C228B8FD1D3C5 /* CommentService.swift */; };
 		BFF42B36D9E6B9E6D2D20215 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD11A484C7628DE0A6A84B0 /* AuthService.swift */; };
+		C3A1B2D4E5F6A7B8C9D0E1F2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C9D0E1F2C3A1B2 /* PrivacyInfo.xcprivacy */; };
 		C4F7188E4107393A8F3A6BAE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */; };
 		C8464CF7C5285EAB53E6B689 /* ContentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF9D2C89BA6439699CACDD /* ContentRepository.swift */; };
 		C87C4DF764520526F7883CD0 /* SeasonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9386362D9CDAFB90B965DB67 /* SeasonDetailView.swift */; };
@@ -172,7 +173,7 @@
 		28237F388713091CF5B58242 /* EmailAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthViewModel.swift; sourceTree = "<group>"; };
 		284EEEB5FBB2470FF1914E70 /* Grippd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grippd.entitlements; sourceTree = "<group>"; };
 		2A185B94F12DE3C66D96ABD6 /* LogEntrySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntrySheet.swift; sourceTree = "<group>"; };
-		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F25E5C2CEA67CEC4A1AB79C /* Grippd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grippd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30FE3994B3A0402BEFAF1818 /* AdminCuratedListsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminCuratedListsView.swift; sourceTree = "<group>"; };
 		318C111BB01F7ACE63E16F3C /* GlowBorderButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowBorderButton.swift; sourceTree = "<group>"; };
 		32D9A248816495A82712DB1F /* LegalView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LegalView.swift; sourceTree = "<group>"; };
@@ -220,8 +221,8 @@
 		85F3842F44C6E0E3A2A569E5 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		88E94163C30D958E1D7E3E54 /* GoogleBooksClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksClient.swift; sourceTree = "<group>"; };
 		8B2C2A1F2AFD352FA1D4A7E3 /* TMDBMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMapper.swift; sourceTree = "<group>"; };
-		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; path = xcconfig.template; sourceTree = "<group>"; };
-		8BC3A6D90147571E6DD8F840 /* AdminContentModerationView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminContentModerationView.swift; sourceTree = "<group>"; };
+		8B5609258A962BEB0EF594A6 /* xcconfig.template */ = {isa = PBXFileReference; lastKnownFileType = text; path = xcconfig.template; sourceTree = "<group>"; };
+		8BC3A6D90147571E6DD8F840 /* AdminContentModerationView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = AdminContentModerationView.swift; sourceTree = "<group>"; };
 		8CEACF29C54EF1930991AB2D /* WrappedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedView.swift; sourceTree = "<group>"; };
 		8D9D48B1D1D889EC48B7C571 /* EmailAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthView.swift; sourceTree = "<group>"; };
 		8DA1E71B5FB2A34D2CDB30D8 /* CustomListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListDetailView.swift; sourceTree = "<group>"; };
@@ -231,7 +232,7 @@
 		981F67CCE1CF235AE73EFDA6 /* CachedAsyncImage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CachedAsyncImage.swift; sourceTree = "<group>"; };
 		9A4CBF9E15999716707334E2 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		9B6CEA8D04D9ED636549509A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		9F6C3B2652F98119F9535282 /* AdminModerationService.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdminModerationService.swift; sourceTree = "<group>"; };
+		9F6C3B2652F98119F9535282 /* AdminModerationService.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = AdminModerationService.swift; sourceTree = "<group>"; };
 		A077D0480CDDF60562399C9D /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		A23DEA96C54398FF74BF7CBD /* HapticManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		AC5AA54A0FEE7C613B91626E /* CuratedListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedListService.swift; sourceTree = "<group>"; };
@@ -253,6 +254,7 @@
 		CE16FCC0B3168E7240C80361 /* LogHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogHistorySection.swift; sourceTree = "<group>"; };
 		D1686809CF6AAB5731AA8481 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D294CAE39853759DC06F575D /* AddToListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListSheet.swift; sourceTree = "<group>"; };
+		D4E5F6A7B8C9D0E1F2C3A1B2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.privacy; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D54011CD2C3A5B68D7F0D39D /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		D97FFEA9C96CC1AC1A471163 /* BooksMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksMapper.swift; sourceTree = "<group>"; };
 		DA22D60136CCDF96EE731F80 /* FollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowService.swift; sourceTree = "<group>"; };
@@ -384,7 +386,6 @@
 				5C3DDCE4C8C71D8947E5A4C5 /* AdminABTestView.swift */,
 				C0CAFCCAAED5CE72352992E3 /* AdminFeatureFlagsView.swift */,
 			);
-			name = Admin;
 			path = Admin;
 			sourceTree = "<group>";
 		};
@@ -479,6 +480,7 @@
 				5A7745AF7CCCAC6083DB32F0 /* Assets.xcassets */,
 				F12A925BB62BED5A878937FD /* Grippd.entitlements */,
 				787BEEC8FC34DAB5B9253370 /* Info.plist */,
+				D4E5F6A7B8C9D0E1F2C3A1B2 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -651,7 +653,6 @@
 			children = (
 				32D9A248816495A82712DB1F /* LegalView.swift */,
 			);
-			name = Legal;
 			path = Legal;
 			sourceTree = "<group>";
 		};
@@ -824,7 +825,6 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					0175D501C0CCC8E960FE18CA = {
-						DevelopmentTeam = 86DFRNMKL7;
 						SystemCapabilities = {
 							com.apple.SignInWithApple = {
 								enabled = 1;
@@ -864,6 +864,7 @@
 			files = (
 				B85E8537418517DBDE67AD03 /* Assets.xcassets in Resources */,
 				2DE3076A9C740F885368A39D /* xcconfig.template in Resources */,
+				C3A1B2D4E5F6A7B8C9D0E1F2 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1177,12 +1178,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Grippd/Resources/Grippd.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 14;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Grippd/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.app;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1195,13 +1201,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Grippd/Resources/Grippd.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 14;
+				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Grippd/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.grippd.app;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

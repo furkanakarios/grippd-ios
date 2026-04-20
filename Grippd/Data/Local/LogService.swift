@@ -7,14 +7,31 @@ final class LogService {
 
     private var context: ModelContext { LocalCacheService.shared.context }
 
+    private var _cachedOwnerID: String?
+
+    var currentOwnerID: String {
+        if let cached = _cachedOwnerID { return cached }
+        return ""
+    }
+
+    func setOwner(_ userID: String) {
+        _cachedOwnerID = userID
+        migrateOrphanedLogs(to: userID)
+    }
+
+    func clearOwner() {
+        _cachedOwnerID = nil
+    }
+
     private init() {}
 
     // MARK: - Fetch
 
     /// Belirli bir içeriğe ait tüm log kayıtları (en yeni önce)
     func logs(for contentKey: String) -> [LogEntry] {
+        let ownerID = currentOwnerID
         let descriptor = FetchDescriptor<LogEntry>(
-            predicate: #Predicate { $0.contentKey == contentKey },
+            predicate: #Predicate { $0.contentKey == contentKey && $0.ownerID == ownerID },
             sortBy: [SortDescriptor(\.watchedAt, order: .reverse)]
         )
         return (try? context.fetch(descriptor)) ?? []
@@ -22,7 +39,9 @@ final class LogService {
 
     /// Tüm log kayıtları (en yeni önce)
     func allLogs() -> [LogEntry] {
+        let ownerID = currentOwnerID
         let descriptor = FetchDescriptor<LogEntry>(
+            predicate: #Predicate { $0.ownerID == ownerID },
             sortBy: [SortDescriptor(\.watchedAt, order: .reverse)]
         )
         return (try? context.fetch(descriptor)) ?? []
@@ -31,8 +50,9 @@ final class LogService {
     /// Belirli bir içerik türündeki loglar
     func logs(for contentType: Content.ContentType) -> [LogEntry] {
         let raw = contentType.rawValue
+        let ownerID = currentOwnerID
         let descriptor = FetchDescriptor<LogEntry>(
-            predicate: #Predicate { $0.contentTypeRaw == raw },
+            predicate: #Predicate { $0.contentTypeRaw == raw && $0.ownerID == ownerID },
             sortBy: [SortDescriptor(\.watchedAt, order: .reverse)]
         )
         return (try? context.fetch(descriptor)) ?? []
@@ -51,8 +71,12 @@ final class LogService {
     // MARK: - Save / Delete
 
     func save(_ entry: LogEntry) {
+        if entry.ownerID.isEmpty {
+            entry.ownerID = currentOwnerID
+        }
         context.insert(entry)
         try? context.save()
+        Task { await LogSyncService.shared.sync(entry) }
     }
 
     func update(_ entry: LogEntry, watchedAt: Date, platform: LogPlatform?,
@@ -68,12 +92,28 @@ final class LogService {
     }
 
     func delete(_ entry: LogEntry) {
+        Task { await LogSyncService.shared.delete(entry) }
         context.delete(entry)
         try? context.save()
     }
 
     func deleteAll(for contentKey: String) {
-        logs(for: contentKey).forEach { context.delete($0) }
+        let entries = logs(for: contentKey)
+        for entry in entries {
+            Task { await LogSyncService.shared.delete(entry) }
+            context.delete(entry)
+        }
+        try? context.save()
+    }
+
+    // MARK: - Migration
+
+    private func migrateOrphanedLogs(to ownerID: String) {
+        let descriptor = FetchDescriptor<LogEntry>(
+            predicate: #Predicate { $0.ownerID == "" }
+        )
+        guard let orphans = try? context.fetch(descriptor), !orphans.isEmpty else { return }
+        for entry in orphans { entry.ownerID = ownerID }
         try? context.save()
     }
 
