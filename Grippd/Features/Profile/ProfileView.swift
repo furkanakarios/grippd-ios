@@ -325,6 +325,18 @@ private struct LogsTabView: View {
                             } label: {
                                 Label("Düzenle", systemImage: "pencil")
                             }
+                            Button(role: .destructive) {
+                                deleteLog(log)
+                            } label: {
+                                Label("Sil", systemImage: "trash")
+                            }
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                deleteLog(log)
+                            } label: {
+                                Label("Sil", systemImage: "trash")
+                            }
                         }
                         Divider().background(.white.opacity(0.06)).padding(.leading, 80)
                     }
@@ -357,6 +369,11 @@ private struct LogsTabView: View {
                     in: Capsule()
                 )
         }
+    }
+
+    private func deleteLog(_ log: LogEntry) {
+        LogService.shared.delete(log)
+        logs = LogService.shared.allLogs()
     }
 
     private func navigate(log: LogEntry) {

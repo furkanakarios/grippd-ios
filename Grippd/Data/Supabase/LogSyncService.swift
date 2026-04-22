@@ -42,6 +42,8 @@ final class LogSyncService {
 
         struct PosterUpdate: Encodable { let poster_url: String }
         var updated = 0
+        let context = LocalCacheService.shared.context
+        var didUpdateLocal = false
 
         for row in rows {
             if let tmdbID = row.tmdbId {
@@ -53,14 +55,33 @@ final class LogSyncService {
                 }
                 guard let path = posterPath else { continue }
                 let fullURL = "https://image.tmdb.org/t/p/w500\(path)"
+
+                // Update Supabase
                 try? await client
                     .from("content")
                     .update(PosterUpdate(poster_url: fullURL))
                     .eq("id", value: row.id)
                     .execute()
+
+                // Update local LogEntry objects with null posterPath for this content
+                let prefix = row.contentType == "tv_show" ? "tv" : row.contentType
+                let contentKey = "\(prefix)-\(tmdbID)"
+                let localLogs = LogService.shared.allLogs().filter {
+                    $0.contentKey == contentKey && $0.posterPath == nil
+                }
+                for entry in localLogs {
+                    entry.posterPath = path
+                    didUpdateLocal = true
+                }
+
                 updated += 1
             }
             // Books: no external API available to backfill — skip
+        }
+
+        if didUpdateLocal {
+            try? context.save()
+            NotificationCenter.default.post(name: .logsDidSyncFromRemote, object: nil)
         }
         print("[LogSync] backfillMissingPosters tamamlandı — \(updated)/\(rows.count) kayıt güncellendi")
     }

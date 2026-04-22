@@ -22,7 +22,7 @@ struct WrappedView: View {
             VStack(spacing: 0) {
                 // Top bar
                 HStack {
-                    Text("\(stats.year) Özeti")
+                    Text(verbatim: "\(stats.year) Özeti")
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.6))
                     Spacer()
@@ -87,7 +87,7 @@ struct WrappedView: View {
             VStack(spacing: 20) {
                 Text("✨")
                     .font(.system(size: 72))
-                Text("\(stats.year)")
+                Text(verbatim: "\(stats.year)")
                     .font(.system(size: 64, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
                 Text("Yılın nasıl geçti\nbir bakalım")
