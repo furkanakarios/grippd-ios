@@ -598,6 +598,8 @@ private struct LogRowCell: View {
     let log: LogEntry
     let onTap: () -> Void
     var onDelete: (() -> Void)? = nil
+
+    @State private var showDeleteConfirm = false
     @Environment(AppState.self) private var appState
 
     private var typeIcon: String {
@@ -650,13 +652,19 @@ private struct LogRowCell: View {
                 HStack(spacing: 12) {
                     if let onDelete {
                         Button {
-                            onDelete()
+                            showDeleteConfirm = true
                         } label: {
                             Image(systemName: "trash")
                                 .font(.system(size: 14))
                                 .foregroundStyle(.red.opacity(0.5))
                         }
                         .buttonStyle(.plain)
+                        .confirmationDialog("\(log.contentTitle)", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+                            Button("Logu Sil", role: .destructive) { onDelete() }
+                            Button("Vazgeç", role: .cancel) {}
+                        } message: {
+                            Text("Bu log kalıcı olarak silinecek.")
+                        }
                     }
 
                     Button {
