@@ -1,6 +1,6 @@
 # Faz 8 — Admin Panel (Mobile)
 
-**Durum:** 🔴 Başlamadı  
+**Durum:** ✅ Tamamlandı  
 **Branch base:** `develop`
 
 ---
@@ -14,29 +14,29 @@ Admin kullanıcı özel bir `is_admin` flag ile işaretlenir, normal kullanıcı
 
 ## Adımlar
 
-- [ ] **Step 1** — Admin kimlik doğrulama: `is_admin` flag kontrolü, admin tab/menü  
+- [x] **Step 1** — Admin kimlik doğrulama: `is_admin` flag kontrolü, admin tab/menü  
   Branch: `feature/phase-8-step-1-admin-auth`
 
-- [ ] **Step 2** — Kullanıcı yönetimi: listeleme, arama, ban/unban, plan değiştirme  
+- [x] **Step 2** — Kullanıcı yönetimi: listeleme, arama, ban/unban, plan değiştirme  
   Branch: `feature/phase-8-step-2-user-management`
 
-- [ ] **Step 3** — İçerik moderasyonu: raporlanan yorumlar, içerik kaldırma  
+- [x] **Step 3** — İçerik moderasyonu: raporlanan yorumlar, içerik kaldırma  
   Branch: `feature/phase-8-step-3-content-moderation`
 
-- [ ] **Step 4** — Curated list yönetimi: Discover ekranındaki koleksiyonları admin ekler/düzenler  
+- [x] **Step 4** — Curated list yönetimi: Discover ekranındaki koleksiyonları admin ekler/düzenler  
   Branch: `feature/phase-8-step-4-curated-lists-admin`
 
-- [ ] **Step 5** — Uygulama istatistikleri: toplam kullanıcı, günlük aktif, log sayısı  
+- [x] **Step 5** — Uygulama istatistikleri: toplam kullanıcı, günlük aktif, log sayısı  
   Branch: `feature/phase-8-step-5-app-stats`
 
-- [ ] **Step 6** — Push notification gönderimi: tüm kullanıcılara veya segmente duyuru  
+- [x] **Step 6** — Push notification gönderimi: tüm kullanıcılara veya segmente duyuru  
   Branch: `feature/phase-8-step-6-push-notifications`
 
-- [ ] **Step 7** — A/B test altyapısı: kullanıcı gruplama, varyant atama, sonuç takibi  
+- [x] **Step 7** — A/B test altyapısı: kullanıcı gruplama, varyant atama, sonuç takibi  
   Branch: `feature/phase-8-step-7-ab-testing`  
   > Phase 5 Step 10'dan ertelendi.
 
-- [ ] **Step 8** — Feature flag sistemi: özelliği canlıda açıp kapama  
+- [x] **Step 8** — Feature flag sistemi: özelliği canlıda açıp kapama  
   Branch: `feature/phase-8-step-8-feature-flags`
 
 ---
