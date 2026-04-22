@@ -314,31 +314,17 @@ private struct LogsTabView: View {
                     title: filter == nil ? "Henüz log yok" : "Bu kategoride log yok"
                 )
             } else {
-                List {
+                LazyVStack(spacing: 0) {
                     ForEach(filtered) { log in
-                        LogRowCell(log: log) {
-                            navigate(log: log)
-                        }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                deleteLog(log)
-                            } label: {
-                                Label("Sil", systemImage: "trash")
-                            }
-                            Button {
-                                editingLog = log
-                            } label: {
-                                Label("Düzenle", systemImage: "pencil")
-                            }
-                            .tint(.blue)
-                        }
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.clear)
-                        .listRowSeparatorTint(.white.opacity(0.06))
+                        SwipeableLogRow(
+                            log: log,
+                            onTap: { navigate(log: log) },
+                            onEdit: { editingLog = log },
+                            onDelete: { deleteLog(log) }
+                        )
+                        Divider().background(.white.opacity(0.06)).padding(.leading, 80)
                     }
                 }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
                 .padding(.bottom, GrippdTheme.Spacing.xl)
             }
         }
@@ -614,6 +600,80 @@ private struct WatchlistTabView: View {
         case .book:
             router.profilePath.append(ProfileRoute.bookDetail(googleBooksID: idStr))
         }
+    }
+}
+
+// MARK: - Swipeable Log Row
+
+private struct SwipeableLogRow: View {
+    let log: LogEntry
+    let onTap: () -> Void
+    let onEdit: () -> Void
+    let onDelete: () -> Void
+
+    @State private var offset: CGFloat = 0
+    private let actionWidth: CGFloat = 160 // Sil + Düzenle
+
+    var body: some View {
+        ZStack(alignment: .trailing) {
+            // Arka planda aksiyonlar
+            HStack(spacing: 0) {
+                Button(action: {
+                    withAnimation(.spring(response: 0.3)) { offset = 0 }
+                    onEdit()
+                }) {
+                    VStack(spacing: 4) {
+                        Image(systemName: "pencil")
+                            .font(.system(size: 16, weight: .medium))
+                        Text("Düzenle")
+                            .font(.system(size: 11, weight: .medium))
+                    }
+                    .foregroundStyle(.white)
+                    .frame(width: 80)
+                    .frame(maxHeight: .infinity)
+                    .background(Color.blue)
+                }
+                Button(action: {
+                    withAnimation(.spring(response: 0.3)) { offset = 0 }
+                    onDelete()
+                }) {
+                    VStack(spacing: 4) {
+                        Image(systemName: "trash")
+                            .font(.system(size: 16, weight: .medium))
+                        Text("Sil")
+                            .font(.system(size: 11, weight: .medium))
+                    }
+                    .foregroundStyle(.white)
+                    .frame(width: 80)
+                    .frame(maxHeight: .infinity)
+                    .background(Color.red)
+                }
+            }
+            .frame(width: actionWidth)
+            .opacity(offset < 0 ? 1 : 0)
+
+            // Öne gelen satır içeriği
+            LogRowCell(log: log, onTap: onTap)
+                .offset(x: offset)
+                .gesture(
+                    DragGesture(minimumDistance: 10, coordinateSpace: .local)
+                        .onChanged { value in
+                            guard abs(value.translation.width) > abs(value.translation.height) else { return }
+                            if value.translation.width < 0 {
+                                offset = max(value.translation.width, -actionWidth)
+                            } else if offset < 0 {
+                                offset = min(0, offset + value.translation.width)
+                            }
+                        }
+                        .onEnded { value in
+                            withAnimation(.spring(response: 0.3)) {
+                                offset = value.translation.width < -actionWidth / 2 ? -actionWidth : 0
+                            }
+                        }
+                )
+        }
+        .clipped()
+        .contentShape(Rectangle())
     }
 }
 
