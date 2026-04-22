@@ -12,34 +12,57 @@ final class LogSyncService {
 
     // MARK: - Public API
 
-    /// Supabase'de poster_url null olan content kayıtlarını lokaldeki LogEntry'lerden doldurur.
+    /// Supabase'de poster_url null olan content kayıtlarını TMDB API'den doldurur.
     /// Admin girişinde bir kez çalıştırılır.
     func backfillMissingPosters() async {
-        let allLogs = LogService.shared.allLogs().filter { $0.posterPath != nil }
-        guard !allLogs.isEmpty else { return }
-
-        for entry in allLogs {
-            let parts = entry.contentKey.split(separator: "-", maxSplits: 1)
-            guard parts.count == 2 else { continue }
-            let typePrefix = String(parts[0])
-            let externalID = String(parts[1])
-
-            switch typePrefix {
-            case "movie":
-                guard let tmdbID = Int(externalID) else { continue }
-                _ = try? await upsertTMDB(tmdbID: tmdbID, contentType: "movie",
-                                          title: entry.contentTitle, posterPath: entry.posterPath)
-            case "tv":
-                guard let tmdbID = Int(externalID) else { continue }
-                _ = try? await upsertTMDB(tmdbID: tmdbID, contentType: "tv_show",
-                                          title: entry.contentTitle, posterPath: entry.posterPath)
-            case "book":
-                _ = try? await upsertBook(googleBooksID: externalID,
-                                          title: entry.contentTitle, posterPath: entry.posterPath)
-            default: continue
+        struct ContentRow: Decodable {
+            let id: String
+            let contentType: String
+            let tmdbId: Int?
+            let googleBooksId: String?
+            enum CodingKeys: String, CodingKey {
+                case id
+                case contentType = "content_type"
+                case tmdbId = "tmdb_id"
+                case googleBooksId = "google_books_id"
             }
         }
-        print("[LogSync] backfillMissingPosters tamamlandı — \(allLogs.count) içerik kontrol edildi")
+
+        let rows: [ContentRow] = (try? await client
+            .from("content")
+            .select("id, content_type, tmdb_id, google_books_id")
+            .is("poster_url", value: nil)
+            .execute()
+            .value) ?? []
+
+        guard !rows.isEmpty else {
+            print("[LogSync] backfillMissingPosters — poster_url null kayıt yok")
+            return
+        }
+
+        struct PosterUpdate: Encodable { let poster_url: String }
+        var updated = 0
+
+        for row in rows {
+            if let tmdbID = row.tmdbId {
+                let posterPath: String?
+                if row.contentType == "tv_show" {
+                    posterPath = (try? await TMDBClient.shared.tvShowDetail(id: tmdbID))?.posterPath
+                } else {
+                    posterPath = (try? await TMDBClient.shared.movieDetail(id: tmdbID))?.posterPath
+                }
+                guard let path = posterPath else { continue }
+                let fullURL = "https://image.tmdb.org/t/p/w500\(path)"
+                try? await client
+                    .from("content")
+                    .update(PosterUpdate(poster_url: fullURL))
+                    .eq("id", value: row.id)
+                    .execute()
+                updated += 1
+            }
+            // Books: no external API available to backfill — skip
+        }
+        print("[LogSync] backfillMissingPosters tamamlandı — \(updated)/\(rows.count) kayıt güncellendi")
     }
 
     /// Giriş sonrası remoteID'si olmayan (sync başarısız) logları tekrar dener.
