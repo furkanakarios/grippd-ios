@@ -34,6 +34,20 @@ final class FollowService {
             .execute()
     }
 
+    // MARK: - Search Users
+
+    func searchUsers(query: String) async throws -> [User] {
+        guard !query.trimmingCharacters(in: .whitespaces).isEmpty else { return [] }
+        let rows: [UserRow] = try await client
+            .from("users")
+            .select()
+            .or("username.ilike.%\(query)%,display_name.ilike.%\(query)%")
+            .limit(20)
+            .execute()
+            .value
+        return rows.map { $0.toDomain() }
+    }
+
     // MARK: - isFollowing
 
     func isFollowing(targetUserID: UUID) async throws -> Bool {

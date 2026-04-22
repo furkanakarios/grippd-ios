@@ -224,25 +224,43 @@ final class LogSyncService {
             let title: String
             let poster_url: String?
         }
-        struct Row: Decodable { let id: String }
+        struct Row: Decodable {
+            let id: String
+            let posterUrl: String?
+            enum CodingKeys: String, CodingKey {
+                case id
+                case posterUrl = "poster_url"
+            }
+        }
 
         // Önce mevcut kaydı ara — upsert UPDATE tetiklediği için RLS'e takılıyor
         let existing: [Row] = (try? await client
             .from("content")
-            .select("id")
+            .select("id, poster_url")
             .eq("tmdb_id", value: tmdbID)
             .eq("content_type", value: contentType)
             .limit(1)
             .execute()
             .value) ?? []
 
-        if let id = existing.first?.id { return id }
+        if let row = existing.first {
+            // poster_url null ise ve bizde varsa güncelle
+            if row.posterUrl == nil, let posterURL {
+                struct PosterUpdate: Encodable { let poster_url: String }
+                try? await client
+                    .from("content")
+                    .update(PosterUpdate(poster_url: posterURL))
+                    .eq("id", value: row.id)
+                    .execute()
+            }
+            return row.id
+        }
 
         // Yoksa insert et
         let rows: [Row] = try await client
             .from("content")
             .insert(Payload(tmdb_id: tmdbID, content_type: contentType, title: title, poster_url: posterURL))
-            .select("id")
+            .select("id, poster_url")
             .execute()
             .value
 
@@ -251,18 +269,36 @@ final class LogSyncService {
     }
 
     private func upsertBook(googleBooksID: String, title: String, posterPath: String?) async throws -> String {
-        struct Row: Decodable { let id: String }
+        struct Row: Decodable {
+            let id: String
+            let posterUrl: String?
+            enum CodingKeys: String, CodingKey {
+                case id
+                case posterUrl = "poster_url"
+            }
+        }
 
         // Önce mevcut kaydı ara
         let existing: [Row] = (try? await client
             .from("content")
-            .select("id")
+            .select("id, poster_url")
             .eq("google_books_id", value: googleBooksID)
             .limit(1)
             .execute()
             .value) ?? []
 
-        if let id = existing.first?.id { return id }
+        if let row = existing.first {
+            // poster_url null ise ve bizde varsa güncelle
+            if row.posterUrl == nil, let posterPath {
+                struct PosterUpdate: Encodable { let poster_url: String }
+                try? await client
+                    .from("content")
+                    .update(PosterUpdate(poster_url: posterPath))
+                    .eq("id", value: row.id)
+                    .execute()
+            }
+            return row.id
+        }
 
         // Yoksa insert et
         struct Payload: Encodable {
@@ -275,7 +311,7 @@ final class LogSyncService {
         let inserted: [Row] = try await client
             .from("content")
             .insert(Payload(google_books_id: googleBooksID, content_type: "book", title: title, poster_url: posterPath))
-            .select("id")
+            .select("id, poster_url")
             .execute()
             .value
 
