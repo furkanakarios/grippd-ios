@@ -314,22 +314,10 @@ private struct LogsTabView: View {
                     title: filter == nil ? "Henüz log yok" : "Bu kategoride log yok"
                 )
             } else {
-                LazyVStack(spacing: 0) {
+                List {
                     ForEach(filtered) { log in
                         LogRowCell(log: log) {
                             navigate(log: log)
-                        }
-                        .contextMenu {
-                            Button {
-                                editingLog = log
-                            } label: {
-                                Label("Düzenle", systemImage: "pencil")
-                            }
-                            Button(role: .destructive) {
-                                deleteLog(log)
-                            } label: {
-                                Label("Sil", systemImage: "trash")
-                            }
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                             Button(role: .destructive) {
@@ -337,10 +325,20 @@ private struct LogsTabView: View {
                             } label: {
                                 Label("Sil", systemImage: "trash")
                             }
+                            Button {
+                                editingLog = log
+                            } label: {
+                                Label("Düzenle", systemImage: "pencil")
+                            }
+                            .tint(.blue)
                         }
-                        Divider().background(.white.opacity(0.06)).padding(.leading, 80)
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                        .listRowSeparatorTint(.white.opacity(0.06))
                     }
                 }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
                 .padding(.bottom, GrippdTheme.Spacing.xl)
             }
         }
