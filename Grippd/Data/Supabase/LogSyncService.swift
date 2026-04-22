@@ -12,6 +12,36 @@ final class LogSyncService {
 
     // MARK: - Public API
 
+    /// Supabase'de poster_url null olan content kayıtlarını lokaldeki LogEntry'lerden doldurur.
+    /// Admin girişinde bir kez çalıştırılır.
+    func backfillMissingPosters() async {
+        let allLogs = LogService.shared.allLogs().filter { $0.posterPath != nil }
+        guard !allLogs.isEmpty else { return }
+
+        for entry in allLogs {
+            let parts = entry.contentKey.split(separator: "-", maxSplits: 1)
+            guard parts.count == 2 else { continue }
+            let typePrefix = String(parts[0])
+            let externalID = String(parts[1])
+
+            switch typePrefix {
+            case "movie":
+                guard let tmdbID = Int(externalID) else { continue }
+                _ = try? await upsertTMDB(tmdbID: tmdbID, contentType: "movie",
+                                          title: entry.contentTitle, posterPath: entry.posterPath)
+            case "tv":
+                guard let tmdbID = Int(externalID) else { continue }
+                _ = try? await upsertTMDB(tmdbID: tmdbID, contentType: "tv_show",
+                                          title: entry.contentTitle, posterPath: entry.posterPath)
+            case "book":
+                _ = try? await upsertBook(googleBooksID: externalID,
+                                          title: entry.contentTitle, posterPath: entry.posterPath)
+            default: continue
+            }
+        }
+        print("[LogSync] backfillMissingPosters tamamlandı — \(allLogs.count) içerik kontrol edildi")
+    }
+
     /// Giriş sonrası remoteID'si olmayan (sync başarısız) logları tekrar dener.
     func syncPending() async {
         guard let userID = client.auth.currentUser?.id else { return }

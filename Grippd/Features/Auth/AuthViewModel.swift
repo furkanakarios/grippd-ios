@@ -29,6 +29,7 @@ final class AuthViewModel {
         Task { await LogSyncService.shared.fetchAllFromRemote(ownerID: user.id.uuidString) }
         Task { await LogSyncService.shared.syncPending() }
         Task { await PurchaseService.shared.login(userID: user.id.uuidString) }
+        if user.isAdmin { Task { await LogSyncService.shared.backfillMissingPosters() } }
     }
 
     // MARK: - Sign in with Apple
@@ -70,6 +71,7 @@ final class AuthViewModel {
                 Task { await LogSyncService.shared.fetchAllFromRemote(ownerID: user.id.uuidString) }
                 Task { await LogSyncService.shared.syncPending() }
                 Task { await PurchaseService.shared.login(userID: user.id.uuidString) }
+                if user.isAdmin { Task { await LogSyncService.shared.backfillMissingPosters() } }
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription
