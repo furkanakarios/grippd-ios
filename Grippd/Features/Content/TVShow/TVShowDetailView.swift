@@ -14,6 +14,7 @@ struct TVShowDetailView: View {
     @State private var loggedRating: Double? = nil
     @State private var loggedEmoji: String? = nil
     @State private var logHistory: [LogEntry] = []
+    @State private var editingLog: LogEntry? = nil
 
     private var contentKey: String { "tv-\(tmdbID)" }
 
@@ -56,6 +57,18 @@ struct TVShowDetailView: View {
                 posterPath: viewModel.show?.posterPath,
                 isPresented: $showLogSheet,
                 defaultIsRewatch: isLogged
+            ) { refreshLogState() }
+            .presentationDetents([.large])
+            .presentationDragIndicator(.visible)
+        }
+        .sheet(item: $editingLog) { log in
+            LogEntrySheet(
+                contentKey: log.contentKey,
+                contentType: log.contentType,
+                contentTitle: log.contentTitle,
+                posterPath: log.posterPath,
+                isPresented: Binding(get: { editingLog != nil }, set: { if !$0 { editingLog = nil } }),
+                editingEntry: log
             ) { refreshLogState() }
             .presentationDetents([.large])
             .presentationDragIndicator(.visible)
@@ -155,6 +168,8 @@ struct TVShowDetailView: View {
                 if logHistory.count > 0 {
                     LogHistorySection(logs: logHistory, contentType: .tv_show) { entry in
                         deleteLog(entry)
+                    } onEdit: { entry in
+                        editingLog = entry
                     }
                     .padding(.horizontal, GrippdTheme.Spacing.md)
                 }

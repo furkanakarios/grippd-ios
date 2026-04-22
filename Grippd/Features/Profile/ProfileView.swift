@@ -287,7 +287,6 @@ private struct LogsTabView: View {
     let router: AppRouter
     @State private var logs: [LogEntry] = []
     @State private var filter: Content.ContentType? = nil
-    @State private var editingLog: LogEntry? = nil
 
     private var filtered: [LogEntry] {
         guard let f = filter else { return logs }
@@ -316,12 +315,7 @@ private struct LogsTabView: View {
             } else {
                 LazyVStack(spacing: 0) {
                     ForEach(filtered) { log in
-                        SwipeableLogRow(
-                            log: log,
-                            onTap: { navigate(log: log) },
-                            onEdit: { editingLog = log },
-                            onDelete: { deleteLog(log) }
-                        )
+                        LogRowCell(log: log, onTap: { navigate(log: log) }, onDelete: { deleteLog(log) })
                         Divider().background(.white.opacity(0.06)).padding(.leading, 80)
                     }
                 }
@@ -331,11 +325,6 @@ private struct LogsTabView: View {
         .onAppear { logs = LogService.shared.allLogs() }
         .onReceive(NotificationCenter.default.publisher(for: .logsDidSyncFromRemote)) { _ in
             logs = LogService.shared.allLogs()
-        }
-        .sheet(item: $editingLog) { log in
-            EditLogSheet(log: log) {
-                logs = LogService.shared.allLogs()
-            }
         }
     }
 
@@ -603,85 +592,12 @@ private struct WatchlistTabView: View {
     }
 }
 
-// MARK: - Swipeable Log Row
-
-private struct SwipeableLogRow: View {
-    let log: LogEntry
-    let onTap: () -> Void
-    let onEdit: () -> Void
-    let onDelete: () -> Void
-
-    @State private var offset: CGFloat = 0
-    private let actionWidth: CGFloat = 160 // Sil + Düzenle
-
-    var body: some View {
-        ZStack(alignment: .trailing) {
-            // Arka planda aksiyonlar
-            HStack(spacing: 0) {
-                Button(action: {
-                    withAnimation(.spring(response: 0.3)) { offset = 0 }
-                    onEdit()
-                }) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "pencil")
-                            .font(.system(size: 16, weight: .medium))
-                        Text("Düzenle")
-                            .font(.system(size: 11, weight: .medium))
-                    }
-                    .foregroundStyle(.white)
-                    .frame(width: 80)
-                    .frame(maxHeight: .infinity)
-                    .background(Color.blue)
-                }
-                Button(action: {
-                    withAnimation(.spring(response: 0.3)) { offset = 0 }
-                    onDelete()
-                }) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "trash")
-                            .font(.system(size: 16, weight: .medium))
-                        Text("Sil")
-                            .font(.system(size: 11, weight: .medium))
-                    }
-                    .foregroundStyle(.white)
-                    .frame(width: 80)
-                    .frame(maxHeight: .infinity)
-                    .background(Color.red)
-                }
-            }
-            .frame(width: actionWidth)
-            .opacity(offset < 0 ? 1 : 0)
-
-            // Öne gelen satır içeriği
-            LogRowCell(log: log, onTap: onTap)
-                .offset(x: offset)
-                .gesture(
-                    DragGesture(minimumDistance: 10, coordinateSpace: .local)
-                        .onChanged { value in
-                            guard abs(value.translation.width) > abs(value.translation.height) else { return }
-                            if value.translation.width < 0 {
-                                offset = max(value.translation.width, -actionWidth)
-                            } else if offset < 0 {
-                                offset = min(0, offset + value.translation.width)
-                            }
-                        }
-                        .onEnded { value in
-                            withAnimation(.spring(response: 0.3)) {
-                                offset = value.translation.width < -actionWidth / 2 ? -actionWidth : 0
-                            }
-                        }
-                )
-        }
-        .clipped()
-        .contentShape(Rectangle())
-    }
-}
-
 // MARK: - Log Row Cell
 
 private struct LogRowCell: View {
     let log: LogEntry
     let onTap: () -> Void
+    var onDelete: (() -> Void)? = nil
     @Environment(AppState.self) private var appState
 
     private var typeIcon: String {
@@ -732,6 +648,17 @@ private struct LogRowCell: View {
                 Spacer()
 
                 HStack(spacing: 12) {
+                    if let onDelete {
+                        Button {
+                            onDelete()
+                        } label: {
+                            Image(systemName: "trash")
+                                .font(.system(size: 14))
+                                .foregroundStyle(.red.opacity(0.5))
+                        }
+                        .buttonStyle(.plain)
+                    }
+
                     Button {
                         Task {
                             await ShareService.shared.present(item: ShareItem(
