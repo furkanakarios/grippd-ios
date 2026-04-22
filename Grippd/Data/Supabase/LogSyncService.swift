@@ -23,6 +23,100 @@ final class LogSyncService {
         }
     }
 
+    /// Giriş sonrası Supabase'deki tüm log'ları lokale çeker. Eksik olanları oluşturur.
+    func fetchAllFromRemote(ownerID: String) async {
+        struct RemoteContent: Decodable {
+            let title: String
+            let posterUrl: String?
+            let contentType: String
+            let tmdbId: Int?
+            let googleBooksId: String?
+            enum CodingKeys: String, CodingKey {
+                case title
+                case posterUrl = "poster_url"
+                case contentType = "content_type"
+                case tmdbId = "tmdb_id"
+                case googleBooksId = "google_books_id"
+            }
+        }
+        struct RemoteLog: Decodable {
+            let id: String
+            let watchedAt: String
+            let rating: Double?
+            let emojiReaction: String?
+            let isRewatch: Bool
+            let notes: String?
+            let content: RemoteContent
+            enum CodingKeys: String, CodingKey {
+                case id, rating, notes, content
+                case watchedAt = "watched_at"
+                case emojiReaction = "emoji_reaction"
+                case isRewatch = "is_rewatch"
+            }
+        }
+
+        do {
+            let rows: [RemoteLog] = try await client
+                .from("logs")
+                .select("id, watched_at, rating, emoji_reaction, is_rewatch, notes, content:content_id(title, poster_url, content_type, tmdb_id, google_books_id)")
+                .eq("user_id", value: ownerID)
+                .order("watched_at", ascending: false)
+                .execute()
+                .value
+
+            let existingRemoteIDs = Set(LogService.shared.allLogs().compactMap { $0.remoteID })
+            let context = LocalCacheService.shared.context
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            var didInsert = false
+
+            for row in rows {
+                guard !existingRemoteIDs.contains(row.id) else { continue }
+                let c = row.content
+                let contentKey: String
+                if let tmdbID = c.tmdbId {
+                    let prefix = c.contentType == "tv_show" ? "tv" : c.contentType
+                    contentKey = "\(prefix)-\(tmdbID)"
+                } else if let booksID = c.googleBooksId {
+                    contentKey = "book-\(booksID)"
+                } else { continue }
+
+                guard let contentType = Content.ContentType(rawValue: c.contentType) else { continue }
+                let watchedAt = formatter.date(from: row.watchedAt) ?? Date()
+
+                let posterPath: String?
+                if let url = c.posterUrl, url.contains("image.tmdb.org/t/p/w500") {
+                    posterPath = String(url.dropFirst("https://image.tmdb.org/t/p/w500".count))
+                } else {
+                    posterPath = c.posterUrl
+                }
+
+                let entry = LogEntry(
+                    ownerID: ownerID,
+                    contentKey: contentKey,
+                    contentType: contentType,
+                    contentTitle: c.title,
+                    posterPath: posterPath,
+                    watchedAt: watchedAt,
+                    isRewatch: row.isRewatch,
+                    rating: row.rating,
+                    emoji: row.emojiReaction,
+                    note: row.notes
+                )
+                entry.remoteID = row.id
+                context.insert(entry)
+                didInsert = true
+            }
+
+            if didInsert {
+                try? context.save()
+                NotificationCenter.default.post(name: .logsDidSyncFromRemote, object: nil)
+            }
+        } catch {
+            print("[LogSync] fetchAllFromRemote error: \(error)")
+        }
+    }
+
     /// Yeni log kaydedilince çağrılır. content upsert + log insert.
     func sync(_ entry: LogEntry) async {
         guard !entry.ownerID.isEmpty else { return }
@@ -224,6 +318,12 @@ final class LogSyncService {
         guard let id = rows.first?.id else { throw SyncError.insertFailed }
         return id
     }
+}
+
+// MARK: - Notifications
+
+extension Notification.Name {
+    static let logsDidSyncFromRemote = Notification.Name("logsDidSyncFromRemote")
 }
 
 // MARK: - Errors

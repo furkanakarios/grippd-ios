@@ -333,6 +333,9 @@ private struct LogsTabView: View {
             }
         }
         .onAppear { logs = LogService.shared.allLogs() }
+        .onReceive(NotificationCenter.default.publisher(for: .logsDidSyncFromRemote)) { _ in
+            logs = LogService.shared.allLogs()
+        }
         .sheet(item: $editingLog) { log in
             EditLogSheet(log: log) {
                 logs = LogService.shared.allLogs()
@@ -1304,6 +1307,7 @@ private struct SettingsView: View {
             appState.isAuthenticated = false
             appState.needsOnboarding = false
             appState.unreadNotificationCount = 0
+            LogService.shared.clearOwner()
         }
     }
 }
