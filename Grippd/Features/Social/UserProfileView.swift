@@ -62,7 +62,7 @@ struct UserProfileView: View {
     @State private var showAvatarZoom = false
     @State private var profileTab: ProfileContentTab = .logs
 
-    enum ProfileContentTab { case logs, lists }
+    enum ProfileContentTab { case logs, lists, stats }
 
     private var isOwnProfile: Bool {
         appState.currentUser?.id == userID
@@ -131,6 +131,9 @@ struct UserProfileView: View {
                         .padding(.top, 0)
                 case .lists:
                     publicListsSection(userID: userID)
+                        .padding(.top, 0)
+                case .stats:
+                    StatsTabView()
                         .padding(.top, 0)
                 }
             }
@@ -304,6 +307,9 @@ struct UserProfileView: View {
         HStack(spacing: 0) {
             tabButton(title: "Son Loglar", icon: "clock", tab: .logs)
             tabButton(title: "Listeler", icon: "list.bullet.rectangle", tab: .lists)
+            if isOwnProfile {
+                tabButton(title: "İstatistik", icon: "chart.bar", tab: .stats)
+            }
         }
         .background(.white.opacity(0.04))
         .padding(.horizontal, GrippdTheme.Spacing.md)
@@ -342,14 +348,6 @@ struct UserProfileView: View {
 
     private func recentLogsSection(logs: [PublicLog]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Son Loglar")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
-                Spacer()
-            }
-            .padding(.horizontal, GrippdTheme.Spacing.md)
-
             if logs.isEmpty {
                 GrippdEmptyStateView(icon: "checkmark.circle", title: "Henüz log yok")
                     .padding(.vertical, GrippdTheme.Spacing.sm)

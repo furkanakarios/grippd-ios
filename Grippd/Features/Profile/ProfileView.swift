@@ -866,7 +866,7 @@ private struct CustomListRow: View {
 
 // MARK: - Stats Tab
 
-private struct StatsTabView: View {
+struct StatsTabView: View {
     @State private var stats: LogService.LogStats? = nil
 
     var body: some View {
