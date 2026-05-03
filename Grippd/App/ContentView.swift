@@ -50,9 +50,9 @@ struct ContentView: View {
         let vm = AuthViewModel()
         await vm.restoreSession(appState: appState)
 
-        // En az 1.8 saniye splash göster (animasyonun tam görünmesi için)
+        // Animasyon bitene kadar splash'ta kal — SplashView.totalDuration ile senkron
         let elapsed = Date().timeIntervalSince(start)
-        let remaining = 1.8 - elapsed
+        let remaining = SplashView.totalDuration - elapsed
         if remaining > 0 {
             try? await Task.sleep(for: .seconds(remaining))
         }
