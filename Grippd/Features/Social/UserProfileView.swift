@@ -60,6 +60,9 @@ struct UserProfileView: View {
     @Environment(AppState.self) private var appState
     @State private var viewModel = UserProfileViewModel()
     @State private var showAvatarZoom = false
+    @State private var profileTab: ProfileContentTab = .logs
+
+    enum ProfileContentTab { case logs, lists }
 
     private var isOwnProfile: Bool {
         appState.currentUser?.id == userID
@@ -119,8 +122,17 @@ struct UserProfileView: View {
                         .padding(.top, GrippdTheme.Spacing.md)
                 }
 
-                recentLogsSection(logs: localRecentLogs(fallback: data.recentLogs))
+                contentTabPicker
                     .padding(.top, GrippdTheme.Spacing.lg)
+
+                switch profileTab {
+                case .logs:
+                    recentLogsSection(logs: localRecentLogs(fallback: data.recentLogs))
+                        .padding(.top, 0)
+                case .lists:
+                    publicListsSection(userID: userID)
+                        .padding(.top, 0)
+                }
             }
             .padding(.bottom, GrippdTheme.Spacing.xxl)
         }
@@ -286,6 +298,46 @@ struct UserProfileView: View {
         }
     }
 
+    // MARK: - Content Tab Picker
+
+    private var contentTabPicker: some View {
+        HStack(spacing: 0) {
+            tabButton(title: "Son Loglar", icon: "clock", tab: .logs)
+            tabButton(title: "Listeler", icon: "list.bullet.rectangle", tab: .lists)
+        }
+        .background(.white.opacity(0.04))
+        .padding(.horizontal, GrippdTheme.Spacing.md)
+        .clipShape(RoundedRectangle(cornerRadius: GrippdTheme.Radius.md))
+    }
+
+    private func tabButton(title: String, icon: String, tab: ProfileContentTab) -> some View {
+        Button {
+            withAnimation(.spring(response: 0.25)) { profileTab = tab }
+        } label: {
+            VStack(spacing: 5) {
+                HStack(spacing: 5) {
+                    Image(systemName: icon)
+                        .font(.system(size: 12, weight: .medium))
+                    Text(title)
+                        .font(.system(size: 13, weight: profileTab == tab ? .semibold : .regular))
+                }
+                .foregroundStyle(profileTab == tab ? .white : .white.opacity(0.4))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+
+                Rectangle()
+                    .fill(profileTab == tab ? GrippdTheme.Colors.accent : Color.clear)
+                    .frame(height: 2)
+            }
+        }
+    }
+
+    // MARK: - Public Lists Section
+
+    private func publicListsSection(userID: UUID) -> some View {
+        PublicListsView(userID: userID)
+    }
+
     // MARK: - Recent Logs Grid
 
     private func recentLogsSection(logs: [PublicLog]) -> some View {
@@ -448,6 +500,201 @@ struct FollowListView: View {
             } catch {}
             isLoading = false
         }
+    }
+}
+
+// MARK: - Public Lists View
+
+private struct PublicListsView: View {
+    let userID: UUID
+
+    @State private var lists: [PublicListInfo] = []
+    @State private var isLoading = false
+    @State private var selectedList: PublicListInfo? = nil
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if isLoading {
+                GrippdLoadingView()
+                    .padding(.top, GrippdTheme.Spacing.lg)
+            } else if lists.isEmpty {
+                GrippdEmptyStateView(icon: "list.bullet.rectangle", title: "Henüz liste yok")
+                    .padding(.vertical, GrippdTheme.Spacing.lg)
+            } else {
+                LazyVStack(spacing: 10) {
+                    ForEach(lists) { list in
+                        Button { selectedList = list } label: {
+                            PublicListCard(list: list)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, GrippdTheme.Spacing.md)
+            }
+        }
+        .padding(.top, GrippdTheme.Spacing.md)
+        .task { await load() }
+        .navigationDestination(isPresented: Binding(
+            get: { selectedList != nil },
+            set: { if !$0 { selectedList = nil } }
+        )) {
+            if let list = selectedList {
+                PublicListDetailView(list: list)
+            }
+        }
+    }
+
+    private func load() async {
+        isLoading = true
+        lists = (try? await SocialService.shared.fetchPublicLists(userID: userID)) ?? []
+        isLoading = false
+    }
+}
+
+// MARK: - Public List Card
+
+private struct PublicListCard: View {
+    let list: PublicListInfo
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Text(list.emoji)
+                .font(.system(size: 26))
+                .frame(width: 44, height: 44)
+                .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 10))
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(list.name)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                Text("\(list.itemCount) içerik")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.white.opacity(0.4))
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(.white.opacity(0.2))
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+// MARK: - Public List Detail View
+
+private struct PublicListDetailView: View {
+    let list: PublicListInfo
+
+    @State private var items: [PublicListItemInfo] = []
+    @State private var isLoading = false
+
+    private var typeIcon: (Content.ContentType) -> String {
+        { type in
+            switch type {
+            case .movie: return "film"
+            case .tv_show: return "tv"
+            case .book: return "book.closed"
+            }
+        }
+    }
+
+    var body: some View {
+        ZStack {
+            GrippdBackground()
+
+            if isLoading {
+                GrippdLoadingView()
+            } else if items.isEmpty {
+                GrippdEmptyStateView(icon: "list.bullet.rectangle", title: "Liste boş")
+            } else {
+                ScrollView(showsIndicators: false) {
+                    LazyVGrid(
+                        columns: [
+                            GridItem(.flexible(), spacing: 4),
+                            GridItem(.flexible(), spacing: 4),
+                            GridItem(.flexible(), spacing: 4),
+                        ],
+                        spacing: 4
+                    ) {
+                        ForEach(items) { item in
+                            itemCell(item)
+                        }
+                    }
+                    .padding(.horizontal, GrippdTheme.Spacing.md)
+                    .padding(.top, GrippdTheme.Spacing.md)
+                    .padding(.bottom, GrippdTheme.Spacing.xxl)
+                }
+            }
+        }
+        .navigationTitle("\(list.emoji) \(list.name)")
+        .navigationBarTitleDisplayMode(.inline)
+        .preferredColorScheme(.dark)
+        .toolbarBackground(GrippdTheme.Colors.background, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .task { await load() }
+    }
+
+    @ViewBuilder
+    private func itemCell(_ item: PublicListItemInfo) -> some View {
+        let icon = typeIcon(item.contentType)
+        let cell = Color.clear
+            .aspectRatio(2/3, contentMode: .fit)
+            .overlay(
+                CachedAsyncImage(url: item.posterURL) { phase in
+                    if case .success(let image) = phase {
+                        image.resizable().aspectRatio(contentMode: .fill)
+                    } else {
+                        Rectangle()
+                            .fill(GrippdTheme.Colors.surface)
+                            .overlay(Image(systemName: icon).font(.system(size: 18)).foregroundStyle(.white.opacity(0.2)))
+                    }
+                }
+            )
+            .overlay(alignment: .bottomLeading) {
+                Text(item.contentTitle)
+                    .font(.system(size: 9, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.85))
+                    .lineLimit(2)
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 4)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.black.opacity(0.55))
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+
+        if let key = item.contentKey {
+            let parts = key.split(separator: "-", maxSplits: 1)
+            if parts.count == 2 {
+                let idStr = String(parts[1])
+                switch item.contentType {
+                case .movie:
+                    if let id = Int(idStr) {
+                        NavigationLink { MovieDetailView(tmdbID: id) } label: { cell }
+                            .buttonStyle(.plain)
+                    }
+                case .tv_show:
+                    if let id = Int(idStr) {
+                        NavigationLink { TVShowDetailView(tmdbID: id) } label: { cell }
+                            .buttonStyle(.plain)
+                    }
+                case .book:
+                    NavigationLink { BookDetailView(googleBooksID: idStr) } label: { cell }
+                        .buttonStyle(.plain)
+                }
+            }
+        } else {
+            cell
+        }
+    }
+
+    private func load() async {
+        isLoading = true
+        items = (try? await SocialService.shared.fetchPublicListItems(listID: list.id)) ?? []
+        isLoading = false
     }
 }
 

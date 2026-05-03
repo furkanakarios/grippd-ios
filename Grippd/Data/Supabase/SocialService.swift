@@ -14,6 +14,24 @@ struct PublicLog: Identifiable {
     let contentKey: String?
 }
 
+// MARK: - Public List
+
+struct PublicListInfo: Identifiable {
+    let id: String
+    let name: String
+    let emoji: String
+    let itemCount: Int
+    let createdAt: Date
+}
+
+struct PublicListItemInfo: Identifiable {
+    let id: String
+    let contentTitle: String
+    let posterURL: URL?
+    let contentType: Content.ContentType
+    let contentKey: String?
+}
+
 // MARK: - User Profile Data
 
 struct UserProfileData {
@@ -142,6 +160,97 @@ final class SocialService {
             .update(["is_private": isPrivate])
             .eq("id", value: userID.uuidString)
             .execute()
+    }
+
+    // MARK: - Public Lists
+
+    func fetchPublicLists(userID: UUID) async throws -> [PublicListInfo] {
+        struct ItemID: Decodable { let id: String }
+        struct ListRow: Decodable {
+            let id: String
+            let name: String
+            let description: String?
+            let createdAt: String
+            let listItems: [ItemID]
+            enum CodingKeys: String, CodingKey {
+                case id, name, description
+                case createdAt = "created_at"
+                case listItems = "list_items"
+            }
+        }
+
+        let rows: [ListRow] = try await client
+            .from("lists")
+            .select("id, name, description, created_at, list_items(id)")
+            .eq("user_id", value: userID.uuidString)
+            .eq("list_type", value: "custom")
+            .eq("is_default", value: false)
+            .eq("is_public", value: true)
+            .order("created_at", ascending: false)
+            .execute()
+            .value
+
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return rows.map { row in
+            let date = formatter.date(from: row.createdAt) ?? Date()
+            return PublicListInfo(
+                id: row.id,
+                name: row.name,
+                emoji: row.description ?? "📋",
+                itemCount: row.listItems.count,
+                createdAt: date
+            )
+        }
+    }
+
+    func fetchPublicListItems(listID: String) async throws -> [PublicListItemInfo] {
+        struct ContentSnippet: Decodable {
+            let title: String
+            let posterUrl: String?
+            let contentType: String
+            let tmdbId: Int?
+            let googleBooksId: String?
+            enum CodingKeys: String, CodingKey {
+                case title
+                case posterUrl = "poster_url"
+                case contentType = "content_type"
+                case tmdbId = "tmdb_id"
+                case googleBooksId = "google_books_id"
+            }
+        }
+        struct ItemRow: Decodable {
+            let id: String
+            let content: ContentSnippet?
+        }
+
+        let rows: [ItemRow] = try await client
+            .from("list_items")
+            .select("id, content(title, poster_url, content_type, tmdb_id, google_books_id)")
+            .eq("list_id", value: listID)
+            .execute()
+            .value
+
+        return rows.compactMap { row in
+            guard let c = row.content else { return nil }
+            let contentType: Content.ContentType = switch c.contentType {
+                case "movie":   .movie
+                case "tv_show": .tv_show
+                default:        .book
+            }
+            let contentKey: String? = switch contentType {
+                case .movie:   c.tmdbId.map { "movie-\($0)" }
+                case .tv_show: c.tmdbId.map { "tv-\($0)" }
+                case .book:    c.googleBooksId.map { "book-\($0)" }
+            }
+            return PublicListItemInfo(
+                id: row.id,
+                contentTitle: c.title,
+                posterURL: c.posterUrl.flatMap { URL(string: $0) },
+                contentType: contentType,
+                contentKey: contentKey
+            )
+        }
     }
 }
 

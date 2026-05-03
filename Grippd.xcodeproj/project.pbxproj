@@ -21,6 +21,7 @@
 		1E50150BD4CADF7E83A4D32E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C3D51F02E1AE282175FA62 /* SearchView.swift */; };
 		1E679D95D69DAB5F5D46E843 /* AdminPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE442293D4CCB1E587BD3E /* AdminPanelView.swift */; };
 		2017BAAAE9EB5CDABAD41919 /* LogSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0C5E02F30A4A8F07FC0F8E /* LogSyncService.swift */; };
+		3EBFC1025189474888C55B60 /* ListSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547465A965B74D8B98CA18E4 /* ListSyncService.swift */; };
 		20DCBC72ADBFD46D53395112 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23DEA96C54398FF74BF7CBD /* HapticManager.swift */; };
 		21697D9AAF267107DF6B5231 /* AdminModerationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6C3B2652F98119F9535282 /* AdminModerationService.swift */; };
 		220B4AA5CE8BE8585F7D27B1 /* CachedAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981F67CCE1CF235AE73EFDA6 /* CachedAsyncImage.swift */; };
@@ -241,6 +242,7 @@
 		B825B9774BCD522A61D8DEB8 /* CommunityStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStatsView.swift; sourceTree = "<group>"; };
 		BB083A0116AE18C3A22F7710 /* SearchHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryService.swift; sourceTree = "<group>"; };
 		BC0C5E02F30A4A8F07FC0F8E /* LogSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogSyncService.swift; sourceTree = "<group>"; };
+		547465A965B74D8B98CA18E4 /* ListSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSyncService.swift; sourceTree = "<group>"; };
 		BC20EF3D14ED4F8926433511 /* SearchFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilterSheet.swift; sourceTree = "<group>"; };
 		BDD30EC30C75D74A24D02AE1 /* FeatureFlagService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FeatureFlagService.swift; sourceTree = "<group>"; };
 		BF95542CD4B341C9D05419B7 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
@@ -403,6 +405,7 @@
 				DA22D60136CCDF96EE731F80 /* FollowService.swift */,
 				546931D814CC04087670F6DE /* LikeService.swift */,
 				BC0C5E02F30A4A8F07FC0F8E /* LogSyncService.swift */,
+				547465A965B74D8B98CA18E4 /* ListSyncService.swift */,
 				4C3F241295256440BB651B13 /* NotificationService.swift */,
 				B348645889240B57745ED216 /* OnboardingService.swift */,
 				E896A0A7D86B89FC9DA417F4 /* SocialService.swift */,
