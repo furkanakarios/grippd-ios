@@ -1,27 +1,26 @@
 import SwiftUI
 
-// MARK: - Variant 1: FILM STRIP REVEAL
-// Üst kenardan kayıp gelen film şeridinde frame'ler sırayla altın ışıkla
-// yanar, son aşamada zoom + altın "G" monogramı reveal olur.
-// Loop süresi ~3.6s. Kalp atışı animasyonunun yerine geçer.
+// MARK: - Variant 3: TYPE CONSTELLATION
+// Karanlık zeminde dağınık altın yıldız parçacıkları belirir, sonra orbit
+// hareketiyle merkeze süzülüp bir "G" formuna kavuşur. Aralarına çizgilerle
+// constellation çizilir, ardından twinkle ile hold eder.
+// Loop süresi ~4.0s.
 // Sabit kalan: "Grippd" başlığı + "Film, dizi ve kitap günlüğün" alt yazısı.
 
 struct SplashView: View {
 
     /// Toplam animasyon süresi. ContentView splash bekleme süresi bu değere
     /// eşit olmalı — animasyon bitmeden ContentView'a geçilmez.
-    static let totalDuration: TimeInterval = 3.6
+    static let totalDuration: TimeInterval = 4.0
+
+    private let gold = Color(red: 0.91, green: 0.70, blue: 0.29)
 
     var body: some View {
         ZStack {
-            // Background — GrippdTheme ile uyumlu
             Color(red: 0.05, green: 0.05, blue: 0.07).ignoresSafeArea()
 
             RadialGradient(
-                colors: [
-                    Color(red: 0.91, green: 0.70, blue: 0.29).opacity(0.10),
-                    .clear
-                ],
+                colors: [gold.opacity(0.10), .clear],
                 center: .init(x: 0.5, y: 0.30),
                 startRadius: 0,
                 endRadius: 380
@@ -29,11 +28,9 @@ struct SplashView: View {
             .ignoresSafeArea()
 
             VStack(spacing: 32) {
-                // Animation slot — her .onAppear'da sıfırdan oynar
-                FilmStripRevealAnimation()
-                    .frame(width: 220, height: 200)
+                TypeConstellationAnimation()
+                    .frame(width: 220, height: 220)
 
-                // Sabit başlık + alt yazı (mevcut launch ile aynı)
                 VStack(spacing: 6) {
                     Text("Grippd")
                         .font(GrippdTheme.Typography.appName)
@@ -52,12 +49,22 @@ struct SplashView: View {
 
 // MARK: - Animation
 
-private struct FilmStripRevealAnimation: View {
+private struct TypeConstellationAnimation: View {
     /// Animasyon başlangıç zamanı — .onAppear'da set edilir, her uygulama
-    /// açılışında sıfırdan başlatır. TimelineView her frame'de elapsed
-    /// üzerinden t = 0..1 hesaplar; faz pencereleri ve easing'ler her
-    /// frame'de doğru çalışır.
+    /// açılışında sıfırdan başlatır.
     @State private var startDate: Date = Date()
+
+    private let gold = Color(red: 0.91, green: 0.70, blue: 0.29)
+
+    // Sample N points along a stylized "G" path (centered around 0,0)
+    private static let targets: [CGPoint] = sampleGPoints(28)
+    private static let starts: [CGPoint] = {
+        targets.enumerated().map { i, _ in
+            let a = CGFloat(i) * 137.5 * .pi / 180
+            let r = 70 + CGFloat((i * 23) % 50)
+            return CGPoint(x: cos(a) * r, y: sin(a) * r * 0.9)
+        }
+    }()
 
     var body: some View {
         TimelineView(.animation) { ctx in
@@ -70,130 +77,108 @@ private struct FilmStripRevealAnimation: View {
 
     @ViewBuilder
     private func animationContent(t: CGFloat) -> some View {
-        let stripT = clamp01(t / 0.55)
-        let stripX = (1 - easeOutCubic(stripT)) * -360
+        let fadeIn = clamp01(t / 0.20)
+        let moveT = clamp01((t - 0.18) / 0.50)
+        let moveE = easeInOutCubic(moveT)
 
-        let zoomT = clamp01((t - 0.55) / 0.23)
-        let zoomScale = 1 + easeInOutCubic(zoomT) * 1.6
-        let centerOpacity = 1 - easeInCubic(zoomT) * 0.85
+        let monoT = clamp01((t - 0.62) / 0.28)
+        let monoOpacity = monoT * 0.82
+        let monoScale = 0.85 + monoT * 0.15
 
-        // Yan 4 frame: zoom başlar başlamaz (0.55) hızlıca 0'a iner
-        let peerOpacity = 1 - clamp01((t - 0.55) / 0.15)
-
-        let monoT = clamp01((t - 0.72) / 0.28)
-        let monoScale = 0.6 + easeOutBack(monoT) * 0.4
-        let monoOpacity = monoT
+        let lineT = clamp01((t - 0.50) / 0.25)
+        let twinkleT = clamp01((t - 0.72) / 0.28)
 
         ZStack {
-            // Film strip — yan 4 frame yok olur, ortadaki solgun kalır
-            HStack(spacing: 8) {
-                FilmFrame(icon: .film, lit: liturn(t, start: 0.08))
-                    .opacity(peerOpacity)
-                FilmFrame(icon: .tv,   lit: liturn(t, start: 0.15))
-                    .opacity(peerOpacity)
-                FilmFrame(icon: .book, lit: liturn(t, start: 0.22))
-                    .opacity(centerOpacity)
-                FilmFrame(icon: .film, lit: liturn(t, start: 0.29))
-                    .opacity(peerOpacity)
-                FilmFrame(icon: .tv,   lit: liturn(t, start: 0.36))
-                    .opacity(peerOpacity)
-            }
-            .scaleEffect(zoomScale)
-            .offset(x: stripX)
-
-            // G monogram
-            GoldGMonogram()
-                .frame(width: 110, height: 110)
+            // Background G monogram, fades in
+            GoldGMonogram(glow: 0.6)
+                .frame(width: 120, height: 120)
                 .scaleEffect(monoScale)
                 .opacity(monoOpacity)
-        }
-    }
 
-    private func liturn(_ t: CGFloat, start: CGFloat) -> CGFloat {
-        clamp01((t - start) / 0.10)
-    }
-}
-
-// MARK: - Single film frame (sprockets + lit content)
-
-private struct FilmFrame: View {
-    enum Icon { case film, tv, book }
-    let icon: Icon
-    let lit: CGFloat
-
-    private let gold = Color(red: 0.91, green: 0.70, blue: 0.29)
-
-    var body: some View {
-        VStack(spacing: 0) {
-            sprocketRow
-            content
-            sprocketRow
-        }
-        .frame(width: 56, height: 76)
-    }
-
-    private var sprocketRow: some View {
-        HStack(spacing: 4) {
-            ForEach(0..<4, id: \.self) { _ in
-                RoundedRectangle(cornerRadius: 1)
-                    .fill(gold.opacity(0.15 + 0.4 * lit))
-                    .frame(width: 6, height: 4)
-                    .shadow(color: gold.opacity(lit > 0.3 ? 0.5 * lit : 0), radius: 2)
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .frame(height: 10)
-        .background(Color.black.opacity(0.6))
-    }
-
-    private var content: some View {
-        ZStack {
-            if lit > 0 {
-                RadialGradient(
-                    colors: [
-                        gold.opacity(0.55 * lit),
-                        gold.opacity(0.05 * lit),
-                        Color.black.opacity(0.85)
-                    ],
-                    center: .center,
-                    startRadius: 0,
-                    endRadius: 32
-                )
-            } else {
-                Color.white.opacity(0.04)
+            // Connecting lines
+            Canvas { ctx, size in
+                let center = CGPoint(x: size.width / 2, y: size.height / 2)
+                var path = Path()
+                for i in 1..<Self.targets.count {
+                    let prev = Self.targets[i - 1]
+                    let tgt = Self.targets[i]
+                    let sPrev = Self.starts[i - 1]
+                    let s = Self.starts[i]
+                    let x0 = sPrev.x + (prev.x - sPrev.x) * moveE + center.x
+                    let y0 = sPrev.y + (prev.y - sPrev.y) * moveE + center.y
+                    let x1 = s.x + (tgt.x - s.x) * moveE + center.x
+                    let y1 = s.y + (tgt.y - s.y) * moveE + center.y
+                    path.move(to: CGPoint(x: x0, y: y0))
+                    path.addLine(to: CGPoint(x: x1, y: y1))
+                }
+                ctx.stroke(path,
+                           with: .color(self.gold.opacity(lineT * 0.45)),
+                           lineWidth: 0.6)
             }
 
-            iconView
-                .foregroundStyle(gold.opacity(0.4 + 0.6 * lit))
-        }
-        .frame(maxHeight: .infinity)
-        .overlay(
-            VStack(spacing: 0) {
-                Rectangle().fill(gold.opacity(0.15 + 0.45 * lit)).frame(height: 1)
-                Spacer()
-                Rectangle().fill(gold.opacity(0.15 + 0.45 * lit)).frame(height: 1)
-            }
-        )
-        .shadow(color: gold.opacity(lit > 0.1 ? 0.45 * lit : 0), radius: 12 * lit)
-    }
+            // Particles
+            ZStack {
+                ForEach(0..<Self.targets.count, id: \.self) { i in
+                    let s = Self.starts[i]
+                    let tgt = Self.targets[i]
+                    let x = s.x + (tgt.x - s.x) * moveE
+                    let y = s.y + (tgt.y - s.y) * moveE
+                    let dotSize: CGFloat = CGFloat(3 + (i % 3))
+                    let tw: CGFloat = twinkleT > 0
+                        ? 0.5 + 0.5 * sin(t * .pi * 2 * (1.5 + CGFloat(i % 4) * 0.3) + CGFloat(i))
+                        : 1
+                    let baseOp = fadeIn * (twinkleT > 0 ? 0.5 + tw * 0.5 : 1)
 
-    @ViewBuilder
-    private var iconView: some View {
-        switch icon {
-        case .film:
-            Image(systemName: "film")
-                .font(.system(size: 22, weight: .light))
-        case .tv:
-            Image(systemName: "tv")
-                .font(.system(size: 22, weight: .light))
-        case .book:
-            Image(systemName: "book")
-                .font(.system(size: 22, weight: .light))
+                    Circle()
+                        .fill(self.gold)
+                        .frame(width: dotSize, height: dotSize)
+                        .shadow(color: self.gold.opacity(0.85), radius: 4)
+                        .shadow(color: self.gold.opacity(0.4), radius: 9)
+                        .offset(x: x, y: y)
+                        .opacity(baseOp)
+                }
+
+                // Ambient sparkles
+                ForEach(0..<6, id: \.self) { i in
+                    let a = (CGFloat(i) * 60 + 30) * .pi / 180
+                    let r: CGFloat = 90
+                    let x = cos(a) * r
+                    let y = sin(a) * r * 0.95
+                    let tw = 0.4 + 0.6 * abs(sin(t * .pi * 2 * (0.8 + CGFloat(i) * 0.2) + CGFloat(i)))
+                    Circle()
+                        .fill(self.gold.opacity(0.7))
+                        .frame(width: 2, height: 2)
+                        .shadow(color: self.gold.opacity(0.6), radius: 2)
+                        .offset(x: x, y: y)
+                        .opacity(fadeIn * tw * 0.6)
+                }
+            }
         }
     }
 }
 
-// MARK: - Gold "G" monogram (shared across variants)
+// MARK: - G-shape sample points
+
+private func sampleGPoints(_ n: Int) -> [CGPoint] {
+    var pts: [CGPoint] = []
+    let radius: CGFloat = 56
+    let arcCount = Int(Double(n) * 0.78)
+    let startAngle: CGFloat = -20
+    let sweep: CGFloat = -300
+    for i in 0..<arcCount {
+        let k = CGFloat(i) / CGFloat(max(1, arcCount - 1))
+        let ang = (startAngle + sweep * k) * .pi / 180
+        pts.append(CGPoint(x: cos(ang) * radius, y: sin(ang) * radius))
+    }
+    let stubCount = n - arcCount
+    for i in 0..<stubCount {
+        let k = CGFloat(i) / CGFloat(max(1, stubCount - 1))
+        pts.append(CGPoint(x: 5 + k * 36, y: 6))
+    }
+    return pts
+}
+
+// MARK: - Gold "G" monogram
 
 struct GoldGMonogram: View {
     var glow: CGFloat = 1
@@ -203,14 +188,12 @@ struct GoldGMonogram: View {
         let goldDeep  = Color(red: 0.71, green: 0.50, blue: 0.16)
 
         Canvas { ctx, size in
-            // Sized to its frame; scale our 120-unit design into it.
             let scale = min(size.width, size.height) / 120.0
             ctx.scaleBy(x: scale, y: scale)
 
-            // Outer G — thick gold gradient stroke
-            // 12 saatten (üst) → 9 → 6 → 3 saatte (sağ) bitecek şekilde 270°
-            // sweep. SwiftUI y-down koordinatta clockwise:true visual olarak
-            // saat yönünün TERSİ — gap sağda kalır, stub için yer açar.
+            // 12 saatten → 9 → 6 → 3 saatte bitecek 270° sweep.
+            // SwiftUI y-down koordinatta clockwise:true visual olarak saat
+            // yönünün tersi — gap sağda kalır, stub için yer açar.
             var gPath = Path()
             gPath.addArc(
                 center: CGPoint(x: 60, y: 60),
@@ -219,7 +202,6 @@ struct GoldGMonogram: View {
                 endAngle: .degrees(0),
                 clockwise: true
             )
-            // Inner stub (G's bar)
             var stub = Path()
             stub.move(to: CGPoint(x: 108, y: 60))
             stub.addLine(to: CGPoint(x: 72, y: 60))
@@ -231,13 +213,12 @@ struct GoldGMonogram: View {
                 startPoint: .zero,
                 endPoint: CGPoint(x: 120, y: 120)
             )
-
             ctx.stroke(gPath, with: goldGradient,
                        style: StrokeStyle(lineWidth: 14, lineCap: .round))
             ctx.stroke(stub, with: goldGradient,
                        style: StrokeStyle(lineWidth: 14, lineCap: .round, lineJoin: .round))
 
-            // Dashed inner arc — film strip detail (G ile aynı yön)
+            // Dashed inner arc — G ile aynı yön
             var dash = Path()
             dash.addArc(
                 center: CGPoint(x: 60, y: 60),
@@ -253,18 +234,11 @@ struct GoldGMonogram: View {
     }
 }
 
-// MARK: - Easing helpers
+// MARK: - Helpers
 
 private func clamp01(_ v: CGFloat) -> CGFloat { max(0, min(1, v)) }
-private func easeOutCubic(_ t: CGFloat) -> CGFloat { 1 - pow(1 - t, 3) }
-private func easeInCubic(_ t: CGFloat) -> CGFloat { t * t * t }
 private func easeInOutCubic(_ t: CGFloat) -> CGFloat {
     t < 0.5 ? 4 * t * t * t : 1 - pow(-2 * t + 2, 3) / 2
-}
-private func easeOutBack(_ t: CGFloat) -> CGFloat {
-    let c1: CGFloat = 1.70158
-    let c3 = c1 + 1
-    return 1 + c3 * pow(t - 1, 3) + c1 * pow(t - 1, 2)
 }
 
 #Preview {
