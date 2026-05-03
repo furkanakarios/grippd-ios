@@ -333,6 +333,61 @@ struct TMDBPerson: Decodable, Identifiable {
     }
 }
 
+// MARK: - Watch Providers
+
+struct TMDBWatchProvidersResponse: Decodable {
+    let results: [String: TMDBWatchProviderRegion]
+}
+
+struct TMDBWatchProviderRegion: Decodable {
+    let link: String?
+    let flatrate: [TMDBWatchProvider]?
+    let free: [TMDBWatchProvider]?
+    let ads: [TMDBWatchProvider]?
+    let rent: [TMDBWatchProvider]?
+    let buy: [TMDBWatchProvider]?
+}
+
+struct TMDBWatchProvider: Decodable, Identifiable {
+    let providerId: Int
+    let providerName: String
+    let logoPath: String?
+    let displayPriority: Int
+
+    var id: Int { providerId }
+
+    var logoURL: URL? {
+        guard let path = logoPath else { return nil }
+        return URL(string: "https://image.tmdb.org/t/p/w92\(path)")
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case providerId = "provider_id"
+        case providerName = "provider_name"
+        case logoPath = "logo_path"
+        case displayPriority = "display_priority"
+    }
+}
+
+enum TMDBWatchProviderType {
+    case flatrate, free, rent, buy
+
+    var displayName: String {
+        switch self {
+        case .flatrate: return "Abone"
+        case .free: return "Ücretsiz"
+        case .rent: return "Kiralık"
+        case .buy: return "Satın Al"
+        }
+    }
+}
+
+struct TMDBProviderEntry: Identifiable {
+    let provider: TMDBWatchProvider
+    let type: TMDBWatchProviderType
+    var id: Int { provider.id }
+}
+
 // MARK: - Paginated Response
 
 struct TMDBPagedResponse<T: Decodable>: Decodable {

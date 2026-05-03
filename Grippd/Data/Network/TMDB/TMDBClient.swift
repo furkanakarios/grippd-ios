@@ -149,6 +149,39 @@ final class TMDBClient {
         return response.genres
     }
 
+    // MARK: - Watch Providers
+
+    func watchProvidersForMovie(id: Int) async throws -> [TMDBProviderEntry] {
+        let response: TMDBWatchProvidersResponse = try await get("movie/\(id)/watch/providers")
+        return providerEntries(from: response.results["TR"])
+    }
+
+    func watchProvidersForTV(id: Int) async throws -> [TMDBProviderEntry] {
+        let response: TMDBWatchProvidersResponse = try await get("tv/\(id)/watch/providers")
+        return providerEntries(from: response.results["TR"])
+    }
+
+    private func providerEntries(from region: TMDBWatchProviderRegion?) -> [TMDBProviderEntry] {
+        guard let region else { return [] }
+        var seen = Set<Int>()
+        var entries: [TMDBProviderEntry] = []
+
+        func add(_ providers: [TMDBWatchProvider]?, type: TMDBWatchProviderType) {
+            for p in (providers ?? []).sorted(by: { $0.displayPriority < $1.displayPriority }) {
+                if seen.insert(p.id).inserted {
+                    entries.append(TMDBProviderEntry(provider: p, type: type))
+                }
+            }
+        }
+
+        add(region.flatrate, type: .flatrate)
+        add(region.free, type: .free)
+        add(region.ads, type: .flatrate)
+        add(region.rent, type: .rent)
+        add(region.buy, type: .buy)
+        return entries
+    }
+
     // MARK: - Generic Request
 
     private func get<T: Decodable>(_ path: String, params: [String: String] = [:]) async throws -> T {
