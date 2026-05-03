@@ -59,6 +59,7 @@ struct UserProfileView: View {
 
     @Environment(AppState.self) private var appState
     @State private var viewModel = UserProfileViewModel()
+    @State private var showAvatarZoom = false
 
     private var isOwnProfile: Bool {
         appState.currentUser?.id == userID
@@ -145,8 +146,15 @@ struct UserProfileView: View {
                     bannerPlaceholder.frame(height: 120)
                 }
 
-                avatarView(url: data.user.avatarURL, isPremium: data.user.planType == .premium)
-                    .offset(y: 45)
+                Button { showAvatarZoom = true } label: {
+                    avatarView(url: data.user.avatarURL, isPremium: data.user.planType == .premium)
+                }
+                .buttonStyle(.plain)
+                .fullScreenCover(isPresented: $showAvatarZoom) {
+                    AvatarZoomView(url: data.user.avatarURL, isPresented: $showAvatarZoom)
+                        .background(.clear)
+                }
+                .offset(y: 45)
             }
             .frame(height: 120)
 
@@ -272,7 +280,8 @@ struct UserProfileView: View {
                 contentType: entry.contentType,
                 watchedAt: entry.watchedAt,
                 rating: entry.rating,
-                emoji: entry.emoji
+                emoji: entry.emoji,
+                contentKey: entry.contentKey
             )
         }
     }
@@ -324,8 +333,28 @@ private struct PublicLogCell: View {
         }
     }
 
+    @ViewBuilder
+    private var destination: some View {
+        if let key = log.contentKey {
+            let parts = key.split(separator: "-", maxSplits: 1)
+            if parts.count == 2 {
+                let idStr = String(parts[1])
+                switch log.contentType {
+                case .movie:
+                    if let id = Int(idStr) { MovieDetailView(tmdbID: id) }
+                case .tv_show:
+                    if let id = Int(idStr) {
+                        TVShowDetailView(tmdbID: id)
+                    }
+                case .book:
+                    BookDetailView(googleBooksID: idStr)
+                }
+            }
+        }
+    }
+
     var body: some View {
-        Color.clear
+        let cell = Color.clear
             .aspectRatio(2/3, contentMode: .fit)
             .overlay(
                 CachedAsyncImage(url: log.posterURL) { phase in
@@ -359,6 +388,13 @@ private struct PublicLogCell: View {
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: 6))
+
+        if log.contentKey != nil {
+            NavigationLink { destination } label: { cell }
+                .buttonStyle(.plain)
+        } else {
+            cell
+        }
     }
 }
 
