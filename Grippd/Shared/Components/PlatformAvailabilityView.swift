@@ -2,8 +2,7 @@ import SwiftUI
 
 // MARK: - Platform Availability Section
 
-/// Fetches and displays streaming platform availability.
-/// Drop into MovieDetailView or TVShowDetailView.
+/// Fetches and displays streaming platform availability via TMDB Watch Providers (TR region).
 struct PlatformAvailabilityView: View {
     enum ContentKind {
         case movie(tmdbID: Int)
@@ -12,7 +11,7 @@ struct PlatformAvailabilityView: View {
 
     let kind: ContentKind
 
-    @State private var sources: [WatchmodeSource] = []
+    @State private var entries: [TMDBProviderEntry] = []
     @State private var isLoading = false
     @State private var failed = false
 
@@ -29,7 +28,7 @@ struct PlatformAvailabilityView: View {
                 }
                 .padding(.horizontal, GrippdTheme.Spacing.md)
 
-            } else if failed || (!isLoading && sources.isEmpty) {
+            } else if failed || (!isLoading && entries.isEmpty) {
                 Text(failed ? "Platform bilgisi alınamadı" : "Bu içerik şu an Türkiye platformlarında yayınlanmıyor")
                     .font(.system(size: 13))
                     .foregroundStyle(.white.opacity(0.35))
@@ -38,15 +37,15 @@ struct PlatformAvailabilityView: View {
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(sources) { source in
-                            PlatformChip(source: source)
+                        ForEach(entries) { entry in
+                            PlatformChip(entry: entry)
                         }
                     }
                     .padding(.horizontal, GrippdTheme.Spacing.md)
                 }
             }
         }
-        .task { await fetchSources() }
+        .task { await fetchProviders() }
     }
 
     private var sectionHeader: some View {
@@ -58,20 +57,16 @@ struct PlatformAvailabilityView: View {
             .padding(.horizontal, GrippdTheme.Spacing.md)
     }
 
-    private func fetchSources() async {
+    private func fetchProviders() async {
         isLoading = true
         failed = false
         do {
             switch kind {
             case .movie(let id):
-                sources = try await WatchmodeClient.shared.sourcesForMovie(tmdbID: id)
+                entries = try await TMDBClient.shared.watchProvidersForMovie(id: id)
             case .tv(let id):
-                sources = try await WatchmodeClient.shared.sourcesForTV(tmdbID: id)
+                entries = try await TMDBClient.shared.watchProvidersForTV(id: id)
             }
-        } catch WatchmodeError.missingAPIKey {
-            // API key not configured yet — silently hide the section
-            failed = false
-            sources = []
         } catch {
             failed = true
         }
@@ -82,30 +77,82 @@ struct PlatformAvailabilityView: View {
 // MARK: - Platform Chip
 
 private struct PlatformChip: View {
-    let source: WatchmodeSource
+    let entry: TMDBProviderEntry
 
     var body: some View {
         VStack(spacing: 6) {
-            Text(shortName)
-                .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(.white)
-                .fixedSize()
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(source.platformColor, in: RoundedRectangle(cornerRadius: 10))
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(platformColor)
+                    .frame(width: 52, height: 52)
 
-            Text(source.type.displayName)
+                if let logoURL = entry.provider.logoURL {
+                    AsyncImage(url: logoURL) { phase in
+                        if case .success(let image) = phase {
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 52, height: 52)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        } else {
+                            platformFallbackLabel
+                        }
+                    }
+                } else {
+                    platformFallbackLabel
+                }
+            }
+
+            Text(entry.type.displayName)
                 .font(.system(size: 10, weight: .medium))
-                .foregroundStyle(source.type.color)
+                .foregroundStyle(typeColor)
         }
     }
 
-    // Normalize well-known platform names
+    private var platformFallbackLabel: some View {
+        Text(shortName)
+            .font(.system(size: 11, weight: .bold))
+            .foregroundStyle(.white)
+            .multilineTextAlignment(.center)
+            .padding(6)
+    }
+
     private var shortName: String {
-        let lower = source.name.lowercased()
-        if lower.contains("amazon prime") { return "Prime Video" }
+        let lower = entry.provider.providerName.lowercased()
+        if lower.contains("amazon prime") || lower.contains("prime video") { return "Prime" }
         if lower.contains("apple tv") { return "Apple TV+" }
         if lower.contains("disney") { return "Disney+" }
-        return source.name
+        if lower.contains("netflix") { return "Netflix" }
+        if lower.contains("mubi") { return "MUBI" }
+        if lower.contains("blutv") { return "BluTV" }
+        if lower.contains("gain") { return "Gain" }
+        if lower.contains("exxen") { return "Exxen" }
+        if lower.contains("hbo") || lower.contains("max") { return "Max" }
+        if lower.contains("hulu") { return "Hulu" }
+        return entry.provider.providerName
+    }
+
+    private var platformColor: Color {
+        let lower = entry.provider.providerName.lowercased()
+        if lower.contains("netflix") { return Color(red: 0.9, green: 0.1, blue: 0.1) }
+        if lower.contains("disney") { return Color(red: 0.05, green: 0.18, blue: 0.55) }
+        if lower.contains("prime") || lower.contains("amazon") { return Color(red: 0.0, green: 0.46, blue: 0.75) }
+        if lower.contains("apple") { return Color(red: 0.35, green: 0.35, blue: 0.38) }
+        if lower.contains("mubi") { return Color(red: 0.0, green: 0.48, blue: 0.4) }
+        if lower.contains("blutv") { return Color(red: 0.42, green: 0.15, blue: 0.75) }
+        if lower.contains("gain") { return Color(red: 0.85, green: 0.25, blue: 0.1) }
+        if lower.contains("exxen") { return Color(red: 0.75, green: 0.1, blue: 0.15) }
+        if lower.contains("hbo") || lower.contains("max") { return Color(red: 0.45, green: 0.05, blue: 0.75) }
+        if lower.contains("hulu") { return Color(red: 0.1, green: 0.78, blue: 0.48) }
+        return Color(red: 0.22, green: 0.22, blue: 0.26)
+    }
+
+    private var typeColor: Color {
+        switch entry.type {
+        case .flatrate: return Color(red: 0.2, green: 0.78, blue: 0.45)
+        case .free: return Color(red: 0.4, green: 0.8, blue: 0.9)
+        case .rent: return Color(red: 0.91, green: 0.70, blue: 0.29)
+        case .buy: return Color(red: 0.4, green: 0.6, blue: 1.0)
+        }
     }
 }

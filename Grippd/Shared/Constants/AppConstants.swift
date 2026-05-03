@@ -7,7 +7,6 @@ enum AppConstants {
         static let tmdbImageBaseURL = "https://image.tmdb.org/t/p"
         static let googleBooksBaseURL = "https://www.googleapis.com/books/v1"
         static let openLibraryBaseURL = "https://openlibrary.org"
-        static let watchmodeBaseURL = "https://api.watchmode.com/v1"
     }
 
     enum Limits {
