@@ -11,6 +11,7 @@ struct PublicLog: Identifiable {
     let watchedAt: Date
     let rating: Double?
     let emoji: String?
+    let contentKey: String?
 }
 
 // MARK: - User Profile Data
@@ -66,7 +67,7 @@ final class SocialService {
 
         async let recentLogRows: [PublicLogRow] = client
             .from("logs")
-            .select("id, watched_at, rating, emoji_reaction, content(title, poster_url, content_type)")
+            .select("id, watched_at, rating, emoji_reaction, content(title, poster_url, content_type, tmdb_id, google_books_id)")
             .eq("user_id", value: userID.uuidString)
             .order("watched_at", ascending: false)
             .limit(12)
@@ -179,11 +180,15 @@ private struct PublicLogRow: Decodable {
         let title: String
         let posterUrl: String?
         let contentType: String
+        let tmdbId: Int?
+        let googleBooksId: String?
 
         enum CodingKeys: String, CodingKey {
             case title
             case posterUrl = "poster_url"
             case contentType = "content_type"
+            case tmdbId = "tmdb_id"
+            case googleBooksId = "google_books_id"
         }
     }
 
@@ -197,6 +202,15 @@ private struct PublicLogRow: Decodable {
             case "tv_show": .tv_show
             default:        .book
         }
+        let contentKey: String?
+        switch contentType {
+        case .movie:
+            contentKey = content.tmdbId.map { "movie-\($0)" }
+        case .tv_show:
+            contentKey = content.tmdbId.map { "tv-\($0)" }
+        case .book:
+            contentKey = content.googleBooksId.map { "book-\($0)" }
+        }
         return PublicLog(
             id: UUID(uuidString: id) ?? UUID(),
             contentTitle: content.title,
@@ -204,7 +218,8 @@ private struct PublicLogRow: Decodable {
             contentType: contentType,
             watchedAt: date,
             rating: rating,
-            emoji: emojiReaction
+            emoji: emojiReaction,
+            contentKey: contentKey
         )
     }
 }
