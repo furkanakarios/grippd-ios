@@ -924,6 +924,7 @@
 				69B7C03F732264D6E923D60F /* LogRepository.swift in Sources */,
 				FA44DE2B0E137C24584E783D /* LogService.swift in Sources */,
 				2017BAAAE9EB5CDABAD41919 /* LogSyncService.swift in Sources */,
+				3EBFC1025189474888C55B60 /* ListSyncService.swift in Sources */,
 				01700C4ED6212604C3062EA7 /* MainTabView.swift in Sources */,
 				AB348E2AD89E0C69B659169A /* MovieDetailView.swift in Sources */,
 				8822054B0850E2DB7EB21BA6 /* MovieDetailViewModel.swift in Sources */,
