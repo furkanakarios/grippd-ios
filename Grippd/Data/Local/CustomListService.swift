@@ -22,6 +22,7 @@ final class CustomListService {
         let list = CustomList(name: name, emoji: emoji)
         context.insert(list)
         try? context.save()
+        Task { await ListSyncService.shared.syncList(list) }
         return list
     }
 
@@ -30,11 +31,14 @@ final class CustomListService {
         list.emoji = emoji
         list.updatedAt = Date()
         try? context.save()
+        Task { await ListSyncService.shared.syncList(list) }
     }
 
     func deleteList(_ list: CustomList) {
+        let listID = list.id
         context.delete(list)
         try? context.save()
+        Task { await ListSyncService.shared.deleteList(listID: listID) }
     }
 
     // MARK: - Items
@@ -47,13 +51,16 @@ final class CustomListService {
         context.insert(item)
         list.updatedAt = Date()
         try? context.save()
+        Task { await ListSyncService.shared.syncItem(listID: list.id, item: item) }
     }
 
     func removeItem(from list: CustomList, contentKey: String) {
+        let listID = list.id
         let items = list.items.filter { $0.contentKey == contentKey }
         items.forEach { context.delete($0) }
         list.updatedAt = Date()
         try? context.save()
+        Task { await ListSyncService.shared.removeItem(listID: listID, contentKey: contentKey) }
     }
 
     func isInList(_ list: CustomList, contentKey: String) -> Bool {
