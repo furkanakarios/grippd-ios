@@ -12,6 +12,80 @@ final class LogSyncService {
 
     // MARK: - Public API
 
+    /// Supabase'de poster_url null olan content kayıtlarını TMDB API'den doldurur.
+    /// Admin girişinde bir kez çalıştırılır.
+    func backfillMissingPosters() async {
+        struct ContentRow: Decodable {
+            let id: String
+            let contentType: String
+            let tmdbId: Int?
+            let googleBooksId: String?
+            enum CodingKeys: String, CodingKey {
+                case id
+                case contentType = "content_type"
+                case tmdbId = "tmdb_id"
+                case googleBooksId = "google_books_id"
+            }
+        }
+
+        let rows: [ContentRow] = (try? await client
+            .from("content")
+            .select("id, content_type, tmdb_id, google_books_id")
+            .is("poster_url", value: nil)
+            .execute()
+            .value) ?? []
+
+        guard !rows.isEmpty else {
+            print("[LogSync] backfillMissingPosters — poster_url null kayıt yok")
+            return
+        }
+
+        struct PosterUpdate: Encodable { let poster_url: String }
+        var updated = 0
+        let context = LocalCacheService.shared.context
+        var didUpdateLocal = false
+
+        for row in rows {
+            if let tmdbID = row.tmdbId {
+                let posterPath: String?
+                if row.contentType == "tv_show" {
+                    posterPath = (try? await TMDBClient.shared.tvShowDetail(id: tmdbID))?.posterPath
+                } else {
+                    posterPath = (try? await TMDBClient.shared.movieDetail(id: tmdbID))?.posterPath
+                }
+                guard let path = posterPath else { continue }
+                let fullURL = "https://image.tmdb.org/t/p/w500\(path)"
+
+                // Update Supabase
+                try? await client
+                    .from("content")
+                    .update(PosterUpdate(poster_url: fullURL))
+                    .eq("id", value: row.id)
+                    .execute()
+
+                // Update local LogEntry objects with null posterPath for this content
+                let prefix = row.contentType == "tv_show" ? "tv" : row.contentType
+                let contentKey = "\(prefix)-\(tmdbID)"
+                let localLogs = LogService.shared.allLogs().filter {
+                    $0.contentKey == contentKey && $0.posterPath == nil
+                }
+                for entry in localLogs {
+                    entry.posterPath = path
+                    didUpdateLocal = true
+                }
+
+                updated += 1
+            }
+            // Books: no external API available to backfill — skip
+        }
+
+        if didUpdateLocal {
+            try? context.save()
+            NotificationCenter.default.post(name: .logsDidSyncFromRemote, object: nil)
+        }
+        print("[LogSync] backfillMissingPosters tamamlandı — \(updated)/\(rows.count) kayıt güncellendi")
+    }
+
     /// Giriş sonrası remoteID'si olmayan (sync başarısız) logları tekrar dener.
     func syncPending() async {
         guard let userID = client.auth.currentUser?.id else { return }
@@ -20,6 +94,100 @@ final class LogSyncService {
         }
         for entry in pending {
             await sync(entry)
+        }
+    }
+
+    /// Giriş sonrası Supabase'deki tüm log'ları lokale çeker. Eksik olanları oluşturur.
+    func fetchAllFromRemote(ownerID: String) async {
+        struct RemoteContent: Decodable {
+            let title: String
+            let posterUrl: String?
+            let contentType: String
+            let tmdbId: Int?
+            let googleBooksId: String?
+            enum CodingKeys: String, CodingKey {
+                case title
+                case posterUrl = "poster_url"
+                case contentType = "content_type"
+                case tmdbId = "tmdb_id"
+                case googleBooksId = "google_books_id"
+            }
+        }
+        struct RemoteLog: Decodable {
+            let id: String
+            let watchedAt: String
+            let rating: Double?
+            let emojiReaction: String?
+            let isRewatch: Bool
+            let notes: String?
+            let content: RemoteContent
+            enum CodingKeys: String, CodingKey {
+                case id, rating, notes, content
+                case watchedAt = "watched_at"
+                case emojiReaction = "emoji_reaction"
+                case isRewatch = "is_rewatch"
+            }
+        }
+
+        do {
+            let rows: [RemoteLog] = try await client
+                .from("logs")
+                .select("id, watched_at, rating, emoji_reaction, is_rewatch, notes, content:content_id(title, poster_url, content_type, tmdb_id, google_books_id)")
+                .eq("user_id", value: ownerID)
+                .order("watched_at", ascending: false)
+                .execute()
+                .value
+
+            let existingRemoteIDs = Set(LogService.shared.allLogs().compactMap { $0.remoteID })
+            let context = LocalCacheService.shared.context
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            var didInsert = false
+
+            for row in rows {
+                guard !existingRemoteIDs.contains(row.id) else { continue }
+                let c = row.content
+                let contentKey: String
+                if let tmdbID = c.tmdbId {
+                    let prefix = c.contentType == "tv_show" ? "tv" : c.contentType
+                    contentKey = "\(prefix)-\(tmdbID)"
+                } else if let booksID = c.googleBooksId {
+                    contentKey = "book-\(booksID)"
+                } else { continue }
+
+                guard let contentType = Content.ContentType(rawValue: c.contentType) else { continue }
+                let watchedAt = formatter.date(from: row.watchedAt) ?? Date()
+
+                let posterPath: String?
+                if let url = c.posterUrl, url.contains("image.tmdb.org/t/p/w500") {
+                    posterPath = String(url.dropFirst("https://image.tmdb.org/t/p/w500".count))
+                } else {
+                    posterPath = c.posterUrl
+                }
+
+                let entry = LogEntry(
+                    ownerID: ownerID,
+                    contentKey: contentKey,
+                    contentType: contentType,
+                    contentTitle: c.title,
+                    posterPath: posterPath,
+                    watchedAt: watchedAt,
+                    isRewatch: row.isRewatch,
+                    rating: row.rating,
+                    emoji: row.emojiReaction,
+                    note: row.notes
+                )
+                entry.remoteID = row.id
+                context.insert(entry)
+                didInsert = true
+            }
+
+            if didInsert {
+                try? context.save()
+                NotificationCenter.default.post(name: .logsDidSyncFromRemote, object: nil)
+            }
+        } catch {
+            print("[LogSync] fetchAllFromRemote error: \(error)")
         }
     }
 
@@ -130,25 +298,43 @@ final class LogSyncService {
             let title: String
             let poster_url: String?
         }
-        struct Row: Decodable { let id: String }
+        struct Row: Decodable {
+            let id: String
+            let posterUrl: String?
+            enum CodingKeys: String, CodingKey {
+                case id
+                case posterUrl = "poster_url"
+            }
+        }
 
         // Önce mevcut kaydı ara — upsert UPDATE tetiklediği için RLS'e takılıyor
         let existing: [Row] = (try? await client
             .from("content")
-            .select("id")
+            .select("id, poster_url")
             .eq("tmdb_id", value: tmdbID)
             .eq("content_type", value: contentType)
             .limit(1)
             .execute()
             .value) ?? []
 
-        if let id = existing.first?.id { return id }
+        if let row = existing.first {
+            // poster_url null ise ve bizde varsa güncelle
+            if row.posterUrl == nil, let posterURL {
+                struct PosterUpdate: Encodable { let poster_url: String }
+                try? await client
+                    .from("content")
+                    .update(PosterUpdate(poster_url: posterURL))
+                    .eq("id", value: row.id)
+                    .execute()
+            }
+            return row.id
+        }
 
         // Yoksa insert et
         let rows: [Row] = try await client
             .from("content")
             .insert(Payload(tmdb_id: tmdbID, content_type: contentType, title: title, poster_url: posterURL))
-            .select("id")
+            .select("id, poster_url")
             .execute()
             .value
 
@@ -157,18 +343,36 @@ final class LogSyncService {
     }
 
     private func upsertBook(googleBooksID: String, title: String, posterPath: String?) async throws -> String {
-        struct Row: Decodable { let id: String }
+        struct Row: Decodable {
+            let id: String
+            let posterUrl: String?
+            enum CodingKeys: String, CodingKey {
+                case id
+                case posterUrl = "poster_url"
+            }
+        }
 
         // Önce mevcut kaydı ara
         let existing: [Row] = (try? await client
             .from("content")
-            .select("id")
+            .select("id, poster_url")
             .eq("google_books_id", value: googleBooksID)
             .limit(1)
             .execute()
             .value) ?? []
 
-        if let id = existing.first?.id { return id }
+        if let row = existing.first {
+            // poster_url null ise ve bizde varsa güncelle
+            if row.posterUrl == nil, let posterPath {
+                struct PosterUpdate: Encodable { let poster_url: String }
+                try? await client
+                    .from("content")
+                    .update(PosterUpdate(poster_url: posterPath))
+                    .eq("id", value: row.id)
+                    .execute()
+            }
+            return row.id
+        }
 
         // Yoksa insert et
         struct Payload: Encodable {
@@ -181,7 +385,7 @@ final class LogSyncService {
         let inserted: [Row] = try await client
             .from("content")
             .insert(Payload(google_books_id: googleBooksID, content_type: "book", title: title, poster_url: posterPath))
-            .select("id")
+            .select("id, poster_url")
             .execute()
             .value
 
@@ -224,6 +428,12 @@ final class LogSyncService {
         guard let id = rows.first?.id else { throw SyncError.insertFailed }
         return id
     }
+}
+
+// MARK: - Notifications
+
+extension Notification.Name {
+    static let logsDidSyncFromRemote = Notification.Name("logsDidSyncFromRemote")
 }
 
 // MARK: - Errors

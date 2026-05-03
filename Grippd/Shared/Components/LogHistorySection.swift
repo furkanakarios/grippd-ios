@@ -6,6 +6,7 @@ struct LogHistorySection: View {
     let logs: [LogEntry]
     let contentType: Content.ContentType
     var onDelete: ((LogEntry) -> Void)?
+    var onEdit: ((LogEntry) -> Void)?
 
     private var watchLabel: String {
         contentType == .book ? "okuma" : "izleme"
@@ -27,7 +28,7 @@ struct LogHistorySection: View {
 
             VStack(spacing: 0) {
                 ForEach(Array(logs.enumerated()), id: \.element.id) { index, log in
-                    LogHistoryRow(log: log, onDelete: { onDelete?(log) })
+                    LogHistoryRow(log: log, onDelete: { onDelete?(log) }, onEdit: { onEdit?(log) })
 
                     if index < logs.count - 1 {
                         Divider()
@@ -46,6 +47,7 @@ struct LogHistorySection: View {
 private struct LogHistoryRow: View {
     let log: LogEntry
     var onDelete: (() -> Void)?
+    var onEdit: (() -> Void)?
 
     @State private var showDeleteConfirm = false
 
@@ -88,17 +90,26 @@ private struct LogHistoryRow: View {
                 }
             }
 
-            // Sil butonu
-            Button {
-                showDeleteConfirm = true
-            } label: {
-                Image(systemName: "trash")
-                    .font(.system(size: 13))
-                    .foregroundStyle(.white.opacity(0.25))
-            }
-            .confirmationDialog("Bu logu sil?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
-                Button("Sil", role: .destructive) { onDelete?() }
-                Button("Vazgeç", role: .cancel) {}
+            // Düzenle + Sil
+            HStack(spacing: 12) {
+                Button {
+                    onEdit?()
+                } label: {
+                    Image(systemName: "pencil")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.white.opacity(0.25))
+                }
+                Button {
+                    showDeleteConfirm = true
+                } label: {
+                    Image(systemName: "trash")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.red.opacity(0.5))
+                }
+                .confirmationDialog("Bu logu sil?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+                    Button("Sil", role: .destructive) { onDelete?() }
+                    Button("Vazgeç", role: .cancel) {}
+                }
             }
         }
         .padding(.horizontal, 16)

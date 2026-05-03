@@ -1,6 +1,6 @@
 # Faz 9 — Bugfix, Security & Final QA
 
-**Durum:** 🔴 Başlamadı  
+**Durum:** 🟡 Devam Ediyor  
 **Branch base:** `develop`
 
 ---
@@ -14,7 +14,7 @@ temizleyip uygulamayı App Store'a hazır hale getirmek.
 
 ## Adımlar
 
-- [ ] **Step 1** — TestFlight crash raporları & feedback bugfix'leri  
+- [x] **Step 1** — Log kaybı bugfix: oturum açıldığında Supabase'den log pull, clearOwner tutarlılığı  
   Branch: `feature/phase-9-step-1-crash-fixes`
 
 - [ ] **Step 2** — Güvenlik denetimi: RLS politikaları, API key güvenliği, input validation  

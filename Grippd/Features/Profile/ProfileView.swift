@@ -11,6 +11,7 @@ struct ProfileView: View {
     @State private var selectedTab: ProfileTab = .logs
     @State private var followerCount: Int = 0
     @State private var followingCount: Int = 0
+    @State private var showAvatarZoom = false
 
     enum ProfileTab: String, CaseIterable {
         case logs = "Loglar"
@@ -132,11 +133,18 @@ struct ProfileView: View {
 
     private var headerSection: some View {
         VStack(spacing: 12) {
-            UserAvatarView(
-                url: appState.currentUser?.avatarURL,
-                size: 90,
-                isPremium: appState.isPremium
-            )
+            Button { showAvatarZoom = true } label: {
+                UserAvatarView(
+                    url: appState.currentUser?.avatarURL,
+                    size: 90,
+                    isPremium: appState.isPremium
+                )
+            }
+            .buttonStyle(.plain)
+            .fullScreenCover(isPresented: $showAvatarZoom) {
+                AvatarZoomView(url: appState.currentUser?.avatarURL, isPresented: $showAvatarZoom)
+                    .background(.clear)
+            }
 
             VStack(spacing: 4) {
                 Text(appState.currentUser?.displayName ?? "")
@@ -287,24 +295,66 @@ private struct LogsTabView: View {
     let router: AppRouter
     @State private var logs: [LogEntry] = []
     @State private var filter: Content.ContentType? = nil
-    @State private var editingLog: LogEntry? = nil
+    @State private var sortOrder: LogSortOrder = .watchedAt
+
+    enum LogSortOrder: String, CaseIterable {
+        case watchedAt = "İzlenme Tarihi"
+        case createdAt = "Eklenme Tarihi"
+        case rating = "Puan"
+
+        var icon: String {
+            switch self {
+            case .watchedAt: return "eye"
+            case .createdAt: return "clock"
+            case .rating: return "star"
+            }
+        }
+    }
 
     private var filtered: [LogEntry] {
-        guard let f = filter else { return logs }
-        return logs.filter { $0.contentType == f }
+        let base = filter == nil ? logs : logs.filter { $0.contentType == filter }
+        switch sortOrder {
+        case .watchedAt:
+            return base.sorted { $0.watchedAt > $1.watchedAt }
+        case .createdAt:
+            return base.sorted { $0.createdAt > $1.createdAt }
+        case .rating:
+            return base.sorted { ($0.rating ?? -1) > ($1.rating ?? -1) }
+        }
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            // Filter chips
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    filterChip(label: "Tümü", type: nil)
-                    filterChip(label: "Filmler", type: .movie)
-                    filterChip(label: "Diziler", type: .tv_show)
-                    filterChip(label: "Kitaplar", type: .book)
+            // Filter + Sort bar
+            HStack(spacing: 0) {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        filterChip(label: "Tümü", type: nil)
+                        filterChip(label: "Filmler", type: .movie)
+                        filterChip(label: "Diziler", type: .tv_show)
+                        filterChip(label: "Kitaplar", type: .book)
+                    }
+                    .padding(.leading, GrippdTheme.Spacing.md)
+                    .padding(.vertical, GrippdTheme.Spacing.sm)
                 }
-                .padding(.horizontal, GrippdTheme.Spacing.md)
+
+                Menu {
+                    ForEach(LogSortOrder.allCases, id: \.self) { order in
+                        Button {
+                            withAnimation(.spring(response: 0.25)) { sortOrder = order }
+                        } label: {
+                            Label(order.rawValue, systemImage: sortOrder == order ? "checkmark" : order.icon)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(sortOrder == .watchedAt ? .white.opacity(0.45) : GrippdTheme.Colors.accent)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 7)
+                        .background(.white.opacity(0.07), in: Capsule())
+                }
+                .padding(.trailing, GrippdTheme.Spacing.md)
                 .padding(.vertical, GrippdTheme.Spacing.sm)
             }
 
@@ -316,16 +366,7 @@ private struct LogsTabView: View {
             } else {
                 LazyVStack(spacing: 0) {
                     ForEach(filtered) { log in
-                        LogRowCell(log: log) {
-                            navigate(log: log)
-                        }
-                        .contextMenu {
-                            Button {
-                                editingLog = log
-                            } label: {
-                                Label("Düzenle", systemImage: "pencil")
-                            }
-                        }
+                        LogRowCell(log: log, onTap: { navigate(log: log) }, onDelete: { deleteLog(log) })
                         Divider().background(.white.opacity(0.06)).padding(.leading, 80)
                     }
                 }
@@ -333,10 +374,8 @@ private struct LogsTabView: View {
             }
         }
         .onAppear { logs = LogService.shared.allLogs() }
-        .sheet(item: $editingLog) { log in
-            EditLogSheet(log: log) {
-                logs = LogService.shared.allLogs()
-            }
+        .onReceive(NotificationCenter.default.publisher(for: .logsDidSyncFromRemote)) { _ in
+            logs = LogService.shared.allLogs()
         }
     }
 
@@ -354,6 +393,11 @@ private struct LogsTabView: View {
                     in: Capsule()
                 )
         }
+    }
+
+    private func deleteLog(_ log: LogEntry) {
+        LogService.shared.delete(log)
+        logs = LogService.shared.allLogs()
     }
 
     private func navigate(log: LogEntry) {
@@ -604,6 +648,9 @@ private struct WatchlistTabView: View {
 private struct LogRowCell: View {
     let log: LogEntry
     let onTap: () -> Void
+    var onDelete: (() -> Void)? = nil
+
+    @State private var showDeleteConfirm = false
     @Environment(AppState.self) private var appState
 
     private var typeIcon: String {
@@ -654,6 +701,23 @@ private struct LogRowCell: View {
                 Spacer()
 
                 HStack(spacing: 12) {
+                    if let onDelete {
+                        Button {
+                            showDeleteConfirm = true
+                        } label: {
+                            Image(systemName: "trash")
+                                .font(.system(size: 14))
+                                .foregroundStyle(.red.opacity(0.5))
+                        }
+                        .buttonStyle(.plain)
+                        .confirmationDialog("\(log.contentTitle)", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+                            Button("Logu Sil", role: .destructive) { onDelete() }
+                            Button("Vazgeç", role: .cancel) {}
+                        } message: {
+                            Text("Bu log kalıcı olarak silinecek.")
+                        }
+                    }
+
                     Button {
                         Task {
                             await ShareService.shared.present(item: ShareItem(
@@ -802,7 +866,7 @@ private struct CustomListRow: View {
 
 // MARK: - Stats Tab
 
-private struct StatsTabView: View {
+struct StatsTabView: View {
     @State private var stats: LogService.LogStats? = nil
 
     var body: some View {
@@ -1304,6 +1368,7 @@ private struct SettingsView: View {
             appState.isAuthenticated = false
             appState.needsOnboarding = false
             appState.unreadNotificationCount = 0
+            LogService.shared.clearOwner()
         }
     }
 }

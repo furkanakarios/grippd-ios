@@ -35,8 +35,6 @@
 	<string>$(TMDB_API_KEY)</string>
 	<key>RevenueCatApiKey</key>
 	<string>$(REVENUECAT_API_KEY)</string>
-	<key>WatchmodeApiKey</key>
-	<string>$(WATCHMODE_API_KEY)</string>
 	<key>GoogleBooksApiKey</key>
 	<string>$(GOOGLE_BOOKS_API_KEY)</string>
 	<key>SupabaseURL</key>

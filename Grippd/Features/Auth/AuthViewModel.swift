@@ -26,8 +26,10 @@ final class AuthViewModel {
             appState.isPremium = rcPremium || user.planType == .premium
             LogService.shared.setOwner(user.id.uuidString)
         }
+        Task { await LogSyncService.shared.fetchAllFromRemote(ownerID: user.id.uuidString) }
         Task { await LogSyncService.shared.syncPending() }
         Task { await PurchaseService.shared.login(userID: user.id.uuidString) }
+        if user.isAdmin { Task { await LogSyncService.shared.backfillMissingPosters() } }
     }
 
     // MARK: - Sign in with Apple
@@ -66,8 +68,10 @@ final class AuthViewModel {
                     isLoading = false
                     LogService.shared.setOwner(user.id.uuidString)
                 }
+                Task { await LogSyncService.shared.fetchAllFromRemote(ownerID: user.id.uuidString) }
                 Task { await LogSyncService.shared.syncPending() }
                 Task { await PurchaseService.shared.login(userID: user.id.uuidString) }
+                if user.isAdmin { Task { await LogSyncService.shared.backfillMissingPosters() } }
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription
