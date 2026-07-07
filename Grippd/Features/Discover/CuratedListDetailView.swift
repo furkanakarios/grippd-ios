@@ -13,11 +13,9 @@ struct CuratedListDetailView: View {
         ZStack {
             GrippdBackground()
             if isLoading {
-                ProgressView()
-                    .tint(GrippdTheme.Colors.accent)
+                GrippdLoadingView()
             } else if items.isEmpty {
-                ContentUnavailableView("İçerik bulunamadı", systemImage: list.icon)
-                    .foregroundStyle(.white.opacity(0.5))
+                GrippdEmptyStateView(icon: list.icon, title: "İçerik bulunamadı")
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVGrid(columns: columns, spacing: 12) {
