@@ -40,8 +40,13 @@ temizleyip uygulamayı App Store'a hazır hale getirmek.
   - CuratedListDetailView: ad-hoc `ProgressView` → `GrippdLoadingView`, Apple `ContentUnavailableView` → `GrippdEmptyStateView` (uygulama görsel diline uyduruldu).
   - **Bilinen kalan (düşük öncelik, kozmetik):** Bazı ekranlarda hâlâ ad-hoc empty-state `Text` var (Search, Feed, Notifications, AddToListSheet, LogCommentsView, CustomContentDetail). Bunlar scroll içi inline olabildiğinden `GrippdEmptyStateView`'a körü körüne çevirmek layout kaydırabilir; cihaz görsel testinde her biri tek tek değerlendirilecek.
 
-- [ ] **Step 5** — Final performans geçişi: Instruments son kontrol, büyük listeler stress test  
+- [x] **Step 5** ✅ (kod incelemesi) — Final performans geçişi: Instruments son kontrol, büyük listeler stress test  
   Branch: `feature/phase-9-step-5-final-performance`
+  - **İyi:** Feed hem LazyVStack (sanallaştırma) hem `.range()` pagination; öneriler/keşfet `.limit()` ile sınırlı; görseller `CachedAsyncImage` (NSCache) ile cache'li.
+  - **Ölçeklenme riski (bilinçli ertelendi — pre-launch küçük ölçek, regresyon riski):**
+    1. `SocialService.fetchFollowers`/`fetchFollowing` limitsiz — tüm takipçi/takip listesini tek çekiyor. Popüler hesapta yavaşlar; çözüm infinite scroll. Launch sonrası kullanıcı büyüyünce ele alınacak.
+    2. `LogSyncService.fetchAllFromRemote` limitsiz — girişte kullanıcının tüm loglarını yerel mirror'a çekiyor (local-first tasarım). Çok aktif kullanıcıda giriş yavaşlar. Mimari; büyük iş.
+  - **Kullanıcı aksiyonu bekliyor:** Instruments ile CPU/memory profiling + büyük listelerde gerçek stress testi Xcode'da interaktif yapılacak (kod tarafından çalıştırılamaz).
 
 - [ ] **Step 6** — Release build hazırlığı: versiyonlama, changelog, production config kontrolü  
   Branch: `feature/phase-9-step-6-release-prep`
