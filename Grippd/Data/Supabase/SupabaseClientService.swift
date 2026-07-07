@@ -15,6 +15,16 @@ final class SupabaseClientService {
             fatalError("Supabase credentials missing from Info.plist. Check xcconfig setup.")
         }
 
-        client = SupabaseClient(supabaseURL: url, supabaseKey: anonKey)
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 20
+        let session = URLSession(configuration: config)
+
+        client = SupabaseClient(
+            supabaseURL: url,
+            supabaseKey: anonKey,
+            options: SupabaseClientOptions(
+                global: SupabaseClientOptions.GlobalOptions(session: session)
+            )
+        )
     }
 }

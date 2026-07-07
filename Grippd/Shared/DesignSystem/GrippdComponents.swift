@@ -227,6 +227,53 @@ struct GrippdEmptyStateView: View {
     }
 }
 
+// MARK: - Error State View
+
+struct GrippdErrorStateView: View {
+    var icon: String = "exclamationmark.triangle"
+    var title: String = "Yüklenemedi"
+    let message: String
+    var retryAction: (() -> Void)? = nil
+
+    var body: some View {
+        VStack(spacing: GrippdTheme.Spacing.md) {
+            Spacer(minLength: 48)
+
+            Image(systemName: icon)
+                .font(.system(size: 40, weight: .light))
+                .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.6))
+
+            VStack(spacing: 6) {
+                Text(title)
+                    .font(GrippdTheme.Typography.title)
+                    .foregroundStyle(.white)
+
+                Text(message)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white.opacity(0.45))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, GrippdTheme.Spacing.xl)
+            }
+
+            if let retryAction {
+                Button(action: retryAction) {
+                    Text("Tekrar Dene")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(GrippdTheme.Colors.accent)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(GrippdTheme.Colors.accent.opacity(0.12), in: Capsule())
+                }
+                .buttonStyle(.press)
+                .padding(.top, 4)
+            }
+
+            Spacer(minLength: 48)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
 // MARK: - Loading View
 
 struct GrippdLoadingView: View {

@@ -25,7 +25,9 @@ struct TVShowDetailView: View {
             if viewModel.isLoading {
                 loadingView
             } else if let error = viewModel.error {
-                errorView(message: error)
+                GrippdErrorStateView(message: error) {
+                    Task { await viewModel.load(tmdbID: tmdbID) }
+                }
             } else if let show = viewModel.show {
                 contentView(show: show)
             }
@@ -461,15 +463,6 @@ struct TVShowDetailView: View {
         }
     }
 
-    private func errorView(message: String) -> some View {
-        VStack(spacing: GrippdTheme.Spacing.md) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 40)).foregroundStyle(GrippdTheme.Colors.accent.opacity(0.6))
-            Text("Yüklenemedi").font(GrippdTheme.Typography.title).foregroundStyle(.white)
-            Text(message).font(.system(size: 14)).foregroundStyle(.white.opacity(0.45))
-                .multilineTextAlignment(.center).padding(.horizontal, GrippdTheme.Spacing.xl)
-        }
-    }
 }
 
 // MARK: - TV Action Button

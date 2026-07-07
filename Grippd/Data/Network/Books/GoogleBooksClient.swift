@@ -12,6 +12,7 @@ final class GoogleBooksClient {
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .returnCacheDataElseLoad
         config.urlCache = URLCache(memoryCapacity: 10_000_000, diskCapacity: 50_000_000)
+        config.timeoutIntervalForRequest = 20
         self.session = URLSession(configuration: config)
     }
 
@@ -62,7 +63,13 @@ final class GoogleBooksClient {
         if let bundleID = Bundle.main.bundleIdentifier {
             request.setValue(bundleID, forHTTPHeaderField: "X-Ios-Bundle-Identifier")
         }
-        let (data, response) = try await session.data(for: request)
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            throw BooksError.network(NetworkError.message(for: error))
+        }
 
         guard let http = response as? HTTPURLResponse else {
             throw BooksError.httpError(statusCode: 0)
@@ -86,6 +93,7 @@ enum BooksError: LocalizedError {
     case httpError(statusCode: Int)
     case notFound
     case decodingError(String)
+    case network(String)
 
     var errorDescription: String? {
         switch self {
@@ -93,6 +101,7 @@ enum BooksError: LocalizedError {
         case .httpError(let code): return "Sunucu hatası (\(code))."
         case .notFound: return "Kitap bulunamadı."
         case .decodingError(let msg): return "Veri hatası: \(msg)"
+        case .network(let message): return message
         }
     }
 }

@@ -27,8 +27,12 @@ temizleyip uygulamayı App Store'a hazır hale getirmek.
   - **(düşük)** TMDB API anahtarı bundle-restricted değil (binary'den çıkarılabilir); Google Books zaten `com.grippd.app` ile kısıtlı. Supabase anon key RLS ile korunuyor.
   - **(not)** Şema drift: yerel `migrations/` (001-003) canlı şemanın çok gerisinde; canlı şema dashboard'dan büyümüş.
 
-- [ ] **Step 3** — Edge case düzeltmeleri: boş state'ler, network hataları, timeout handling  
+- [x] **Step 3** ✅ — Edge case düzeltmeleri: boş state'ler, network hataları, timeout handling  
   Branch: `feature/phase-9-step-3-edge-cases`
+  - Network timeout: 4 client (TMDB, Google Books, Open Library, Supabase) `URLSessionConfiguration.default` (60sn) kullanıyordu → `timeoutIntervalForRequest = 20` eklendi.
+  - `NetworkError` yardımcısı: URLError kodlarını anlaşılır Türkçe mesaja çevirir (offline/timeout/host); 3 içerik client'ına bağlandı.
+  - `GrippdErrorStateView` (ikon + mesaj + "Tekrar Dene"): 5 detay ekranına (film/dizi/sezon/bölüm/kitap) retry eklendi — eskiden hata ekranında retry yoktu, kullanıcı çıkıp girmek zorundaydı.
+  - Yeni dosya `NetworkError.swift` Sources build phase'ine eklendi (pbxproj).
 
 - [ ] **Step 4** — UI regresyon testi: tüm ekranlar gözden geçirilir, tutarsızlıklar giderilir  
   Branch: `feature/phase-9-step-4-ui-regression`
