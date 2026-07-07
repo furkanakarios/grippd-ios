@@ -10,6 +10,7 @@ final class OpenLibraryClient {
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .returnCacheDataElseLoad
         config.urlCache = URLCache(memoryCapacity: 10_000_000, diskCapacity: 50_000_000)
+        config.timeoutIntervalForRequest = 20
         self.session = URLSession(configuration: config)
     }
 
@@ -32,7 +33,13 @@ final class OpenLibraryClient {
 
         guard let url = components.url else { throw BooksError.invalidURL }
 
-        let (data, response) = try await session.data(from: url)
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(from: url)
+        } catch {
+            throw BooksError.network(NetworkError.message(for: error))
+        }
 
         guard let http = response as? HTTPURLResponse else {
             throw BooksError.httpError(statusCode: 0)

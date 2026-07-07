@@ -16,6 +16,7 @@ final class TMDBClient {
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .returnCacheDataElseLoad
         config.urlCache = URLCache(memoryCapacity: 20_000_000, diskCapacity: 100_000_000)
+        config.timeoutIntervalForRequest = 20
         self.session = URLSession(configuration: config)
     }
 
@@ -199,7 +200,13 @@ final class TMDBClient {
             throw TMDBError.invalidURL
         }
 
-        let (data, response) = try await session.data(from: url)
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(from: url)
+        } catch {
+            throw TMDBError.network(NetworkError.message(for: error))
+        }
 
         guard let http = response as? HTTPURLResponse else {
             throw TMDBError.invalidResponse
@@ -224,6 +231,7 @@ enum TMDBError: LocalizedError {
     case invalidResponse
     case httpError(statusCode: Int)
     case decodingError(Error)
+    case network(String)
 
     var errorDescription: String? {
         switch self {
@@ -231,6 +239,7 @@ enum TMDBError: LocalizedError {
         case .invalidResponse: return "Sunucu yanıtı alınamadı."
         case .httpError(let code): return "Sunucu hatası: \(code)"
         case .decodingError(let e): return "Veri işleme hatası: \(e.localizedDescription)"
+        case .network(let message): return message
         }
     }
 }

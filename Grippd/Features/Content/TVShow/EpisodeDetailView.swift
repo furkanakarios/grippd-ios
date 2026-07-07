@@ -49,7 +49,15 @@ struct EpisodeDetailView: View {
             if viewModel.isLoading {
                 loadingView
             } else if let error = viewModel.error {
-                errorView(message: error)
+                GrippdErrorStateView(message: error) {
+                    Task {
+                        await viewModel.load(
+                            showID: showID,
+                            seasonNumber: seasonNumber,
+                            episodeNumber: episodeNumber
+                        )
+                    }
+                }
             } else if let episode = viewModel.episode {
                 contentView(episode: episode)
             }
@@ -333,15 +341,6 @@ struct EpisodeDetailView: View {
         }
     }
 
-    private func errorView(message: String) -> some View {
-        VStack(spacing: GrippdTheme.Spacing.md) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 40)).foregroundStyle(GrippdTheme.Colors.accent.opacity(0.6))
-            Text("Yüklenemedi").font(GrippdTheme.Typography.title).foregroundStyle(.white)
-            Text(message).font(.system(size: 14)).foregroundStyle(.white.opacity(0.45))
-                .multilineTextAlignment(.center).padding(.horizontal, 32)
-        }
-    }
 }
 
 // MARK: - Meta Chip

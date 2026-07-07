@@ -36,11 +36,8 @@ struct SeasonDetailView: View {
                     Text("Yükleniyor...").font(.system(size: 14)).foregroundStyle(.white.opacity(0.4))
                 }
             } else if let error = viewModel.error {
-                VStack(spacing: GrippdTheme.Spacing.md) {
-                    Image(systemName: "exclamationmark.triangle").font(.system(size: 40))
-                        .foregroundStyle(GrippdTheme.Colors.accent.opacity(0.6))
-                    Text(error).font(.system(size: 14)).foregroundStyle(.white.opacity(0.45))
-                        .multilineTextAlignment(.center).padding(.horizontal, 32)
+                GrippdErrorStateView(message: error) {
+                    Task { await viewModel.load(showID: showID, seasonNumber: seasonNumber) }
                 }
             } else if let season = viewModel.season {
                 seasonContent(season: season)
