@@ -32,12 +32,12 @@ struct ContentView: View {
                 .onPurchaseCompleted { _ in
                     appState.showPaywall = false
                     appState.isPremium = true
-                    Task { await PurchaseService.shared.syncPremiumStatus() }
+                    // DB plan_type senkronu RevenueCat webhook (Edge Function) ile yapılır.
                 }
                 .onRestoreCompleted { _ in
                     appState.showPaywall = false
                     appState.isPremium = true
-                    Task { await PurchaseService.shared.syncPremiumStatus() }
+                    // DB plan_type senkronu RevenueCat webhook (Edge Function) ile yapılır.
                 }
         }
         .task { await checkAuth() }

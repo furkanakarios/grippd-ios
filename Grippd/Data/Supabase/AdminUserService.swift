@@ -81,20 +81,26 @@ final class AdminUserService {
     // MARK: - Ban / Unban
 
     func setBanned(userID: UUID, banned: Bool) async throws {
+        // is_banned kolonu istemciye kapalı; admin işlemi is_admin() kontrolü
+        // yapan SECURITY DEFINER RPC üzerinden yürür.
         try await client
-            .from("users")
-            .update(["is_banned": banned])
-            .eq("id", value: userID.uuidString)
+            .rpc("admin_set_banned", params: [
+                "target_user_id": AnyJSON.string(userID.uuidString),
+                "banned": AnyJSON.bool(banned)
+            ])
             .execute()
     }
 
     // MARK: - Plan
 
     func setPlan(userID: UUID, plan: String) async throws {
+        // plan_type kolonu istemciye kapalı; admin işlemi is_admin() kontrolü
+        // yapan SECURITY DEFINER RPC üzerinden yürür.
         try await client
-            .from("users")
-            .update(["plan_type": plan])
-            .eq("id", value: userID.uuidString)
+            .rpc("admin_set_plan", params: [
+                "target_user_id": AnyJSON.string(userID.uuidString),
+                "new_plan": AnyJSON.string(plan)
+            ])
             .execute()
     }
 }
