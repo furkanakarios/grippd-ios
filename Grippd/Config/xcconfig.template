@@ -4,7 +4,11 @@
 // NOTE: Use https:/$()/your-project.supabase.co — the $() trick prevents // being treated as a comment
 
 SUPABASE_URL = https:/$()/YOUR_PROJECT_ID.supabase.co
-SUPABASE_ANON_KEY = your_anon_key_here
+SUPABASE_ANON_KEY = your_supabase_anon_key_here
 TMDB_API_KEY = your_tmdb_api_key_here
-WATCHMODE_API_KEY = your_watchmode_api_key_here
 GOOGLE_BOOKS_API_KEY = your_google_books_api_key_here
+DEVELOPMENT_TEAM = your_apple_developer_team_id
+
+// RevenueCat public SDK key (RevenueCat → Project → API keys → Apple App Store)
+// Debug: test_... (sandbox) · Release: appl_... (production)
+REVENUECAT_API_KEY = your_revenuecat_public_key_here

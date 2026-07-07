@@ -48,8 +48,19 @@ temizleyip uygulamayı App Store'a hazır hale getirmek.
     2. `LogSyncService.fetchAllFromRemote` limitsiz — girişte kullanıcının tüm loglarını yerel mirror'a çekiyor (local-first tasarım). Çok aktif kullanıcıda giriş yavaşlar. Mimari; büyük iş.
   - **Kullanıcı aksiyonu bekliyor:** Instruments ile CPU/memory profiling + büyük listelerde gerçek stress testi Xcode'da interaktif yapılacak (kod tarafından çalıştırılamaz).
 
-- [ ] **Step 6** — Release build hazırlığı: versiyonlama, changelog, production config kontrolü  
+- [~] **Step 6** 🟡 (kod/config kısmı bitti; kullanıcı aksiyonları bekliyor) — Release build hazırlığı  
   Branch: `feature/phase-9-step-6-release-prep`
+  **Yapıldı (kod/config):**
+  - Versiyon denetimi: `MARKETING_VERSION = 1.0.0`, app target `CURRENT_PROJECT_VERSION = 15`, `CFBundleShortVersionString`/`CFBundleVersion` build ayarlarına bağlı. `ITSAppUsesNonExemptEncryption = false` (export compliance prompt'u önler). Uygun.
+  - **Release configuration temiz derleniyor** (simulator, Release; hata yok).
+  - `CHANGELOG.md` oluşturuldu (v1.0.0 sürüm notları).
+  - `xcconfig.template` güncellendi (stale WATCHMODE_API_KEY kaldırıldı; REVENUECAT_API_KEY + DEVELOPMENT_TEAM eklendi).
+  - Debug artifacts: `Purchases.logLevel = .warn` (uygun), `#if DEBUG` yok, 11 print() diagnostic log (hassas veri yok — bırakıldı).
+  **KULLANICI AKSİYONU BEKLİYOR (kod tarafından yapılamaz):**
+  - ⚠️ **RevenueCat production key:** `Release.xcconfig` içinde `REVENUECAT_API_KEY = REVENUECAT_KEY_PLACEHOLDER` — production public key (`appl_...`) ile değiştirilmeli, yoksa release'te satın almalar çalışmaz.
+  - App Store Connect: uygulama kaydı, ekran görüntüleri yükleme, metadata/fiyat.
+  - Xcode: Archive + distribution signing + TestFlight'a upload.
+  - RevenueCat webhook'unu gerçek sandbox satın almayla doğrula (plan_type premium'a dönüyor mu).
 
 ---
 
