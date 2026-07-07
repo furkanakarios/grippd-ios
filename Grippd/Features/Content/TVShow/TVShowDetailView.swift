@@ -457,10 +457,7 @@ struct TVShowDetailView: View {
     // MARK: - Loading & Error
 
     private var loadingView: some View {
-        VStack(spacing: GrippdTheme.Spacing.md) {
-            ProgressView().scaleEffect(1.4).tint(GrippdTheme.Colors.accent)
-            Text("Yükleniyor...").font(.system(size: 14)).foregroundStyle(.white.opacity(0.4))
-        }
+        GrippdLoadingView(label: "Yükleniyor...")
     }
 
 }

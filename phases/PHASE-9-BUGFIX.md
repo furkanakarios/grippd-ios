@@ -34,8 +34,11 @@ temizleyip uygulamayı App Store'a hazır hale getirmek.
   - `GrippdErrorStateView` (ikon + mesaj + "Tekrar Dene"): 5 detay ekranına (film/dizi/sezon/bölüm/kitap) retry eklendi — eskiden hata ekranında retry yoktu, kullanıcı çıkıp girmek zorundaydı.
   - Yeni dosya `NetworkError.swift` Sources build phase'ine eklendi (pbxproj).
 
-- [ ] **Step 4** — UI regresyon testi: tüm ekranlar gözden geçirilir, tutarsızlıklar giderilir  
+- [x] **Step 4** ✅ — UI regresyon testi: tüm ekranlar gözden geçirilir, tutarsızlıklar giderilir  
   Branch: `feature/phase-9-step-4-ui-regression`
+  - Tasarım sistemi tutarlılığı: 5 içerik detay ekranı (film/dizi/sezon/bölüm/kitap) ad-hoc loading VStack'i yerine `GrippdLoadingView` kullanacak şekilde standartlaştırıldı (Step 3'te error state'leri standartlaşmıştı; loading de eşitlendi).
+  - CuratedListDetailView: ad-hoc `ProgressView` → `GrippdLoadingView`, Apple `ContentUnavailableView` → `GrippdEmptyStateView` (uygulama görsel diline uyduruldu).
+  - **Bilinen kalan (düşük öncelik, kozmetik):** Bazı ekranlarda hâlâ ad-hoc empty-state `Text` var (Search, Feed, Notifications, AddToListSheet, LogCommentsView, CustomContentDetail). Bunlar scroll içi inline olabildiğinden `GrippdEmptyStateView`'a körü körüne çevirmek layout kaydırabilir; cihaz görsel testinde her biri tek tek değerlendirilecek.
 
 - [ ] **Step 5** — Final performans geçişi: Instruments son kontrol, büyük listeler stress test  
   Branch: `feature/phase-9-step-5-final-performance`

@@ -31,10 +31,7 @@ struct SeasonDetailView: View {
             GrippdBackground()
 
             if viewModel.isLoading {
-                VStack(spacing: GrippdTheme.Spacing.md) {
-                    ProgressView().scaleEffect(1.4).tint(GrippdTheme.Colors.accent)
-                    Text("Yükleniyor...").font(.system(size: 14)).foregroundStyle(.white.opacity(0.4))
-                }
+                GrippdLoadingView(label: "Yükleniyor...")
             } else if let error = viewModel.error {
                 GrippdErrorStateView(message: error) {
                     Task { await viewModel.load(showID: showID, seasonNumber: seasonNumber) }
