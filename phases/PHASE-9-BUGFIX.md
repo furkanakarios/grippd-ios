@@ -1,6 +1,9 @@
 # Faz 9 — Bugfix, Security & Final QA
 
-**Durum:** 🟡 Devam Ediyor  
+**Durum:** 🟡 Devam Ediyor — Step 1-6 kod tarafı bitti, **faz kasıtlı olarak açık tutuluyor**
+(2026-07-24): uygulama kullanıldıkça çıkacak yeni bug'lar ve eklenecek şeyler bu faza
+yazılacak. `develop → main` merge + `phase-9-complete` tag + splash branch propagasyonu
+kullanıcı onayı gelince yapılacak.  
 **Branch base:** `develop`
 
 ---
