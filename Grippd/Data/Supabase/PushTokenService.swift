@@ -51,7 +51,7 @@ final class PushTokenService {
             userId: userID.uuidString,
             token: token,
             platform: "ios",
-            updatedAt: ISO8601DateFormatter().string(from: Date())
+            updatedAt: SupabaseDate.string(from: Date())
         )
         try? await client
             .from("device_tokens")

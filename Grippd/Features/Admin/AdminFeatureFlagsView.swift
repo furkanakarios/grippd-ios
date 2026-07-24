@@ -40,7 +40,7 @@ private final class AdminFeatureFlagsViewModel {
             try await SupabaseClientService.shared.client
                 .from("feature_flags")
                 .update(Patch(isEnabled: flags[idx].isEnabled,
-                              updatedAt: ISO8601DateFormatter().string(from: Date())))
+                              updatedAt: SupabaseDate.string(from: Date())))
                 .eq("id", value: flag.id.uuidString)
                 .execute()
             HapticManager.success()

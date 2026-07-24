@@ -140,8 +140,6 @@ final class LogSyncService {
 
             let existingRemoteIDs = Set(LogService.shared.allLogs().compactMap { $0.remoteID })
             let context = LocalCacheService.shared.context
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
             var didInsert = false
 
             for row in rows {
@@ -156,7 +154,7 @@ final class LogSyncService {
                 } else { continue }
 
                 guard let contentType = Content.ContentType(rawValue: c.contentType) else { continue }
-                let watchedAt = formatter.date(from: row.watchedAt) ?? Date()
+                let watchedAt = SupabaseDate.parse(row.watchedAt) ?? Date()
 
                 let posterPath: String?
                 if let url = c.posterUrl, url.contains("image.tmdb.org/t/p/w500") {
@@ -212,8 +210,6 @@ final class LogSyncService {
             await sync(entry)
             return
         }
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
 
         struct Payload: Encodable {
             let watched_at: String
@@ -226,7 +222,7 @@ final class LogSyncService {
             try await client
                 .from("logs")
                 .update(Payload(
-                    watched_at: formatter.string(from: entry.watchedAt),
+                    watched_at: SupabaseDate.string(from: entry.watchedAt),
                     rating: entry.rating,
                     emoji_reaction: entry.emoji,
                     is_rewatch: entry.isRewatch,
@@ -407,15 +403,13 @@ final class LogSyncService {
         }
         struct Row: Decodable { let id: String }
 
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
 
         let rows: [Row] = try await client
             .from("logs")
             .insert(Payload(
                 user_id: entry.ownerID,
                 content_id: contentID,
-                watched_at: formatter.string(from: entry.watchedAt),
+                watched_at: SupabaseDate.string(from: entry.watchedAt),
                 rating: entry.rating,
                 emoji_reaction: entry.emoji,
                 is_rewatch: entry.isRewatch,

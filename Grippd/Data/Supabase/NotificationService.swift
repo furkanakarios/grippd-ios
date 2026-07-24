@@ -76,8 +76,6 @@ final class NotificationService {
             .execute()
             .value
 
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
 
         return rows.compactMap { row in
             guard let notifID = UUID(uuidString: row.id),
@@ -96,7 +94,7 @@ final class NotificationService {
                 logID: row.logId.flatMap { UUID(uuidString: $0) },
                 commentID: row.commentId.flatMap { UUID(uuidString: $0) },
                 isRead: row.isRead,
-                createdAt: formatter.date(from: row.createdAt) ?? Date()
+                createdAt: SupabaseDate.parse(row.createdAt) ?? Date()
             )
         }
     }

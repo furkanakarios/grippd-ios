@@ -72,13 +72,11 @@ final class CommentService {
         let commentIDs = rows.compactMap { UUID(uuidString: $0.id) }
         let likeData = await fetchCommentLikeData(commentIDs: commentIDs, myID: myID)
 
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
 
         return rows.compactMap { row in
             guard let commentID = UUID(uuidString: row.id),
                   let userID = UUID(uuidString: row.user.id) else { return nil }
-            let date = formatter.date(from: row.createdAt) ?? Date()
+            let date = SupabaseDate.parse(row.createdAt) ?? Date()
             let like = likeData[commentID]
             return Comment(
                 id: commentID,
@@ -142,8 +140,6 @@ final class CommentService {
             .value
 
         let me = userRows.first?.toDomain()
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
 
         return Comment(
             id: commentID,
@@ -155,7 +151,7 @@ final class CommentService {
                 avatarURL: me?.avatarURL
             ),
             body: row.body,
-            createdAt: formatter.date(from: row.createdAt) ?? Date(),
+            createdAt: SupabaseDate.parse(row.createdAt) ?? Date(),
             likeCount: 0,
             isLiked: false,
             isOwn: true
@@ -181,9 +177,7 @@ final class CommentService {
         let now = Date()
         guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) else { return 0 }
 
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        let startString = formatter.string(from: startOfMonth)
+        let startString = SupabaseDate.string(from: startOfMonth)
 
         struct CountRow: Decodable { let id: String }
         let rows: [CountRow] = (try? await client

@@ -76,6 +76,21 @@ Her step'in kodu tamamlandıktan sonra, **git commit/push'tan ÖNCE**:
 
 ---
 
+## Faz Sonrası Ek Düzeltmeler
+
+- **Feed/log tarihleri hep "az önce" görünüyordu (2026-07-24).** Postgres, salise
+  sıfır olduğunda ISO8601 çıktısına yazmıyor (`...T17:23:00+00:00`). Kod ise
+  `ISO8601DateFormatter`'ı `.withFractionalSeconds` ile katı kullanıyordu; salisesiz
+  değerler parse edilemiyor ve çağrı yerlerindeki `?? Date()` fallback'i yüzünden
+  tarih "şimdi" oluyordu. Kullanıcının seçtiği `watched_at` çoğunlukla tam dakika
+  olduğu için neredeyse tüm loglar etkileniyordu (feed, profil geçmişi, Wrapped,
+  yorum/bildirim/admin ekranları). Çözüm: `SupabaseDate` yardımcısı — önce saliseli,
+  sonra salisesiz formatter denenir; 13 parse/serialize noktası buna geçirildi.
+- **Supabase keep-alive (2026-07-24).** Free tier ~7 gün hareketsizlikte projeyi
+  duraklatıyor (ikinci kez yaşandı). `.github/workflows/supabase-keepalive.yml`
+  3 günde bir hafif REST isteği atarak projeyi ayakta tutar. **Geçici çözüm —
+  App Store'a çıkmadan önce Supabase Pro'ya geçilmeli.**
+
 ## Alınan Kararlar
 
 - **Step 2 — plan_type (paywall) kalıcı çözümü [TAMAMLANDI]:** `plan_type` artık

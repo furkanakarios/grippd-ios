@@ -139,9 +139,7 @@ private struct FeedRow: Decodable {
 
     func toDomain() -> FeedActivity? {
         guard let user, let content else { return nil }
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        let date = formatter.date(from: watchedAt) ?? Date()
+        let date = SupabaseDate.parse(watchedAt) ?? Date()
 
         let contentType: Content.ContentType = switch content.contentType {
             case "movie":   .movie

@@ -60,8 +60,6 @@ final class AdminUserService {
             .execute()
             .value
 
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
 
         return rows.map { row in
             AdminUserSummary(
@@ -73,7 +71,7 @@ final class AdminUserService {
                 isBanned: row.isBanned,
                 isAdmin: row.isAdmin,
                 logCount: row.logCount,
-                createdAt: formatter.date(from: row.createdAt) ?? Date()
+                createdAt: SupabaseDate.parse(row.createdAt) ?? Date()
             )
         }
     }

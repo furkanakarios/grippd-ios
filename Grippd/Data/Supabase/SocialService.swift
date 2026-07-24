@@ -190,10 +190,8 @@ final class SocialService {
             .execute()
             .value
 
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return rows.map { row in
-            let date = formatter.date(from: row.createdAt) ?? Date()
+            let date = SupabaseDate.parse(row.createdAt) ?? Date()
             return PublicListInfo(
                 id: row.id,
                 name: row.name,
@@ -303,9 +301,7 @@ private struct PublicLogRow: Decodable {
 
     func toDomain() -> PublicLog? {
         guard let content else { return nil }
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        let date = formatter.date(from: watchedAt) ?? Date()
+        let date = SupabaseDate.parse(watchedAt) ?? Date()
         let contentType: Content.ContentType = switch content.contentType {
             case "movie":   .movie
             case "tv_show": .tv_show

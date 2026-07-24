@@ -68,19 +68,17 @@ final class AdminModerationService {
             .execute()
             .value
 
-        let fmt = ISO8601DateFormatter()
-        fmt.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
 
         return rows.map { row in
             ReportedComment(
                 id: UUID(uuidString: row.reportId) ?? UUID(),
                 reason: row.reason,
-                reportedAt: fmt.date(from: row.reportedAt) ?? Date(),
-                resolvedAt: row.resolvedAt.flatMap { fmt.date(from: $0) },
+                reportedAt: SupabaseDate.parse(row.reportedAt) ?? Date(),
+                resolvedAt: row.resolvedAt.flatMap { SupabaseDate.parse($0) },
                 commentID: UUID(uuidString: row.commentId) ?? UUID(),
                 commentBody: row.commentBody,
                 commentHidden: row.commentHidden,
-                commentCreatedAt: fmt.date(from: row.commentCreated) ?? Date(),
+                commentCreatedAt: SupabaseDate.parse(row.commentCreated) ?? Date(),
                 authorID: UUID(uuidString: row.authorId) ?? UUID(),
                 authorUsername: row.authorUsername,
                 reporterUsername: row.reporterUsername
@@ -114,7 +112,7 @@ final class AdminModerationService {
         try await client
             .from("reports")
             .update([
-                "resolved_at": ISO8601DateFormatter().string(from: Date()),
+                "resolved_at": SupabaseDate.string(from: Date()),
                 "resolved_by": adminID.uuidString
             ])
             .eq("id", value: reportID.uuidString)

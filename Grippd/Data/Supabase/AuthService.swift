@@ -114,9 +114,7 @@ struct UserRow: Decodable {
     }
 
     func toDomain() -> User {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        let date = createdAt.flatMap { formatter.date(from: $0) } ?? Date()
+        let date = createdAt.flatMap { SupabaseDate.parse($0) } ?? Date()
         return User(
             id: UUID(uuidString: id) ?? UUID(),
             username: username,
