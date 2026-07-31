@@ -46,18 +46,19 @@ jobs:
             -d "{\"email\":\"${KEEPALIVE_EMAIL}\",\"password\":\"${KEEPALIVE_PASSWORD}\"}")
 
           JWT=$(echo "$AUTH" | jq -r '.access_token // empty')
-          UID=$(echo "$AUTH" | jq -r '.user.id // empty')
+          # NOT: değişken adı UID OLMAMALI — UID bash'te salt-okunur (OS user id).
+          USER_ID=$(echo "$AUTH" | jq -r '.user.id // empty')
 
-          if [ -z "$JWT" ] || [ -z "$UID" ]; then
+          if [ -z "$JWT" ] || [ -z "$USER_ID" ]; then
             echo "::error::Giriş başarısız (proje duraklamış veya kimlik hatalı olabilir)."
             echo "Yanıt: $(echo "$AUTH" | jq -c '{error, error_description, msg}')"
             exit 1
           fi
-          echo "Giriş başarılı — kullanıcı: $UID"
+          echo "Giriş başarılı — kullanıcı: $USER_ID"
 
           # 2) Son log'u oku (READ)
           LAST=$(curl -s -m 30 \
-            "${SUPABASE_URL}/rest/v1/logs?user_id=eq.${UID}&select=id,watched_at&order=watched_at.desc&limit=1" \
+            "${SUPABASE_URL}/rest/v1/logs?user_id=eq.${USER_ID}&select=id,watched_at&order=watched_at.desc&limit=1" \
             -H "apikey: ${ANON_KEY}" -H "Authorization: Bearer ${JWT}")
 
           LOG_ID=$(echo "$LAST" | jq -r '.[0].id // empty')
