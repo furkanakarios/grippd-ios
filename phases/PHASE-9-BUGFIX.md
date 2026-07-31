@@ -94,6 +94,31 @@ Her step'in kodu tamamlandıktan sonra, **git commit/push'tan ÖNCE**:
   3 günde bir hafif REST isteği atarak projeyi ayakta tutar. **Geçici çözüm —
   App Store'a çıkmadan önce Supabase Pro'ya geçilmeli.**
 
+## Bekleyen Tasarım Kararları (ileride tartışılacak — henüz YAPILMADI)
+
+- **Feed sıralaması: izleme tarihi → ekleme tarihi (`watched_at` → `created_at`).**
+  Şu an anasayfa feed'i `watched_at`'e (kullanıcının seçtiği izleme tarihi) göre
+  sıralanıyor ve o tarihi gösteriyor (`FeedService.fetchFeed` → `.order("watched_at")`;
+  `FeedView.relativeTime` → `activity.watchedAt`). Sonuç: kullanıcı geçmişe tarihli
+  bir log girerse (ör. bugün eklediği ama 3 ay önce izlediği film), log feed'de en
+  üste değil, o eski tarihin arasına düşer → takipçiler yeni girilen bu log'u görmez,
+  etkileşim olmaz.
+
+  **Kullanıcının istediği (ileride):** Feed **ekleme tarihine (`created_at`) göre
+  sıralansın** ki geç fark edilip sonradan girilen eski izlemeler de feed'in üstünde
+  "yeni aktivite" olarak belirsin. Not: her iki tarih zaten ayrı ayrı tutuluyor
+  (`watched_at` = izleme, `created_at` = log ekleme).
+
+  **Planlanan tasarım yönü:** Anasayfa log kartında **birincil zaman = ekleme tarihi
+  (created_at)** olsun; ayrıca küçük bir tasarım eklemesiyle **izleme tarihi de**
+  gösterilsin (ör. bir film emojisi + "25 Nis'te izledi" gibi ikincil bir satır).
+  Böylece hem aktivite akışı mantığı (yeni girilenler üstte) hem de "ne zaman
+  izlediği" bilgisi birlikte korunur. Bu, saf "günlük" mantığından "aktivite akışı"
+  mantığına ölçülü bir geçiş.
+
+  Durum: şimdilik değişiklik yok — kullanıcı bunu ileride tekrar tartışıp karar
+  verecek. (Kaynak: 2026-07-31 tartışması.)
+
 ## Alınan Kararlar
 
 - **Step 2 — plan_type (paywall) kalıcı çözümü [TAMAMLANDI]:** `plan_type` artık
